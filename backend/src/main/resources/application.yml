@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5430/backendDB
+    username: usr
+    password: pwd
+  flyway:
+    enabled: true
+server:
+  port: 8080

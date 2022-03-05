@@ -1,0 +1,75 @@
+/* ---------------------------------------------------
+    OTHER STYLE
+----------------------------------------------------- */
+
+.col-md-auto .imgdiv {
+    position: relative;
+    /* Оверфлов для того, чтобы анимация исходила из картинки */
+    overflow: hidden;
+}
+
+.imgdiv:hover .descr {
+    /* box-shadow: inset 0 0 0 23px #2a5d7a; */
+    opacity: 1;
+    top: 0;
+}
+
+.row.justify-content-center {
+    margin: 30px;
+}
+
+footer.text-muted {
+    margin-top: 100px;
+}
+
+.row.align-items-center input {
+    margin-right: 30px;
+
+}
+
+.descr {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(27, 23, 23, 0.623);
+    color: white;
+    padding-top: 40%;
+    text-align: center;
+    /* Состояние до транзишона  */
+    opacity: 0;
+    top: 100%;
+    -webkit-transition: all 0.5s;
+    -o-transition: all 0.5s;
+    transition: all 0.5s;
+}
+
+/*div {*/
+/*text-align: center;*/
+/*}*/
+/*#submitSubs{*/
+/*position: absolute;*/
+/*}*/
+/*alert a{*/
+/*line-height: 1;*/
+/*display: inline-block;*/
+/*color: #2c2c2c;*/
+/*}*/
+
+/*alert a:hover{*/
+/*cursor: pointer;*/
+/*}*/
+
+/*alert a:after{*/
+/*display: block;*/
+/*content: "";*/
+/*height: 2px;*/
+/*width: 0;*/
+/*background-color: #000000;*/
+/*transition: width .3s ease-in-out;*/
+/*}*/
+
+/*alert a:hover:after,*/
+/*alert a:focus:after {*/
+/*width: 100%;*/
+/*}*/
