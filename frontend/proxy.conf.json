@@ -1,7 +1,7 @@
 {
   "/api/*": {
     "target": {
-      "host": "localhost",
+      "host": "apigateway",
       "protocol": "http:",
       "port": 8081
     },

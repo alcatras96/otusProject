@@ -16,15 +16,15 @@ import {finalize} from "rxjs";
     styleUrls: ['./registration.component.css']
 })
 export class RegistrationComponent {
-    radioModel = 'Customer';
+    currentRegisterOption = 'Customer';
     isOpen = false;
     password = 'password';
     confirmPassword = 'password';
 
     passwordForm: FormGroup;
-    othersForm: FormGroup;
-    // private subCustomer: Subscription[] = [];
-    // private subOwner: Subscription[] = [];
+    usersForm: FormGroup;
+    ownersForm: FormGroup;
+    customersForm: FormGroup;
     newUser: User = new User();
     newCustomer: Customer = new Customer();
     newOwner: Owner = new Owner();
@@ -37,13 +37,19 @@ export class RegistrationComponent {
             confirmPassword: ['', Validators.required]
         }, {validator: this.checkPasswords});
 
-        this.othersForm = formBuilder.group({
-            firstName: [''],
-            orgName: [''],
+        this.usersForm = formBuilder.group({
             login: ['', Validators.required],
-            email: ['', Validators.required],
+            email: ['', Validators.required]
+        });
+
+        this.ownersForm = formBuilder.group({
+            orgName: ['']
+        });
+
+        this.customersForm = formBuilder.group({
+            firstName: [''],
             address: ['']
-        })
+        });
     }
 
     public _addCustomer(): void {
@@ -59,7 +65,7 @@ export class RegistrationComponent {
             .subscribe(() => {
                 this.refreshCustomer();
                 this.passwordForm.reset();
-                this.othersForm.reset();
+                this.usersForm.reset();
                 this.router.navigateByUrl('/');
             });
     }
@@ -77,9 +83,14 @@ export class RegistrationComponent {
             .subscribe(() => {
                 this.refreshOwner();
                 this.passwordForm.reset();
-                this.othersForm.reset();
+                this.usersForm.reset();
                 this.router.navigateByUrl('/');
             });
+    }
+
+    public _isRegisterButtonDisabled(currentRegisterOption: string): boolean {
+        return this.passwordForm.invalid || this.usersForm.invalid ||
+            (currentRegisterOption == 'Owner' ? this.ownersForm.invalid : this.customersForm.invalid);
     }
 
     private refreshCustomer(): void {

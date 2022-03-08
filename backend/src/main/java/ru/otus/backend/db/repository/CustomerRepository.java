@@ -28,7 +28,7 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
             from customers c
                      inner join users u
                                 on c.user_id = u.id
-                     inner join billing_accounts b
+                     left join billing_accounts b
                                 on c.billing_account_id = b.id
                      inner join statuses s on c.status_id = s.id
                      inner join roles r on r.id = u.role_id

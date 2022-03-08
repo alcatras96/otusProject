@@ -34,6 +34,7 @@ import {TabsModule} from "ngx-bootstrap/tabs";
 import {AlertModule} from "ngx-bootstrap/alert";
 import {PaginationModule} from "ngx-bootstrap/pagination";
 import {ModalModule} from "ngx-bootstrap/modal";
+import {ButtonsModule} from "ngx-bootstrap/buttons";
 
 const appRoutes: Routes = [
     {path: '', component: ShopComponent},
@@ -80,7 +81,8 @@ const appRoutes: Routes = [
         TabsModule,
         AlertModule,
         PaginationModule,
-        ModalModule.forRoot()
+        ModalModule.forRoot(),
+        ButtonsModule
     ],
     providers: [
         TokenStorage,

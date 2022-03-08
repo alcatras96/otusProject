@@ -4,12 +4,12 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import ru.otus.backend.db.entity.BillingAccount;
 import ru.otus.backend.db.entity.Customer;
 import ru.otus.backend.db.entity.User;
 import ru.otus.backend.db.repository.CustomerRepository;
 import ru.otus.backend.service.api.BillingAccountService;
 import ru.otus.backend.service.api.CustomerService;
-import ru.otus.backend.service.api.StatusService;
 import ru.otus.backend.service.api.UserService;
 
 import java.util.Optional;
@@ -20,12 +20,20 @@ public class CustomerServiceImpl implements CustomerService {
 
     private final UserService userService;
     private final CustomerRepository customerRepository;
-    private final StatusService statusService;
     private final BillingAccountService billingAccountService;
 
     @Override
     public Optional<Customer> getCustomerById(Long id) {
         return customerRepository.findById(id);
+    }
+
+    @Transactional
+    @Override
+    public Customer saveWithBillingAccount(Customer customer) {
+        BillingAccount billingAccount = customer.getBillingAccount();
+        billingAccountService.saveBillingAccount(billingAccount);
+        customer.setBillingAccountId(billingAccount.getId());
+        return saveCustomer(customer);
     }
 
     @Override

@@ -90,47 +90,54 @@ create table basket_items
     subscription_id bigint references subscriptions
 );
 
-insert into statuses(id, name)
-values (1, 'valid'),
-       (2, 'blocked');
+insert into statuses(name)
+values ('valid'),
+       ('blocked');
 
-insert into roles(id, name)
-values (1, 'admin'),
-       (2, 'customer'),
-       (3, 'owner');
+insert into roles(name)
+values ('admin'),
+       ('customer'),
+       ('owner');
 
-insert into users(id, email, login, password, role_id)
-values (1, null, 'admin', '$2a$10$qjHmq9fz8E9NhsZPhw2.D.jS2meQKM4BwKeX9Q4aLW0lghmtY51mS', 1),
-       (2, 'customer@mail.ru', 'customer1', '$2a$10$qjHmq9fz8E9NhsZPhw2.D.jS2meQKM4BwKeX9Q4aLW0lghmtY51mS', 2),
-       (3, 'owner@mail.ru', 'owner1', '$2a$10$qjHmq9fz8E9NhsZPhw2.D.jS2meQKM4BwKeX9Q4aLW0lghmtY51mS', 3);
+insert into users(email, login, password, role_id)
+values (null, 'admin', '$2a$10$qjHmq9fz8E9NhsZPhw2.D.jS2meQKM4BwKeX9Q4aLW0lghmtY51mS', (select id from roles where name like 'admin')),
+       ('customer@mail.ru', 'customer1', '$2a$10$qjHmq9fz8E9NhsZPhw2.D.jS2meQKM4BwKeX9Q4aLW0lghmtY51mS',
+        (select id from roles where name like 'customer')),
+       ('owner@mail.ru', 'owner1', '$2a$10$qjHmq9fz8E9NhsZPhw2.D.jS2meQKM4BwKeX9Q4aLW0lghmtY51mS',
+        (select id from roles where name like 'owner'));
 
-insert into billing_accounts(id, balance, cvv, number)
-values (1, '1000', '666', '123456'),
-       (2, '1000', '666', '654321');
+insert into billing_accounts(balance, cvv, number)
+values ('1000', '666', '123456'),
+       ('1000', '666', '654321');
 
-insert into owners(id, name, billing_account_id, user_id)
-values (1, 'Steve Jobs', 1, 3);
+insert into owners(name, billing_account_id, user_id)
+values ('Steve Jobs', 1, (select id from users where login like 'owner1'));
 
 insert into customers(address, name, billing_account_id, status_id, user_id)
-values ('Belarus, Minsk', 'Petya', 1, 1, 2);
+values ('Belarus, Minsk', 'Petya', 1, 1, (select id from users where login like 'customer1'));
 
-insert into categories(id, name)
-values (1, 'music'),
-       (2, 'games'),
-       (3, 'sport'),
-       (4, 'media'),
-       (5, 'other');
+insert into categories(name)
+values ('music'),
+       ('games'),
+       ('sport'),
+       ('media'),
+       ('other');
 
 insert into subscriptions(description, image_url, name, price, category_id, owner_id)
-values ('Apple Music description', 'https://i.pinimg.com/originals/67/f6/cb/67f6cb14f862297e3c145014cdd6b635.jpg', 'Apple Music', 9.99, 1,
-        1),
+values ('Apple Music description', 'https://i.pinimg.com/originals/67/f6/cb/67f6cb14f862297e3c145014cdd6b635.jpg', 'Apple Music', 9.99,
+        (select id from categories where categories.name like 'music'),
+        (select id from owners where name like 'Steve Jobs')),
        ('Apple TV description', 'https://play-lh.googleusercontent.com/zovfDsfyegE7SF3hCrN_hWPiQ2VLSh_Hreg20YsgQD5d9rfeq_HLA1fdq3q9zn-QNg',
-        'Apple TV', 6.99, 4, 1),
+        'Apple TV', 6.99, (select id from categories where categories.name like 'media'),
+        (select id from owners where name like 'Steve Jobs')),
        ('Apple Arcade description', 'https://i1.wp.com/www.appgefahren.de/wp-content/uploads/2019/09/Apple-Arcade-Icon.jpg', 'Apple Arcade',
-        5.99, 2, 1),
-       ('Apple News description', 'https://seeklogo.com/images/A/apple-news-logo-AE5FC95C6B-seeklogo.com.png', 'Apple News', 3.99, 4, 1),
+        5.99, (select id from categories where categories.name like 'games'), (select id from owners where name like 'Steve Jobs')),
+       ('Apple News description', 'https://seeklogo.com/images/A/apple-news-logo-AE5FC95C6B-seeklogo.com.png', 'Apple News', 3.99, 4,
+        (select id from owners where name like 'Steve Jobs')),
        ('iCloud description', 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS7aRXIsaVuG8EMhoeMM0LMUsBUlcmEEcDKhA&usqp=CAU',
-        'iCloud', 2.99, 1, 1),
+        'iCloud', 2.99, (select id from categories where categories.name like 'music'),
+        (select id from owners where name like 'Steve Jobs')),
        ('Apple Fitness+ description',
         'https://www.gannett-cdn.com/presto/2020/12/14/USAT/7f3e26ed-032d-4ac9-9c4e-ff9b9951f1e9-8x_iOS14-Activity-Icon_US-EN_00-0051-092_v1_w.png',
-        'Apple Fitness+', 3.99, 3, 1);
+        'Apple Fitness+', 3.99, (select id from categories where categories.name like 'sport'),
+        (select id from owners where name like 'Steve Jobs'));

@@ -1,19 +1,18 @@
 package ru.otus.apigateway.controller;
 
 import lombok.AllArgsConstructor;
-import ru.otus.apigateway.model.view.BillingAccountViewModel;
-import ru.otus.apigateway.model.view.Content;
-import ru.otus.apigateway.model.view.OwnerViewModel;
-import ru.otus.apigateway.service.api.OwnerDataService;
-import ru.otus.apigateway.service.api.UserDataService;
-import ru.otus.apigateway.transfer.Exist;
-import ru.otus.apigateway.transfer.New;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.otus.apigateway.model.view.Content;
+import ru.otus.apigateway.model.view.OwnerViewModel;
+import ru.otus.apigateway.service.api.OwnerDataService;
+import ru.otus.apigateway.service.api.UserDataService;
+import ru.otus.apigateway.transfer.Exist;
+import ru.otus.apigateway.transfer.New;
 
 import java.util.Optional;
 
@@ -28,7 +27,7 @@ public class OwnerController {
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @RequestMapping(params = {"page", "size"})
-    public ResponseEntity<Content> getAllOwners(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public ResponseEntity<Content<OwnerViewModel>> getAllOwners(@RequestParam("page") int page, @RequestParam("size") int size) {
         return ResponseEntity.ok(ownerDataService.getAll(page, size));
     }
 
@@ -68,16 +67,5 @@ public class OwnerController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteOwner(@PathVariable String id) {
         ownerDataService.deleteOwner(Long.valueOf(id));
-    }
-
-    @PreAuthorize("hasAnyAuthority('owner')")
-    @RequestMapping(value = "/ba", method = RequestMethod.POST)
-    public ResponseEntity<BillingAccountViewModel> saveBa(@Validated(New.class) @RequestBody BillingAccountViewModel ba) {
-        OwnerViewModel owner = ownerDataService.getOwnerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
-        if (owner.getBillingAccount() == null && ba.getNumber() != null) {
-            owner.setBillingAccount(ba);
-            return ResponseEntity.ok(ownerDataService.saveOwnerBa(owner).getBillingAccount());
-        }
-        return ResponseEntity.notFound().build();
     }
 }

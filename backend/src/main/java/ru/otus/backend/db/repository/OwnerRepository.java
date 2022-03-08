@@ -2,6 +2,7 @@ package ru.otus.backend.db.repository;
 
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.otus.backend.db.entity.Owner;
@@ -9,7 +10,7 @@ import ru.otus.backend.db.entity.Owner;
 import java.util.List;
 
 @Repository
-public interface OwnerRepository extends CrudRepository<Owner, Long> {
+public interface OwnerRepository extends PagingAndSortingRepository<Owner, Long> {
 
     @Query(value = """
             select o.id       as owner_id,
@@ -27,7 +28,7 @@ public interface OwnerRepository extends CrudRepository<Owner, Long> {
             from owners o
                      inner join users u
                                 on o.user_id = u.id
-                     inner join billing_accounts b
+                     left join billing_accounts b
                                 on o.billing_account_id = b.id
                      inner join roles r on r.id = u.role_id
             where o.user_id = :user_id
@@ -51,7 +52,7 @@ public interface OwnerRepository extends CrudRepository<Owner, Long> {
             from owners o
                      inner join users u
                                 on o.user_id = u.id
-                     inner join billing_accounts b
+                     left join billing_accounts b
                                 on o.billing_account_id = b.id
                      inner join roles r on r.id = u.role_id
             offset :offset limit :limit
@@ -76,7 +77,7 @@ public interface OwnerRepository extends CrudRepository<Owner, Long> {
             from owners o
                      inner join users u
                                 on o.user_id = u.id
-                     inner join billing_accounts b
+                     left join billing_accounts b
                                 on o.billing_account_id = b.id
                      inner join roles r on r.id = u.role_id
                                                     """,

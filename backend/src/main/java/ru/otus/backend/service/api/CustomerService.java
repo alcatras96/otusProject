@@ -8,6 +8,8 @@ public interface CustomerService {
 
     Optional<Customer> getCustomerById(Long id);
 
+    Customer saveWithBillingAccount(Customer customer);
+
     Iterable<Customer> getAllCustomers(int page, int size);
 
     Customer saveCustomer(Customer customer);

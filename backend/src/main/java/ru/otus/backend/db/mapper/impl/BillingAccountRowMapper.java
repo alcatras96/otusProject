@@ -12,7 +12,12 @@ public class BillingAccountRowMapper implements RowMapper<BillingAccount> {
 
     @Override
     public BillingAccount mapRow(ResultSet rs) throws SQLException {
-        return new BillingAccount(rs.getLong("billing_account_id"),
+        long billing_account_id = rs.getLong("billing_account_id");
+        if (billing_account_id == 0) {
+            return null;
+        }
+
+        return new BillingAccount(billing_account_id,
                 rs.getString("billing_account_number"),
                 rs.getInt("billing_account_cvv"),
                 rs.getInt("billing_account_balance"));

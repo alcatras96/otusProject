@@ -29,10 +29,6 @@ export class CustomerService {
         return this.http.delete<void>('/api/customers/' + id);
     }
 
-    saveBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
-        return this.http.post<BillingAccount>('/api/customers/ba', billingAccount);
-    }
-
     addMoneyOnBillingAccount(money: number): Observable<BillingAccount> {
         return this.http.put<BillingAccount>('/api/customers/ba/' + money, '');
     }

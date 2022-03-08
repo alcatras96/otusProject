@@ -1,10 +1,12 @@
 package ru.otus.apigateway.service.impl;
 
-import ru.otus.apigateway.model.view.BillingAccountViewModel;
-import ru.otus.apigateway.service.api.BillingAccountService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import ru.otus.apigateway.model.view.BillingAccountViewModel;
+import ru.otus.apigateway.model.view.CustomerViewModel;
+import ru.otus.apigateway.model.view.OwnerViewModel;
+import ru.otus.apigateway.service.api.BillingAccountService;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -40,4 +42,15 @@ public class BaServiceImpl implements BillingAccountService {
         return null;
     }
 
+    @Override
+    public OwnerViewModel saveOwnerBillingAccount(OwnerViewModel owner) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.postForEntity(backendServerUrl + "/api/billing_accounts/owner", owner, OwnerViewModel.class).getBody();
+    }
+
+    @Override
+    public OwnerViewModel saveCustomerBillingAccount(CustomerViewModel customer) {
+        RestTemplate restTemplate = new RestTemplate();
+        return restTemplate.postForEntity(backendServerUrl + "/api/billing_accounts/customer", customer, OwnerViewModel.class).getBody();
+    }
 }

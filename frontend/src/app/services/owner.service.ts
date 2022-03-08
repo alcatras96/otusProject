@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Owner} from "../main-module/models/owner";
-import {BillingAccount} from "../main-module/models/billing-account";
 import {Content} from "../main-module/models/content";
 
 @Injectable({
@@ -27,10 +26,6 @@ export class OwnerService {
 
     deleteOwner(id: string): Observable<void> {
         return this.http.delete<void>('/api/owners/' + id);
-    }
-
-    saveBillingAccount(ba: BillingAccount): Observable<BillingAccount> {
-        return this.http.post<BillingAccount>('/api/owners/ba', ba);
     }
 
     getOwnerByUserId(): Observable<Owner> {

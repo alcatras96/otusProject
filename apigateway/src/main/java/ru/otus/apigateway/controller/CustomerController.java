@@ -1,8 +1,14 @@
 package ru.otus.apigateway.controller;
 
 import lombok.AllArgsConstructor;
-import ru.otus.apigateway.model.view.BillingAccountViewModel;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.apigateway.constants.Constants;
+import ru.otus.apigateway.model.view.BillingAccountViewModel;
 import ru.otus.apigateway.model.view.Content;
 import ru.otus.apigateway.model.view.CustomerViewModel;
 import ru.otus.apigateway.service.api.BillingAccountService;
@@ -10,12 +16,6 @@ import ru.otus.apigateway.service.api.CustomerDataService;
 import ru.otus.apigateway.service.api.UserDataService;
 import ru.otus.apigateway.transfer.Exist;
 import ru.otus.apigateway.transfer.New;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/customers")
@@ -29,7 +29,7 @@ public class CustomerController {
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @RequestMapping(params = {"page", "size"})
-    public ResponseEntity<Content> getAllCustomers(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public ResponseEntity<Content<CustomerViewModel>> getAllCustomers(@RequestParam("page") int page, @RequestParam("size") int size) {
         return ResponseEntity.ok(customerDataService.getAll(page, size));
     }
 
@@ -72,17 +72,6 @@ public class CustomerController {
     @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
     public void deleteCustomer(@PathVariable String id) {
         customerDataService.deleteCustomer(Long.valueOf(id));
-    }
-
-    @PreAuthorize("hasAnyAuthority('customer')")
-    @RequestMapping(value = "/ba", method = RequestMethod.POST)
-    public ResponseEntity<BillingAccountViewModel> saveBa(@Validated(New.class) @RequestBody BillingAccountViewModel ba) {
-        CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
-        if (customer.getBillingAccount() == null && ba.getNumber() != null) {
-            customer.setBillingAccount(ba);
-            return ResponseEntity.ok(customerDataService.saveCustomerBa(customer).getBillingAccount());
-        }
-        return ResponseEntity.notFound().build();
     }
 
     @PreAuthorize("hasAnyAuthority('customer')")

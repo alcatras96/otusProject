@@ -5,8 +5,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.backend.db.entity.BillingAccount;
 import ru.otus.backend.db.entity.Customer;
+import ru.otus.backend.db.entity.Owner;
 import ru.otus.backend.service.api.BillingAccountService;
 import ru.otus.backend.service.api.CustomerService;
+import ru.otus.backend.service.api.OwnerService;
 
 import java.util.Optional;
 
@@ -17,6 +19,7 @@ public class BillingAccountController {
 
     private final BillingAccountService billingAccountService;
     private final CustomerService customerService;
+    private final OwnerService ownerService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<BillingAccount> getBillingAccountById(@PathVariable(name = "id") Long id) {
@@ -34,9 +37,13 @@ public class BillingAccountController {
         return billingAccountService.saveBillingAccount(billingAccount);
     }
 
-    @PostMapping(value = "/ba")
-    public Customer saveBillingAccount(@RequestBody Customer customer) {
-        billingAccountService.saveBillingAccount(customer.getBillingAccount());
-        return customerService.saveCustomer(customer);
+    @PostMapping(value = "/customer")
+    public Customer saveCustomerBillingAccount(@RequestBody Customer customer) {
+        return customerService.saveWithBillingAccount(customer);
+    }
+
+    @PostMapping(value = "/owner")
+    public Owner saveOwnerBillingAccount(@RequestBody Owner owner) {
+        return ownerService.saveWithBillingAccount(owner);
     }
 }

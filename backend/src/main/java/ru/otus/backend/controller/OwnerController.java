@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.backend.db.entity.Owner;
-import ru.otus.backend.service.api.BillingAccountService;
 import ru.otus.backend.service.api.OwnerService;
 
 import java.util.Optional;
@@ -15,7 +14,6 @@ import java.util.Optional;
 public class OwnerController {
 
     private final OwnerService ownerService;
-    private final BillingAccountService billingAccountService;
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<Owner> getOwnerById(@PathVariable(name = "id") Long id) {
@@ -52,12 +50,5 @@ public class OwnerController {
         } else {
             return ResponseEntity.noContent().build();
         }
-    }
-
-    @PostMapping(value = "/ba")
-    public Owner saveBa(@RequestBody Owner owner) {
-        billingAccountService.saveBillingAccount(owner.getBillingAccount());
-        return ownerService.saveOwner(owner);
-
     }
 }

@@ -26,6 +26,15 @@ public class OwnerServiceImpl implements OwnerService {
         return ownerRepository.findById(id);
     }
 
+    @Transactional
+    @Override
+    public Owner saveWithBillingAccount(Owner owner) {
+        BillingAccount billingAccount = owner.getBillingAccount();
+        billingAccountService.saveBillingAccount(billingAccount);
+        owner.setBillingAccountId(billingAccount.getId());
+        return saveOwner(owner);
+    }
+
     @Override
     public Iterable<Owner> getAllOwners(Optional<Integer> pageOptional, Optional<Integer> sizeOptional) {
         if (pageOptional.isPresent() && sizeOptional.isPresent()) {

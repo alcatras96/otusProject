@@ -11,11 +11,15 @@ export class BillingAccountService {
     constructor(private http: HttpClient) {
     }
 
-    getCustomerBillingAccounts(): Observable<BillingAccount[]> {
-        return this.http.get<BillingAccount[]>('/api/billing_accounts');
-    }
-
     saveBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
         return this.http.put<BillingAccount>('/api/billing_accounts', billingAccount);
+    }
+
+    saveCustomerBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
+        return this.http.post<BillingAccount>('/api/billing_accounts/customer', billingAccount);
+    }
+
+    saveOwnerBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
+        return this.http.post<BillingAccount>('/api/billing_accounts/owner', billingAccount);
     }
 }
