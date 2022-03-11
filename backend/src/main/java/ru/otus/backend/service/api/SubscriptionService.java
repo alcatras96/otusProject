@@ -19,4 +19,6 @@ public interface SubscriptionService {
     Subscription saveSubscription(Subscription subscription);
 
     void deleteSubscription(Long id);
+
+    void deleteSubscriptionsByOwnerId(Long ownerId);
 }

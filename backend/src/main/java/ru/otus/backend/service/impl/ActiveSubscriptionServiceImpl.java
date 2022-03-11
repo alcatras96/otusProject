@@ -64,4 +64,9 @@ public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionService 
     public void deleteActiveSubscriptionById(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public void deleteActiveSubscriptionsByCustomerId(Long customerId) {
+        repository.deleteAll(getActiveSubscriptionsByCustomerId(customerId));
+    }
 }

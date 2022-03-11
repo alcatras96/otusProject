@@ -18,4 +18,6 @@ public interface ActiveSubscriptionService {
     ActiveSubscription saveActiveSubscription(ActiveSubscription activeSubscription);
 
     void deleteActiveSubscriptionById(Long id);
+
+    void deleteActiveSubscriptionsByCustomerId(Long customerId);
 }

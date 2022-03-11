@@ -5,10 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.apigateway.model.view.BillingAccountViewModel;
 import ru.otus.apigateway.model.view.CustomerViewModel;
 import ru.otus.apigateway.model.view.OwnerViewModel;
@@ -38,14 +35,14 @@ public class BillingAccountController {
     }
 
     @PreAuthorize("hasAnyAuthority('owner', 'customer')")
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<BillingAccountViewModel> saveBillingAccount(@Validated(Exist.class) @RequestBody BillingAccountViewModel billingAccount) {
         billingAccountService.saveBillingAccount(billingAccount);
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasAnyAuthority('customer')")
-    @RequestMapping(value = "/customer", method = RequestMethod.POST)
+    @PostMapping(value = "/customer")
     public ResponseEntity<BillingAccountViewModel> saveCustomerBillingAccount(@Validated(New.class) @RequestBody BillingAccountViewModel billingAccountViewModel) {
         CustomerViewModel customer = customerDataService.getCustomerByUserId(
                 Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId())
@@ -55,7 +52,7 @@ public class BillingAccountController {
     }
 
     @PreAuthorize("hasAnyAuthority('owner')")
-    @RequestMapping(value = "/owner", method = RequestMethod.POST)
+    @PostMapping(value = "/owner")
     public ResponseEntity<BillingAccountViewModel> saveOwnerBillingAccount(@Validated(New.class) @RequestBody BillingAccountViewModel billingAccountViewModel) {
         OwnerViewModel owner = ownerDataService.getOwnerByUserId(
                 Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId())

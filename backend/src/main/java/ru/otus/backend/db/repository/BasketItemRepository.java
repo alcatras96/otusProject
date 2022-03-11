@@ -31,8 +31,6 @@ public interface BasketItemRepository extends CrudRepository<BasketItem, Long> {
 
     Long countByCustomerId(Long id);
 
-    List<BasketItem> findAll();
-
     @Modifying
     @Query(value = "delete from basket_items b where b.customer_id = :customer_id")
     void deleteBasketItemsByCustomerId(@Param("customer_id") Long customerId);

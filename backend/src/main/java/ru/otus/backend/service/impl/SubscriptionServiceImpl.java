@@ -50,4 +50,9 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     public void deleteSubscription(Long id) {
         repository.deleteById(id);
     }
+
+    @Override
+    public void deleteSubscriptionsByOwnerId(Long ownerId) {
+        repository.deleteAll(getByOwnerId(ownerId));
+    }
 }

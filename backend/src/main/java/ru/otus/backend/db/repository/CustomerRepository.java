@@ -1,14 +1,13 @@
 package ru.otus.backend.db.repository;
 
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jdbc.repository.query.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.otus.backend.db.entity.Customer;
 
 @Repository
-public interface CustomerRepository extends CrudRepository<Customer, Long> {
+public interface CustomerRepository extends PagingAndSortingRepository<Customer, Long> {
 
     @Query(value = """
             select c.id       as customer_id,
@@ -36,6 +35,4 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
                                                         """,
             resultSetExtractorRef = "customerByUserIdExtractor")
     Customer findByUserId(@Param("user_id") Long id);
-
-    Iterable<Customer> findAll(Pageable pageable);
 }

@@ -11,7 +11,7 @@ export class SubtractionService {
     }
 
     editThreshold(value: number): Observable<number> {
-        return this.http.put<number>('/api/subtraction/threshold/' + value, 0);
+        return this.http.put<number>('/api/subtraction/threshold', value);
     }
 
     getThreshold(): Observable<number> {

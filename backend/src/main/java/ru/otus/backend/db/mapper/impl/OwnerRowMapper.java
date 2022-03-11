@@ -12,7 +12,6 @@ public class OwnerRowMapper implements RowMapper<Owner> {
 
     @Override
     public Owner mapRow(ResultSet rs) throws SQLException {
-        return new Owner(rs.getLong("owner_id"),
-                rs.getString("owner_name"));
+        return new Owner(rs.getLong("owner_id"), rs.getString("owner_name"));
     }
 }

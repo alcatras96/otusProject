@@ -6,6 +6,7 @@ import ru.otus.backend.db.entity.BillingAccount;
 import ru.otus.backend.db.repository.BillingAccountRepository;
 import ru.otus.backend.service.api.BillingAccountService;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -20,8 +21,8 @@ public class BillingAccountServiceImpl implements BillingAccountService {
     }
 
     @Override
-    public void deleteBa(BillingAccount ba) {
-        repository.delete(ba);
+    public void deleteBillingAccountById(Long id) {
+        repository.deleteById(id);
     }
 
     @Override
@@ -32,5 +33,10 @@ public class BillingAccountServiceImpl implements BillingAccountService {
     @Override
     public Iterable<BillingAccount> getAllBillingAccounts() {
         return repository.findAll();
+    }
+
+    @Override
+    public Iterable<BillingAccount> getBillingAccountsById(List<Long> ids) {
+        return repository.findAllById(ids);
     }
 }

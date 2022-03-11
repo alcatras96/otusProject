@@ -23,28 +23,28 @@ public class SubscriptionController {
     private final OwnerDataService ownerDataService;
     private final UserDataService userDataService;
 
-    @RequestMapping(params = {"page", "size"})
-    public ResponseEntity<Content> findAll(@RequestParam("page") int page, @RequestParam("size") int size) {
+    @GetMapping(params = {"page", "size"})
+    public ResponseEntity<Content<SubscriptionViewModel>> findAll(@RequestParam("page") int page, @RequestParam("size") int size) {
         return ResponseEntity.ok(subscriptionDataService.findAll(page, size));
     }
 
-    @RequestMapping(value = "/category/{id}", params = {"page", "size"})
-    public ResponseEntity<Content> findByCategoryId(@PathVariable("id") Long id, @RequestParam("page") int page, @RequestParam("size") int size) {
+    @GetMapping(value = "/category/{id}", params = {"page", "size"})
+    public ResponseEntity<Content<SubscriptionViewModel>> findByCategoryId(@PathVariable("id") Long id, @RequestParam("page") int page, @RequestParam("size") int size) {
         return ResponseEntity.ok(subscriptionDataService.findByCategoryId(id, page, size));
     }
 
-    @RequestMapping(value = "/search", params = {"name", "page", "size"})
-    public ResponseEntity<Content> findByNameLike(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("size") int size) {
+    @GetMapping(value = "/search", params = {"name", "page", "size"})
+    public ResponseEntity<Content<SubscriptionViewModel>> findByNameLike(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("size") int size) {
         return ResponseEntity.ok(subscriptionDataService.findByNameLike(name, page, size));
     }
 
-    @RequestMapping(value = "/owner/{ownerId}")
+    @GetMapping(value = "/owner/{ownerId}")
     public ResponseEntity<List<SubscriptionViewModel>> getSubscriptionsByOwnerId(@PathVariable(name = "ownerId") String id) {
         return ResponseEntity.ok(subscriptionDataService.findByOwnerId(Long.valueOf(id)));
     }
 
     @PreAuthorize("hasAnyAuthority('owner')")
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<SubscriptionViewModel> saveSubscription(@RequestBody SubscriptionViewModel subscription) {
         OwnerViewModel owner = ownerDataService.getOwnerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
         if (owner.getBillingAccount() == null) {
@@ -54,7 +54,7 @@ public class SubscriptionController {
     }
 
     @PreAuthorize("hasAnyAuthority('owner')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public void deleteCustomer(@PathVariable String id) {
         subscriptionDataService.deleteSubscription(Long.valueOf(id));
     }

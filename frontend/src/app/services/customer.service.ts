@@ -21,6 +21,10 @@ export class CustomerService {
         return this.http.put<Customer>('/api/customers', customer);
     }
 
+    updateCustomerDetails(customer: Customer): Observable<Customer> {
+        return this.http.put<Customer>('/api/customers/details', customer);
+    }
+
     createCustomer(customer: Customer): Observable<Customer> {
         return this.http.post<Customer>('/api/customers', customer);
     }

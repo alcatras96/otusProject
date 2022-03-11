@@ -2,10 +2,7 @@ package ru.otus.backend.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.otus.backend.constants.Constants;
 
 @AllArgsConstructor
@@ -13,8 +10,8 @@ import ru.otus.backend.constants.Constants;
 @RequestMapping("/api/subtraction")
 public class SubtractionController {
 
-    @PutMapping(value = "/threshold/{value}")
-    public ResponseEntity<Integer> editThreshold(@PathVariable(name = "value") Integer threshold) {
+    @PutMapping(value = "/threshold")
+    public ResponseEntity<Integer> editThreshold(@RequestBody Integer threshold) {
         if (threshold < 0) {
             Constants.THRESHOLD = threshold;
             return ResponseEntity.ok(Constants.THRESHOLD);
@@ -23,4 +20,8 @@ public class SubtractionController {
         }
     }
 
+    @GetMapping(value = "/threshold")
+    public Integer getThreshold() {
+        return Constants.THRESHOLD;
+    }
 }

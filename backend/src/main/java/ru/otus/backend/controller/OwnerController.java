@@ -31,18 +31,24 @@ public class OwnerController {
         return ownerService.saveOwner(owner);
     }
 
+    @PutMapping(value = "/details")
+    public void saveOwnerDetails(@RequestBody Owner owner) {
+        ownerService.updateOwnerDetails(owner);
+    }
+
     @PutMapping
     public Owner saveEditedOwner(@RequestBody Owner owner) {
         return ownerService.saveOwner(owner);
     }
 
+    //todo return ok
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<?> deleteOwner(@PathVariable(name = "id") Long id) {
         ownerService.deleteOwner(id);
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "user/{id}")
+    @GetMapping(value = "/user/{id}")
     public ResponseEntity<Owner> getOwnerByUserId(@PathVariable(name = "id") Long id) {
         Owner owner = ownerService.findByUserId(id);
         if (owner != null) {

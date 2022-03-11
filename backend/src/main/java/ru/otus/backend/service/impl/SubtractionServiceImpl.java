@@ -34,8 +34,8 @@ public class SubtractionServiceImpl implements SubtractionService {
         for (ActiveSubscription subscription : activeSubscriptions) {
             long newEditedDate = System.currentTimeMillis();
             long deltaTime = newEditedDate - subscription.getLastEditDate();
-            int amount = (int) deltaTime / CYCLE_TIME; //Находится количество условных единиц которые мы должны вычесть с quantity и умножить на price и вычесть с кошелька.
-            log.info("Разница во времени: " + ((Long) deltaTime));
+            int amount = (int) deltaTime / CYCLE_TIME;
+            log.info("Difference in time: " + ((Long) deltaTime));
             if (amount > 0) {
                 Optional<Customer> customerOptional = customerService.getCustomerById(subscription.getCustomerId());
 
@@ -52,7 +52,7 @@ public class SubtractionServiceImpl implements SubtractionService {
                         BillingAccount ownerBillingAccount = owner.getBillingAccount();
                         Integer ownerBalance = ownerBillingAccount.getBalance();
 
-                        if (quantity < 0) {//Если у нас сервис не запускался долгое время то кол-во дней может быть отрицательным, в таком случае мы просто меняем дату так как проблема на стороне сервера.
+                        if (quantity < 0) {
                             subscription.setLastEditDate(newEditedDate);
                             activeSubscriptionService.saveActiveSubscription(subscription);
                         } else {
@@ -74,9 +74,8 @@ public class SubtractionServiceImpl implements SubtractionService {
                             billingAccountService.saveBillingAccount(customerBillingAccount);
                         }
 
-                        if (customerBillingAccount.getBalance() < Constants.THRESHOLD) {//Если баланс кошелька привысил какое-то кол-во денег то блокируем пользователя
-                            customer.setStatusId(2L);
-                            customerService.saveEditedCustomer(customer);
+                        if (customerBillingAccount.getBalance() < Constants.THRESHOLD) {
+                            customerService.updateCustomerStatus(customer.getId(), 2L);
                         }
                     } else {
                         subscription.setLastEditDate(newEditedDate);

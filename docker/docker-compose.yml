@@ -12,7 +12,7 @@ services:
       POSTGRES_DB: backendDB
     networks:
       - ecommerce
-    # remove ports, only for development
+    # only for development
     ports:
       - "5430:5432"
     deploy:

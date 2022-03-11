@@ -31,6 +31,11 @@ public class CustomerController {
         return customerService.saveCustomer(customer);
     }
 
+    @PutMapping(value = "/details")
+    public void saveOwnerDetails(@RequestBody Customer customer) {
+        customerService.updateCustomerDetails(customer);
+    }
+
     @PutMapping
     public Customer saveEditedCustomer(@RequestBody Customer customer) {
         return customerService.saveCustomer(customer);

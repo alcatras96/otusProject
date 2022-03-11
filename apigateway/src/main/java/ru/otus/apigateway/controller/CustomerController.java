@@ -33,21 +33,29 @@ public class CustomerController {
         return ResponseEntity.ok(customerDataService.getAll(page, size));
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<CustomerViewModel> saveCustomer(@Validated(New.class) @RequestBody CustomerViewModel customer) {
         customer.getUser().setPassword(passwordEncoder.encode(customer.getUser().getPassword()));
         return ResponseEntity.ok(customerDataService.saveCustomer(customer));
     }
 
 
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<CustomerViewModel> saveEditedCustomer(@Validated(Exist.class) @RequestBody CustomerViewModel customer) {
         customerDataService.saveEditedCustomer(customer);
         return ResponseEntity.ok().build();
     }
 
+//    @Validated(Exist.class) on customer
     @PreAuthorize("hasAnyAuthority('admin')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @PutMapping(value = "/details")
+    public ResponseEntity<CustomerViewModel> updateCustomerDetails(@RequestBody CustomerViewModel customer) {
+        customerDataService.updateCustomerDetails(customer);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasAnyAuthority('admin')")
+    @GetMapping(value = "/{id}")
     public ResponseEntity<CustomerViewModel> getCustomerById(@PathVariable(name = "id") Long id) {
         CustomerViewModel customer = customerDataService.getCustomerById(id);
         if (customer != null) {
@@ -58,7 +66,7 @@ public class CustomerController {
     }
 
     @PreAuthorize("hasAnyAuthority('admin', 'customer')")
-    @RequestMapping(value = "/user/", method = RequestMethod.GET)
+    @GetMapping(value = "/user/")
     public ResponseEntity<CustomerViewModel> getCustomerByUserId() {
         CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
         if (customer != null) {
@@ -69,13 +77,13 @@ public class CustomerController {
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public void deleteCustomer(@PathVariable String id) {
         customerDataService.deleteCustomer(Long.valueOf(id));
     }
 
     @PreAuthorize("hasAnyAuthority('customer')")
-    @RequestMapping(value = "/ba/{value}", method = RequestMethod.PUT)
+    @PutMapping(value = "/ba/{value}")
     public ResponseEntity<BillingAccountViewModel> saveEditedBa(@PathVariable(name = "value") int value) {
         CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
         if (customer.getBillingAccount() == null || value <= 0) {

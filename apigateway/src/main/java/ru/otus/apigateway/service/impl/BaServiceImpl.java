@@ -27,7 +27,7 @@ public class BaServiceImpl implements BillingAccountService {
     @Override
     public void saveBillingAccount(BillingAccountViewModel billingAccount) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.put(backendServerUrl + "/api/billing_accounts/", billingAccount, BillingAccountViewModel.class);
+        restTemplate.put(backendServerUrl + "/api/billing_accounts/", billingAccount);
     }
 
     @Override

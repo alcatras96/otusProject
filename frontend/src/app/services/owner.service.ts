@@ -3,6 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Owner} from "../main-module/models/owner";
 import {Content} from "../main-module/models/content";
+import {Customer} from "../main-module/models/customer";
 
 @Injectable({
     providedIn: 'root'
@@ -18,6 +19,10 @@ export class OwnerService {
 
     saveEditedOwner(owner: Owner): Observable<Owner> {
         return this.http.put<Owner>('/api/owners', owner);
+    }
+
+    updateOwnerDetails(owner: Owner): Observable<Customer> {
+        return this.http.put<Customer>('/api/owners/details', owner);
     }
 
     saveOwner(owner: Owner): Observable<Owner> {

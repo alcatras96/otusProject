@@ -8,6 +8,10 @@ export class User {
     role: Role = new Role();
 
     static cloneUser(user: User): User {
+        if (!user) {
+            return null;
+        }
+
         let clonedUser: User = new User();
         clonedUser.id = user.id;
         clonedUser.login = user.login;

@@ -16,8 +16,7 @@ export class EditCustomerModalComponent {
     }
 
     saveCustomer() {
-        // console.log(this.editableOwner.name);
-        this.customersService.saveCustomer(this.editableCustomer).subscribe(() => {
+        this.customersService.updateCustomerDetails(this.editableCustomer).subscribe(() => {
             this.onChanged.emit();
         });
     }

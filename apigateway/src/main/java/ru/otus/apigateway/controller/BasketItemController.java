@@ -5,12 +5,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.apigateway.service.api.BasketItemDataService;
-import ru.otus.apigateway.service.api.CustomerDataService;
-import ru.otus.apigateway.service.api.UserDataService;
 import ru.otus.apigateway.model.view.BasketItemViewModel;
 import ru.otus.apigateway.model.view.CustomerViewModel;
 import ru.otus.apigateway.model.view.ListWrapper;
+import ru.otus.apigateway.service.api.BasketItemDataService;
+import ru.otus.apigateway.service.api.CustomerDataService;
+import ru.otus.apigateway.service.api.UserDataService;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -25,7 +25,7 @@ public class BasketItemController {
     private final UserDataService userDataService;
 
     @PreAuthorize("hasAnyAuthority('customer')")
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<?> saveBasketItem(@Valid @RequestBody ListWrapper<BasketItemViewModel> basketItemWrapper) {
         CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
         if (customer.getId().equals(basketItemWrapper.getListWrapper().get(0).getCustomerId())) {
@@ -36,7 +36,7 @@ public class BasketItemController {
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<BasketItemViewModel> getBasketItemById(@PathVariable(name = "id") Long id) {
         BasketItemViewModel sb = basketItemDataService.getBasketItemById(id);
         if (sb != null) {
@@ -47,14 +47,14 @@ public class BasketItemController {
     }
 
     @PreAuthorize("hasAnyAuthority('customer')")
-    @RequestMapping(value = "/count", method = RequestMethod.GET)
+    @GetMapping(value = "/count")
     public ResponseEntity<Long> getCount() {
         CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
         return ResponseEntity.ok(basketItemDataService.getCount(customer.getId()));
     }
 
     @PreAuthorize("hasAnyAuthority('customer')")
-    @RequestMapping(value = "/customer", method = RequestMethod.GET)
+    @GetMapping(value = "/customer")
     public ResponseEntity<List<BasketItemViewModel>> getBasketItemsByCustomerId() {
         CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
         List<BasketItemViewModel> basketItems = basketItemDataService.findByCustomerId(customer.getId());
@@ -66,7 +66,7 @@ public class BasketItemController {
     }
 
     @PreAuthorize("hasAnyAuthority('customer')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public void deleteBasketItem(@PathVariable Long id) {
         CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
         BasketItemViewModel basketItem = basketItemDataService.getBasketItemById(id);
@@ -76,7 +76,7 @@ public class BasketItemController {
     }
 
     @PreAuthorize("hasAnyAuthority('customer')")
-    @RequestMapping(value = "/customer", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/customer")
     public void deleteBasketItemByCustomerId() {
         CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
         basketItemDataService.deleteBasketItemByCustomerId(customer.getId());

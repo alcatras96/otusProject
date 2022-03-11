@@ -6,6 +6,7 @@ import ru.otus.backend.db.entity.User;
 import ru.otus.backend.db.repository.UserRepository;
 import ru.otus.backend.service.api.UserService;
 
+import java.util.List;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -30,6 +31,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User updateUserDetails(User user) {
+        User userForUpdate = getUserById(user.getId()).orElseThrow();
+        userForUpdate.setEmail(user.getEmail());
+        userForUpdate.setLogin(user.getLogin());
+        saveUser(userForUpdate);
+
+        return userForUpdate;
+    }
+
+    @Override
     public void deleteUser(Long id) {
         repository.deleteById(id);
     }
@@ -37,5 +48,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> findByLogin(String login) {
         return repository.findByLogin(login);
+    }
+
+    @Override
+    public Iterable<User> getAllUsersById(List<Long> ids) {
+        return repository.findAllById(ids);
     }
 }

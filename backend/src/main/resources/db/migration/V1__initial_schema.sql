@@ -111,10 +111,10 @@ values ('1000', '666', '123456'),
        ('1000', '666', '654321');
 
 insert into owners(name, billing_account_id, user_id)
-values ('Steve Jobs', 1, (select id from users where login like 'owner1'));
+values ('Steve Jobs', (select id from billing_accounts where number like '123456'), (select id from users where login like 'owner1'));
 
 insert into customers(address, name, billing_account_id, status_id, user_id)
-values ('Belarus, Minsk', 'Petya', 1, 1, (select id from users where login like 'customer1'));
+values ('Belarus, Minsk', 'Petya', (select id from billing_accounts where number like '654321'), 1, (select id from users where login like 'customer1'));
 
 insert into categories(name)
 values ('music'),

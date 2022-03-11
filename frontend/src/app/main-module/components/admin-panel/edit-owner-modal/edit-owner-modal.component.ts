@@ -15,9 +15,8 @@ export class EditOwnerModalComponent {
     }
 
     saveOwner() {
-        this.ownersService.saveEditedOwner(this.editableOwner).subscribe(() => {
+        this.ownersService.updateOwnerDetails(this.editableOwner).subscribe(() => {
             this.onChanged.emit();
         });
     }
-
 }

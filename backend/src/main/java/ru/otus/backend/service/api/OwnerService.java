@@ -12,6 +12,8 @@ public interface OwnerService {
 
     Iterable<Owner> getAllOwners(Optional<Integer> pageOptional, Optional<Integer> sizeOptional);
 
+    void updateOwnerDetails(Owner owner);
+
     Owner saveOwner(Owner owner);
 
     void deleteOwner(Long id);

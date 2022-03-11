@@ -23,15 +23,15 @@ import static ru.otus.apigateway.constants.Constants.TOKEN_PREFIX;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-    //    @Qualifier("usersServiceImpl")
     @Autowired
     private UserServiceImpl usersService;
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest req, HttpServletResponse res, FilterChain chain) throws IOException, ServletException {
-        String header = req.getHeader(HEADER_STRING);
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws IOException, ServletException {
+        String header = request.getHeader(HEADER_STRING);
         String username = null;
         String authToken = null;
         if (header != null && header.startsWith(TOKEN_PREFIX)) {
@@ -53,12 +53,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             UserDetails userDetails = usersService.loadUserByUsername(username);
             if (jwtTokenUtil.validateToken(authToken, userDetails)) {
                 UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, Arrays.asList(new SimpleGrantedAuthority(usersService.findByLogin(username).getRole().getName())));
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 logger.info("authenticated user: " + username + ", setting security context");
                 SecurityContextHolder.getContext().setAuthentication(authentication);//Каждый раз создается контекст при каждом запросе и из него узнается роль для ПреАуторайз
             }
         }
 
-        chain.doFilter(req, res);
+        filterChain.doFilter(request, response);
     }
 }

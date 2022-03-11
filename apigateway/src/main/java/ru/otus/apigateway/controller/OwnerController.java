@@ -26,34 +26,34 @@ public class OwnerController {
     private final PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAnyAuthority('admin')")
-    @RequestMapping(params = {"page", "size"})
+    @GetMapping(params = {"page", "size"})
     public ResponseEntity<Content<OwnerViewModel>> getAllOwners(@RequestParam("page") int page, @RequestParam("size") int size) {
         return ResponseEntity.ok(ownerDataService.getAll(page, size));
     }
 
 
-    @RequestMapping(method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<OwnerViewModel> saveOwner(@Validated(New.class) @RequestBody OwnerViewModel owner) {
         owner.getUser().setPassword(passwordEncoder.encode(owner.getUser().getPassword()));
         return ResponseEntity.ok(ownerDataService.saveOwner(owner));
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
-    @RequestMapping(method = RequestMethod.PUT)
+    @PutMapping
     public ResponseEntity<OwnerViewModel> saveEditedOwner(@Validated(Exist.class) @RequestBody OwnerViewModel owner) {
         ownerDataService.saveEditedOwner(owner);
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    @GetMapping(value = "/{id}")
     public ResponseEntity<OwnerViewModel> getOwnerById(@PathVariable(name = "id") Long id) {
         Optional<OwnerViewModel> owner = ownerDataService.getOwnerById(id);
         return owner.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PreAuthorize("hasAnyAuthority('admin', 'owner')")
-    @RequestMapping(value = "/user/", method = RequestMethod.GET)
+    @GetMapping(value = "/user/")
     public ResponseEntity<OwnerViewModel> getOwnerByUserId() {
         OwnerViewModel owner = ownerDataService.getOwnerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
         if (owner != null) {
@@ -64,8 +64,16 @@ public class OwnerController {
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
-    @RequestMapping(value = "/{id}", method = RequestMethod.DELETE)
+    @DeleteMapping(value = "/{id}")
     public void deleteOwner(@PathVariable String id) {
         ownerDataService.deleteOwner(Long.valueOf(id));
+    }
+
+    @PreAuthorize("hasAnyAuthority('admin')")
+    //    @Validated(Exist.class) on owner
+    @PutMapping(value = "/details")
+    public ResponseEntity<OwnerViewModel> updateOwnerDetails(@RequestBody OwnerViewModel owner) {
+        ownerDataService.updateOwnerDetails(owner);
+        return ResponseEntity.ok().build();
     }
 }

@@ -1,6 +1,7 @@
 package ru.otus.apigateway.service.api;
 
 import ru.otus.apigateway.model.view.Content;
+import ru.otus.apigateway.model.view.CustomerViewModel;
 import ru.otus.apigateway.model.view.OwnerViewModel;
 
 import java.util.Optional;
@@ -19,4 +20,6 @@ public interface OwnerDataService {
     OwnerViewModel saveOwnerBa(OwnerViewModel owner);
 
     void deleteOwner(Long id);
+
+    void updateOwnerDetails(OwnerViewModel owner);
 }

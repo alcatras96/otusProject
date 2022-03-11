@@ -16,5 +16,7 @@ public interface CustomerDataService {
 
     CustomerViewModel saveCustomerBa(CustomerViewModel customer);
 
+    void updateCustomerDetails(CustomerViewModel customer);
+
     void deleteCustomer(Long id);
 }

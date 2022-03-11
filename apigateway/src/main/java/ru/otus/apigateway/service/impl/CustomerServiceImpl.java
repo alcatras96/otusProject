@@ -42,7 +42,7 @@ public class CustomerServiceImpl implements CustomerDataService {
     @Override
     public void saveEditedCustomer(CustomerViewModel customer) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.put(backendServerUrl + "/api/customers", customer, CustomerViewModel.class);
+        restTemplate.put(backendServerUrl + "/api/customers", customer);
     }
 
     @Override
@@ -57,4 +57,9 @@ public class CustomerServiceImpl implements CustomerDataService {
         return restTemplate.postForEntity(backendServerUrl + "/api/customers/ba", customer, CustomerViewModel.class).getBody();
     }
 
+    @Override
+    public void updateCustomerDetails(CustomerViewModel customer) {
+        RestTemplate restTemplate = new RestTemplate();
+        restTemplate.put(backendServerUrl + "/api/customers/details", customer);
+    }
 }
