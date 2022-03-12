@@ -1,5 +1,6 @@
 package ru.otus.backend.service.impl;
 
+import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +15,6 @@ import ru.otus.backend.service.api.BillingAccountService;
 import ru.otus.backend.service.api.CustomerService;
 import ru.otus.backend.service.api.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -33,13 +33,18 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findById(id);
     }
 
+    @Override
+    public Iterable<Customer> getCustomersById(Iterable<Long> ids) {
+        return customerRepository.findAllById(ids);
+    }
+
     @Transactional
     @Override
     public Customer saveWithBillingAccount(Customer customer) {
         BillingAccount billingAccount = customer.getBillingAccount();
         billingAccountService.saveBillingAccount(billingAccount);
         customer.setBillingAccountId(billingAccount.getId());
-        return saveCustomer(customer);
+        return createCustomer(customer);
     }
 
     @Override
@@ -47,12 +52,10 @@ public class CustomerServiceImpl implements CustomerService {
         Page<Customer> customers = customerRepository.findAll(PageRequest.of(page, size));
 
         List<Long> userIds = customers.getContent().stream().map(Customer::getUserId).collect(Collectors.toList());
-        Iterable<User> users = userService.getAllUsersById(userIds);
-        List<User> usersList = new ArrayList<>();
-        users.forEach(usersList::add);
+        List<User> users = Lists.newArrayList(userService.getAllUsersById(userIds));
 
         customers.forEach(customer -> {
-            User user = usersList.stream()
+            User user = users.stream()
                     .filter(usr -> usr.getId().equals(customer.getUserId()))
                     .findAny()
                     .orElseThrow();
@@ -65,7 +68,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Transactional
     @Override
-    public Customer saveCustomer(Customer customer) {
+    public Customer createCustomer(Customer customer) {
         customer.setStatusId(1L);
         User user = customer.getUser();
         user.setRoleId(user.getRole().getId());
@@ -75,11 +78,13 @@ public class CustomerServiceImpl implements CustomerService {
     }
 
     @Override
-    public Customer updateCustomerStatus(Long id, Long statusId) {
-        Customer customer = customerRepository.findById(id).orElseThrow();
-        customer.setStatusId(statusId);
-
+    public Customer updateCustomer(Customer customer) {
         return customerRepository.save(customer);
+    }
+
+    @Override
+    public Iterable<Customer> saveCustomers(Iterable<Customer> customers) {
+        return customerRepository.saveAll(customers);
     }
 
     @Override

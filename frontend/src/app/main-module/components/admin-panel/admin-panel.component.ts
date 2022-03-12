@@ -6,7 +6,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {PageChangedEvent} from "ngx-bootstrap/pagination";
 
 @Component({
-    selector: 'app-adminPanel',
+    selector: 'app-admin-panel',
     templateUrl: './admin-panel.component.html',
     styleUrls: ['./admin-panel.component.css']
 })

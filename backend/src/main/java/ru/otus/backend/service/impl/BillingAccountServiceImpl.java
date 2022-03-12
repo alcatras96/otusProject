@@ -21,6 +21,11 @@ public class BillingAccountServiceImpl implements BillingAccountService {
     }
 
     @Override
+    public Iterable<BillingAccount> saveBillingAccounts(Iterable<BillingAccount> billingAccounts) {
+        return repository.saveAll(billingAccounts);
+    }
+
+    @Override
     public void deleteBillingAccountById(Long id) {
         repository.deleteById(id);
     }
@@ -28,11 +33,6 @@ public class BillingAccountServiceImpl implements BillingAccountService {
     @Override
     public Optional<BillingAccount> getBillingAccountById(Long id) {
         return repository.findById(id);
-    }
-
-    @Override
-    public Iterable<BillingAccount> getAllBillingAccounts() {
-        return repository.findAll();
     }
 
     @Override

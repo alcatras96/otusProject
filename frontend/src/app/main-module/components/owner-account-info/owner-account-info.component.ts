@@ -26,7 +26,7 @@ export class OwnerAccountInfoComponent implements OnInit {
     editableSubscription: Subscription;
 
     constructor(private modalService: BsModalService, private activateRoute: ActivatedRoute,
-                private loadingService: NgxSpinnerService , private ownersService: OwnerService,
+                private loadingService: NgxSpinnerService, private ownersService: OwnerService,
                 private subscriptionsService: SubscriptionService, private baService: BillingAccountService) {
         this.id = activateRoute.snapshot.params['id'];
     }
@@ -87,8 +87,9 @@ export class OwnerAccountInfoComponent implements OnInit {
     }
 
     fillUp(): void {
-        this.owner.billingAccount.balance += this.amount;
-        this.baService.saveBillingAccount(this.owner.billingAccount).subscribe(() => {
+        const billingAccount = this.owner.billingAccount;
+        billingAccount.balance += this.amount;
+        this.baService.addMoneyOnBillingAccount(billingAccount.balance).subscribe(() => {
             this.loadOwner();
             this.amount = 0;
             this.modalRef.hide();

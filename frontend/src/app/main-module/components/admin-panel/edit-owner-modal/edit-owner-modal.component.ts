@@ -3,7 +3,7 @@ import {Owner} from "../../../models/owner";
 import {OwnerService} from "../../../../services/owner.service";
 
 @Component({
-    selector: 'modal-editOwnerMenu',
+    selector: 'modal-edit-owner',
     templateUrl: './edit-owner-modal.component.html'
 })
 export class EditOwnerModalComponent {

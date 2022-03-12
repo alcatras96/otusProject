@@ -9,26 +9,28 @@ import {ListWrapper} from "../main-module/models/list-wrapper";
 })
 export class BasketItemService {
 
+    private _controllerUrlPrefix: string = '/api/basket-items';
+
     constructor(private http: HttpClient) {
     }
 
-    saveSb(basketItem: ListWrapper<BasketItem>): Observable<void> {
-        return this.http.post<void>('/api/basket_item', basketItem);
+    saveBasketItem(basketItem: ListWrapper<BasketItem>): Observable<void> {
+        return this.http.post<void>(this._controllerUrlPrefix, basketItem);
     }
 
-    getSbByCustomerId(): Observable<BasketItem[]> {
-        return this.http.get<BasketItem[]>('/api/basket_item/customer');
+    getBasketItemsByCustomerId(): Observable<BasketItem[]> {
+        return this.http.get<BasketItem[]>(this._controllerUrlPrefix + '/customers');
     }
 
     getCount(): Observable<number> {
-        return this.http.get<number>('/api/basket_item/count');
+        return this.http.get<number>(this._controllerUrlPrefix + '/count');
     }
 
-    deleteSbById(id: string): Observable<BasketItem> {
-        return this.http.delete<BasketItem>('/api/basket_item/' + id);
+    deleteBasketItemById(id: string): Observable<BasketItem> {
+        return this.http.delete<BasketItem>(this._controllerUrlPrefix + '/' + id);
     }
 
-    deleteAllSbByCustomerId(): Observable<void> {
-        return this.http.delete<void>('/api/basket_item/customer');
+    deleteAllBasketItemsByCustomerId(): Observable<void> {
+        return this.http.delete<void>(this._controllerUrlPrefix + '/customers');
     }
 }

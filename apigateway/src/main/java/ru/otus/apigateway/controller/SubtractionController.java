@@ -32,5 +32,4 @@ public class SubtractionController {
         Constants.THRESHOLD = threshold;
         return threshold;
     }
-
 }

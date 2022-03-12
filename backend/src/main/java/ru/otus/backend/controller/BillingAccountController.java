@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/billing_accounts")
+@RequestMapping("/api/billing-accounts")
 public class BillingAccountController {
 
     private final BillingAccountService billingAccountService;
@@ -27,22 +27,17 @@ public class BillingAccountController {
         return billing_accountsOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
     }
 
-    @GetMapping
-    public Iterable<BillingAccount> getAllBillingAccounts() {
-        return billingAccountService.getAllBillingAccounts();
-    }
-
     @PutMapping
     public BillingAccount updateBillingAccount(@RequestBody BillingAccount billingAccount) {
         return billingAccountService.saveBillingAccount(billingAccount);
     }
 
-    @PostMapping(value = "/customer")
+    @PostMapping(value = "/customers")
     public Customer saveCustomerBillingAccount(@RequestBody Customer customer) {
         return customerService.saveWithBillingAccount(customer);
     }
 
-    @PostMapping(value = "/owner")
+    @PostMapping(value = "/owners")
     public Owner saveOwnerBillingAccount(@RequestBody Owner owner) {
         return ownerService.saveWithBillingAccount(owner);
     }

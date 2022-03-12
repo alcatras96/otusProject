@@ -9,7 +9,7 @@ import ru.otus.backend.service.api.CategoryService;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/category")
+@RequestMapping("/api/categories")
 public class CategoryController {
 
     private final CategoryService categoryService;

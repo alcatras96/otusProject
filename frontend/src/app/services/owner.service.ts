@@ -10,30 +10,28 @@ import {Customer} from "../main-module/models/customer";
 })
 export class OwnerService {
 
+    private _controllerUrlPrefix: string = '/api/owners';
+
     constructor(private http: HttpClient) {
     }
 
     getOwners(page: number, size: number): Observable<Content<Owner>> {
-        return this.http.get<Content<Owner>>('/api/owners?page=' + page + '&size=' + size);
-    }
-
-    saveEditedOwner(owner: Owner): Observable<Owner> {
-        return this.http.put<Owner>('/api/owners', owner);
+        return this.http.get<Content<Owner>>(this._controllerUrlPrefix + '?page=' + page + '&size=' + size);
     }
 
     updateOwnerDetails(owner: Owner): Observable<Customer> {
-        return this.http.put<Customer>('/api/owners/details', owner);
+        return this.http.put<Customer>(this._controllerUrlPrefix + '/details', owner);
     }
 
     saveOwner(owner: Owner): Observable<Owner> {
-        return this.http.post<Owner>('/api/owners', owner);
+        return this.http.post<Owner>(this._controllerUrlPrefix, owner);
     }
 
     deleteOwner(id: string): Observable<void> {
-        return this.http.delete<void>('/api/owners/' + id);
+        return this.http.delete<void>(this._controllerUrlPrefix + '/' + id);
     }
 
     getOwnerByUserId(): Observable<Owner> {
-        return this.http.get<Owner>('/api/owners/user/');
+        return this.http.get<Owner>(this._controllerUrlPrefix + '/user');
     }
 }

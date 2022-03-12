@@ -95,7 +95,7 @@ export class ShopComponent implements OnInit {
             i++;
         }
 
-        this.sbService.saveSb(new ListWrapper<BasketItem>(this.shoppingList)).pipe(finalize(() => {
+        this.sbService.saveBasketItem(new ListWrapper<BasketItem>(this.shoppingList)).pipe(finalize(() => {
             this.updateItemsCounter();
             this.shoppingList = [];
             this.selectedMonthsCountPerSubscription = [];

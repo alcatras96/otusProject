@@ -29,7 +29,7 @@ export class LoginModalComponent {
                 this.token.saveToken(data.token);
                 localStorage.setItem('currentUser', this.loginUser.login);
 
-                this.userService.getUser().subscribe(user => {
+                this.userService.getUserByLogin().subscribe(user => {
                     localStorage.setItem('currentUserRole', user.role.name);
                     this.onChange.emit();
 

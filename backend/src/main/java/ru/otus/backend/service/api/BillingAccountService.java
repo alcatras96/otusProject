@@ -7,13 +7,13 @@ import java.util.Optional;
 
 public interface BillingAccountService {
 
-    BillingAccount saveBillingAccount(BillingAccount ba);
+    BillingAccount saveBillingAccount(BillingAccount billingAccounts);
+
+    Iterable<BillingAccount> saveBillingAccounts(Iterable<BillingAccount> billingAccounts);
 
     void deleteBillingAccountById(Long id);
 
     Optional<BillingAccount> getBillingAccountById(Long id);
-
-    Iterable<BillingAccount> getAllBillingAccounts();
 
     Iterable<BillingAccount> getBillingAccountsById(List<Long> ids);
 }

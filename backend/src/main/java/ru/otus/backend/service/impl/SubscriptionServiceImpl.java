@@ -27,6 +27,11 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     }
 
     @Override
+    public Iterable<Subscription> getSubscriptionsById(Iterable<Long> ids) {
+        return repository.findAllById(ids);
+    }
+
+    @Override
     public Iterable<Subscription> findByNameContaining(String name, int page, int size) {
         return repository.findByNameContaining(name, PageRequest.of(page, size));
     }

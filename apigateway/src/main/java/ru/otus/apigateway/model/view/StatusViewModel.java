@@ -7,6 +7,6 @@ import lombok.Data;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class StatusViewModel {
 
-    private int id;
+    private Long id;
     private String name;
 }

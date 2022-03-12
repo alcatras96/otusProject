@@ -1,6 +1,5 @@
 package ru.otus.backend.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -15,7 +14,6 @@ public class User {
     private String login;
     private String email;
     private String password;
-    @JsonIgnore
     private Long roleId;
 
     @Transient

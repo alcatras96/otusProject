@@ -23,7 +23,7 @@ export class CustomerAccountInfoComponent implements OnInit {
 
     constructor(private modalService: BsModalService, private loadingService: NgxSpinnerService,
                 private sbService: BasketItemService, private customersService: CustomerService,
-                private baService: BillingAccountService, private ASService: ActiveSubscriptionService) {
+                private billingAccountService: BillingAccountService, private ASService: ActiveSubscriptionService) {
     }
 
     openModal(template: TemplateRef<any>) {
@@ -61,8 +61,7 @@ export class CustomerAccountInfoComponent implements OnInit {
     }
 
     fillUp(): void {
-        // this.customer.ba.balance += this.amount;
-        this.customersService.addMoneyOnBillingAccount(this.amount).subscribe(() => {
+        this.billingAccountService.addMoneyOnBillingAccount(this.amount).subscribe(() => {
             this.loadCustomer();
             this.amount = 0;
             this.modalRef.hide();

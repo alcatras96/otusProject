@@ -64,10 +64,10 @@ public class JwtTokenUtil implements Serializable {
                         && !isTokenExpired(token));
     }
 
-//    public Claims revokeToken(String token){
-//        return Jwts.parser()
-//                .setSigningKey(SIGNING_KEY)
-//                .parseClaimsJws(token)
-//                .getBody();
-//    }
+    public Claims revokeToken(String token) {
+        return Jwts.parser()
+                .setSigningKey(SIGNING_KEY)
+                .parseClaimsJws(token)
+                .getBody();
+    }
 }

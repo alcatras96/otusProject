@@ -1,6 +1,5 @@
 package ru.otus.backend.db.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.annotation.Transient;
@@ -13,9 +12,7 @@ public class Owner {
     @Id
     private Long id;
     private String name;
-    @JsonIgnore
     private Long userId;
-    @JsonIgnore
     private Long billingAccountId;
 
     @Transient

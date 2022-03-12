@@ -16,32 +16,25 @@ import java.util.*;
 @Service("usersServiceImpl")
 public class UserServiceImpl implements UserDataService, UserDetailsService {
 
-    @Value("${backend.server.url}")
-    private String backendServerUrl;
+    private final static String BACKEND_CONTROLLER_URL_PREFIX = "/api/users";
+
+    private final String backendServerUrl;
+
+    public UserServiceImpl(@Value("${backend.server.url}") String backendServerUrl) {
+        this.backendServerUrl = backendServerUrl;
+    }
 
     @Override
     public List<UserViewModel> getAll() {
         RestTemplate restTemplate = new RestTemplate();
-        UserViewModel[] userViewModelsResponse = restTemplate.getForObject(backendServerUrl + "/api/users/", UserViewModel[].class);
+        UserViewModel[] userViewModelsResponse = restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX, UserViewModel[].class);
         return userViewModelsResponse == null ? Collections.emptyList() : Arrays.asList(userViewModelsResponse);
     }
 
     @Override
     public Optional<UserViewModel> getUserById(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + "/api/users/" + id, Optional.class);
-    }
-
-    @Override
-    public UserViewModel saveUser(UserViewModel user) {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForEntity(backendServerUrl + "/api/users", user, UserViewModel.class).getBody();
-    }
-
-    @Override
-    public void deleteUser(Long id) {
-        RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(backendServerUrl + "/api/users/" + id);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/" + id, Optional.class);
     }
 
     @Override
@@ -56,7 +49,7 @@ public class UserServiceImpl implements UserDataService, UserDetailsService {
     @Override
     public UserViewModel findByLogin(String login) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + "/api/users/userLogin/" + login, UserViewModel.class);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/login/" + login, UserViewModel.class);
     }
 
     private Set<GrantedAuthority> getAuthority(UserViewModel user) {

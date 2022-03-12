@@ -4,7 +4,7 @@ import ru.otus.apigateway.model.view.ActiveSubscriptionViewModel;
 
 import java.util.List;
 
-public interface ActiveSubscriptionDataService {
+public interface ActiveSubscriptionService {
     List<ActiveSubscriptionViewModel> saveActiveSubscriptions(List<ActiveSubscriptionViewModel> activeSubscriptionViewModel);
 
     Iterable<ActiveSubscriptionViewModel> getASByCustomerId(Long id);

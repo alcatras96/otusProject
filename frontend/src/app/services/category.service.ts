@@ -12,6 +12,6 @@ export class CategoryService {
     }
 
     getCategories(): Observable<SubscriptionCategory[]> {
-        return this.http.get<SubscriptionCategory[]>('/api/category');
+        return this.http.get<SubscriptionCategory[]>('/api/categories');
     }
 }

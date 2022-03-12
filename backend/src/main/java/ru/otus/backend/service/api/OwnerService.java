@@ -8,6 +8,8 @@ public interface OwnerService {
 
     Optional<Owner> getOwnerById(Long id);
 
+    Iterable<Owner> getOwnersById(Iterable<Long> ids);
+
     Owner saveWithBillingAccount(Owner owner);
 
     Iterable<Owner> getAllOwners(Optional<Integer> pageOptional, Optional<Integer> sizeOptional);

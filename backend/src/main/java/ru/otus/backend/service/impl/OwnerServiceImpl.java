@@ -1,5 +1,6 @@
 package ru.otus.backend.service.impl;
 
+import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -14,7 +15,6 @@ import ru.otus.backend.service.api.OwnerService;
 import ru.otus.backend.service.api.SubscriptionService;
 import ru.otus.backend.service.api.UserService;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -31,6 +31,11 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     public Optional<Owner> getOwnerById(Long id) {
         return ownerRepository.findById(id);
+    }
+
+    @Override
+    public Iterable<Owner> getOwnersById(Iterable<Long> ids) {
+        return ownerRepository.findAllById(ids);
     }
 
     @Transactional
@@ -50,12 +55,10 @@ public class OwnerServiceImpl implements OwnerService {
             Page<Owner> owners = ownerRepository.findAll(PageRequest.of(page, size));
 
             List<Long> userIds = owners.getContent().stream().map(Owner::getUserId).collect(Collectors.toList());
-            Iterable<User> users = userService.getAllUsersById(userIds);
-            List<User> usersList = new ArrayList<>();
-            users.forEach(usersList::add);
+            List<User> users = Lists.newArrayList(userService.getAllUsersById(userIds));
 
             owners.forEach(owner -> {
-                User user = usersList.stream()
+                User user = users.stream()
                         .filter(usr -> usr.getId().equals(owner.getUserId()))
                         .findAny()
                         .orElseThrow();

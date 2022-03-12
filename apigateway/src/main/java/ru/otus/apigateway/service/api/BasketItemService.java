@@ -4,7 +4,7 @@ import ru.otus.apigateway.model.view.BasketItemViewModel;
 
 import java.util.List;
 
-public interface BasketItemDataService {
+public interface BasketItemService {
 
     List<BasketItemViewModel> findByCustomerId(Long id);
 

@@ -3,7 +3,7 @@ import {Customer} from "../../../models/customer";
 import {CustomerService} from "../../../../services/customer.service";
 
 @Component({
-    selector: 'modal-editCustomerMenu',
+    selector: 'modal-edit-customer',
     templateUrl: './edit-customer-modal.component.html'
 })
 export class EditCustomerModalComponent {

@@ -9,9 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.Serializable;
 
-// This is invoked when user tries to access a secured REST resource without supplying any credentials
-// We should just send a 401 Unauthorized response because there is no 'login page' to redirect to
-
 @Component
 public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint, Serializable {
 

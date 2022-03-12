@@ -35,10 +35,10 @@ public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionService 
 
     @Transactional
     @Override
-    public Iterable<ActiveSubscription> saveActiveSubscriptions(List<ActiveSubscription> activeSubscriptionsToSave) {
+    public Iterable<ActiveSubscription> addActiveSubscriptions(List<ActiveSubscription> activeSubscriptionsToSave) {
         List<ActiveSubscription> sameItems = new ArrayList<>();
 
-        List<ActiveSubscription> currentActiveSubscriptions = (List<ActiveSubscription>) repository.findByCustomerId(activeSubscriptionsToSave.get(0).getCustomerId());
+        List<ActiveSubscription> currentActiveSubscriptions = repository.findByCustomerId(activeSubscriptionsToSave.get(0).getCustomerId());
         for (ActiveSubscription currentActiveSubscription : currentActiveSubscriptions) {
             for (ActiveSubscription activeSubscriptionToSave : activeSubscriptionsToSave) {
                 if (Objects.equals(currentActiveSubscription.getCustomerId(), activeSubscriptionToSave.getCustomerId())
@@ -56,6 +56,11 @@ public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionService 
     }
 
     @Override
+    public Iterable<ActiveSubscription> saveActiveSubscriptions(Iterable<ActiveSubscription> activeSubscriptions) {
+        return repository.saveAll(activeSubscriptions);
+    }
+
+    @Override
     public ActiveSubscription saveActiveSubscription(ActiveSubscription activeSubscription) {
         return repository.save(activeSubscription);
     }
@@ -68,5 +73,10 @@ public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionService 
     @Override
     public void deleteActiveSubscriptionsByCustomerId(Long customerId) {
         repository.deleteAll(getActiveSubscriptionsByCustomerId(customerId));
+    }
+
+    @Override
+    public void deleteActiveSubscriptions(Iterable<ActiveSubscription> activeSubscriptions) {
+        repository.deleteAll(activeSubscriptions);
     }
 }

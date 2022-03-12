@@ -13,7 +13,7 @@ public class UserViewModel {
 
     @Null(groups = {New.class})
     @NotNull(groups = {Exist.class})
-    private String id;
+    private Long id;
     @NotNull(groups = {New.class, Exist.class})
     @Size(groups = {New.class}, min = 6, max = 20)
     @Pattern(groups = {New.class}, regexp = "^(?=.*[a-zA-Z])(?=.*[0-9])[a-zA-Z0-9]+$")

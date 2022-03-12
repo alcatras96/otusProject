@@ -13,7 +13,7 @@ export class AuthService {
     }
 
     attemptAuth(loginUser: AuthInfo): Observable<any> {
-        return this.http.post<any>('/api/token/generate-token', loginUser);
+        return this.http.post<any>('/api/token/generate', loginUser);
     }
 
     logout() {

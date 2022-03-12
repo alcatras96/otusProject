@@ -2,7 +2,6 @@ import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Customer} from "../main-module/models/customer";
-import {BillingAccount} from "../main-module/models/billing-account";
 import {Content} from "../main-module/models/content";
 
 @Injectable({
@@ -10,34 +9,28 @@ import {Content} from "../main-module/models/content";
 })
 export class CustomerService {
 
+    private _controllerUrlPrefix: string = '/api/customers';
+
     constructor(private http: HttpClient) {
     }
 
     getCustomers(page: number, size: number): Observable<Content<Customer>> {
-        return this.http.get<Content<Customer>>('/api/customers?page=' + page + '&size=' + size);
-    }
-
-    saveCustomer(customer: Customer): Observable<Customer> {
-        return this.http.put<Customer>('/api/customers', customer);
+        return this.http.get<Content<Customer>>(this._controllerUrlPrefix + '?page=' + page + '&size=' + size);
     }
 
     updateCustomerDetails(customer: Customer): Observable<Customer> {
-        return this.http.put<Customer>('/api/customers/details', customer);
+        return this.http.put<Customer>(this._controllerUrlPrefix + '/details', customer);
     }
 
     createCustomer(customer: Customer): Observable<Customer> {
-        return this.http.post<Customer>('/api/customers', customer);
+        return this.http.post<Customer>(this._controllerUrlPrefix, customer);
     }
 
     deleteCustomer(id: string): Observable<void> {
-        return this.http.delete<void>('/api/customers/' + id);
-    }
-
-    addMoneyOnBillingAccount(money: number): Observable<BillingAccount> {
-        return this.http.put<BillingAccount>('/api/customers/ba/' + money, '');
+        return this.http.delete<void>(this._controllerUrlPrefix + '/' + id);
     }
 
     getCustomerByUserId(): Observable<Customer> {
-        return this.http.get<Customer>('/api/customers/user/');
+        return this.http.get<Customer>(this._controllerUrlPrefix + '/user');
     }
 }

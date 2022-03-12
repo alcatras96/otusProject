@@ -7,24 +7,15 @@ import ru.otus.backend.db.entity.ActiveSubscription;
 import ru.otus.backend.service.api.ActiveSubscriptionService;
 
 import java.util.List;
-import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/active_subscription")
+@RequestMapping("/api/active-subscriptions")
 public class ActiveSubscriptionController {
 
     private final ActiveSubscriptionService activeSubscriptionService;
 
-    @GetMapping(value = "/{id}")
-    public ResponseEntity<ActiveSubscription> getActiveSubscriptionById(@PathVariable(name = "id") Long id) {
-        Optional<ActiveSubscription> activeSubscription = activeSubscriptionService.getActiveSubscriptionById(id);
-        return activeSubscription
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.noContent().build());
-    }
-
-    @GetMapping(value = "/customer/{id}")
+    @GetMapping(value = "/customers/{id}")
     public ResponseEntity<Iterable<ActiveSubscription>> getActiveSubscriptionsByCustomerId(@PathVariable(name = "id") Long id) {
         Iterable<ActiveSubscription> activeSubscriptions = activeSubscriptionService.getActiveSubscriptionsByCustomerId(id);
         if (activeSubscriptions != null) {
@@ -34,19 +25,13 @@ public class ActiveSubscriptionController {
         }
     }
 
-    @GetMapping
-    public Iterable<ActiveSubscription> getAllActiveSubscriptions() {
-        return activeSubscriptionService.getAllActiveSubscriptions();
-    }
-
     @PostMapping
-    public Iterable<ActiveSubscription> saveActiveSubscription(@RequestBody List<ActiveSubscription> activeSubscription) {
-        return activeSubscriptionService.saveActiveSubscriptions(activeSubscription);
+    public Iterable<ActiveSubscription> saveActiveSubscriptions(@RequestBody List<ActiveSubscription> activeSubscriptions) {
+        return activeSubscriptionService.addActiveSubscriptions(activeSubscriptions);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteActiveSubscription(@PathVariable(name = "id") Long id) {
+    public void deleteActiveSubscription(@PathVariable(name = "id") Long id) {
         activeSubscriptionService.deleteActiveSubscriptionById(id);
-        return ResponseEntity.noContent().build();
     }
 }

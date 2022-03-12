@@ -2,12 +2,12 @@
 
 <div class="wrapper">
     <!-- Сайдбар  -->
-    <app-adminSideBar [isCollapsed]="isCollapsed"></app-adminSideBar>
+    <app-admin-sidebar [isCollapsed]="isCollapsed"></app-admin-sidebar>
 
     <!-- Контент страницы -->
     <div id="content">
 
-        <app-adminNavBar (onCollapse)="collapse($event)"></app-adminNavBar>
+        <app-admin-navbar (onCollapse)="collapse($event)"></app-admin-navbar>
 
         <div class="container">
             <div class="row">
@@ -67,6 +67,6 @@
 </div>
 
 <ng-template #editCustomer>
-    <modal-editCustomerMenu [editableCustomer]="editableCustomer"
-                            (onChanged)="closeEditCustomerModal()"></modal-editCustomerMenu>
+    <modal-edit-customer [editableCustomer]="editableCustomer"
+                         (onChanged)="closeEditCustomerModal()"></modal-edit-customer>
 </ng-template>

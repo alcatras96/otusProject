@@ -43,7 +43,7 @@ export class ShoppingListComponent implements OnInit {
 
     loadShoppingBasket(): void {
         this.loadingService.show();
-        this.sbService.getSbByCustomerId().subscribe(shoppingBasket => {
+        this.sbService.getBasketItemsByCustomerId().subscribe(shoppingBasket => {
             this.shoppingBasket = shoppingBasket;
             this.updateItemsCounter();
             this.totalCount();
@@ -59,7 +59,7 @@ export class ShoppingListComponent implements OnInit {
     }
 
     deleteSbItem(id: string): void {
-        this.sbService.deleteSbById(id).subscribe(() => {
+        this.sbService.deleteBasketItemById(id).subscribe(() => {
             this.updateItemsCounter();
             this.loadShoppingBasket();
         });
@@ -72,7 +72,7 @@ export class ShoppingListComponent implements OnInit {
         this.activeSubscriptionService.saveActiveSubscriptions(new ListWrapper<ActiveSubscription>(this.subscriptions)).pipe(finalize(() => {
             this.subscriptions = [];
         })).subscribe(() => {
-            this.sbService.deleteAllSbByCustomerId().subscribe(() => {
+            this.sbService.deleteAllBasketItemsByCustomerId().subscribe(() => {
                 this.router.navigateByUrl('/');
             });
         });

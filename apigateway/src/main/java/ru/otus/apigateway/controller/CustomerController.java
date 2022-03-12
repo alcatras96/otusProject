@@ -7,14 +7,10 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import ru.otus.apigateway.constants.Constants;
-import ru.otus.apigateway.model.view.BillingAccountViewModel;
 import ru.otus.apigateway.model.view.Content;
 import ru.otus.apigateway.model.view.CustomerViewModel;
-import ru.otus.apigateway.service.api.BillingAccountService;
-import ru.otus.apigateway.service.api.CustomerDataService;
+import ru.otus.apigateway.service.api.CustomerService;
 import ru.otus.apigateway.service.api.UserDataService;
-import ru.otus.apigateway.transfer.Exist;
 import ru.otus.apigateway.transfer.New;
 
 @RestController
@@ -22,42 +18,34 @@ import ru.otus.apigateway.transfer.New;
 @AllArgsConstructor
 public class CustomerController {
 
-    private final CustomerDataService customerDataService;
+    private final CustomerService customerService;
     private final UserDataService userDataService;
     private final PasswordEncoder passwordEncoder;
-    private final BillingAccountService billingAccountService;
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @RequestMapping(params = {"page", "size"})
     public ResponseEntity<Content<CustomerViewModel>> getAllCustomers(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return ResponseEntity.ok(customerDataService.getAll(page, size));
+        return ResponseEntity.ok(customerService.getAll(page, size));
     }
 
     @PostMapping
     public ResponseEntity<CustomerViewModel> saveCustomer(@Validated(New.class) @RequestBody CustomerViewModel customer) {
         customer.getUser().setPassword(passwordEncoder.encode(customer.getUser().getPassword()));
-        return ResponseEntity.ok(customerDataService.saveCustomer(customer));
+        return ResponseEntity.ok(customerService.saveCustomer(customer));
     }
 
-
-    @PutMapping
-    public ResponseEntity<CustomerViewModel> saveEditedCustomer(@Validated(Exist.class) @RequestBody CustomerViewModel customer) {
-        customerDataService.saveEditedCustomer(customer);
-        return ResponseEntity.ok().build();
-    }
-
-//    @Validated(Exist.class) on customer
+    //    @Validated(Exist.class) on customer
     @PreAuthorize("hasAnyAuthority('admin')")
     @PutMapping(value = "/details")
     public ResponseEntity<CustomerViewModel> updateCustomerDetails(@RequestBody CustomerViewModel customer) {
-        customerDataService.updateCustomerDetails(customer);
+        customerService.updateCustomerDetails(customer);
         return ResponseEntity.ok().build();
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<CustomerViewModel> getCustomerById(@PathVariable(name = "id") Long id) {
-        CustomerViewModel customer = customerDataService.getCustomerById(id);
+        CustomerViewModel customer = customerService.getCustomerById(id);
         if (customer != null) {
             return ResponseEntity.ok(customer);
         } else {
@@ -66,9 +54,9 @@ public class CustomerController {
     }
 
     @PreAuthorize("hasAnyAuthority('admin', 'customer')")
-    @GetMapping(value = "/user/")
+    @GetMapping(value = "/users")
     public ResponseEntity<CustomerViewModel> getCustomerByUserId() {
-        CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
+        CustomerViewModel customer = customerService.getCustomerByUserId(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
         if (customer != null) {
             return ResponseEntity.ok(customer);
         } else {
@@ -79,23 +67,26 @@ public class CustomerController {
     @PreAuthorize("hasAnyAuthority('admin')")
     @DeleteMapping(value = "/{id}")
     public void deleteCustomer(@PathVariable String id) {
-        customerDataService.deleteCustomer(Long.valueOf(id));
+        customerService.deleteCustomer(Long.valueOf(id));
     }
 
-    @PreAuthorize("hasAnyAuthority('customer')")
-    @PutMapping(value = "/ba/{value}")
-    public ResponseEntity<BillingAccountViewModel> saveEditedBa(@PathVariable(name = "value") int value) {
-        CustomerViewModel customer = customerDataService.getCustomerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
-        if (customer.getBillingAccount() == null || value <= 0) {
-            return ResponseEntity.badRequest().build();
-        }
-        customer.getBillingAccount().setBalance(customer.getBillingAccount().getBalance() + value);
-        billingAccountService.saveBillingAccount(customer.getBillingAccount());
-        if (customer.getStatus().getName().equals("blocked") && customer.getBillingAccount().getBalance() > Constants.THRESHOLD) {//Проверяем пополнил ли кастомер кошелек и если закрыл долг то делаем valid
-            customer.getStatus().setId(1);
-            customerDataService.saveEditedCustomer(customer);
-        }
-
-        return ResponseEntity.ok().build();
-    }
+//    @PreAuthorize("hasAnyAuthority('customer')")
+//    @PutMapping(value = "/ba/{value}")
+//    public ResponseEntity<BillingAccountViewModel> addMoneyOnBillingAccount(@PathVariable(name = "value") int value) {
+//        CustomerViewModel customerViewModel = customerDataService.getCustomerByUserId(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
+//        BillingAccountViewModel billingAccount = customerViewModel.getBillingAccount();
+//        if (billingAccount == null || value <= 0) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//        billingAccount.setBalance(billingAccount.getBalance() + value);
+//        billingAccountService.saveBillingAccount(billingAccount);
+//        StatusViewModel status = customerViewModel.getStatus();
+//        if (status.getName().equals("blocked") && billingAccount.getBalance() > Constants.THRESHOLD) {
+//            status.setId(1L);
+//            Customer customer = toCustomerConverter.convert(customerViewModel);
+//            customerDataService.updateCustomer(customer);
+//        }
+//
+//        return ResponseEntity.ok().build();
+//    }
 }

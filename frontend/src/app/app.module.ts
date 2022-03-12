@@ -3,7 +3,7 @@ import {NgModule} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {RouterModule, Routes} from '@angular/router';
 
-import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule, HttpClientXsrfModule} from '@angular/common/http';
 
 import {AppComponent} from './app.component';
 import {ShopComponent} from './main-module/components/shop/shop.component';
@@ -25,9 +25,9 @@ import {TokenStorage} from "./services/token.storage";
 import {AuthInterceptor} from "./services/auth-interceptor.service.";
 import {AdminPanelGuard} from "./main-module/components/admin-panel/admin-panel.guard";
 import {RegistrationGuard} from "./main-module/components/registration/registration.guard";
-import {AdminNavBarComponent} from "./main-module/components/admin-panel/admin-navbar/adminNavBar.component";
+import {AdminNavbarComponent} from "./main-module/components/admin-panel/admin-navbar/admin-navbar.component";
 import {OwnersListComponent} from "./main-module/components/admin-panel/owners-list/owners-list.component";
-import {AdminSideBarComponent} from "./main-module/components/admin-panel/admin-sidebar/adminSideBar.component";
+import {AdminSidebarComponent} from "./main-module/components/admin-panel/admin-sidebar/admin-sidebar.component";
 import {NgxSpinnerModule} from "ngx-spinner";
 import {CollapseModule} from "ngx-bootstrap/collapse";
 import {TabsModule} from "ngx-bootstrap/tabs";
@@ -65,14 +65,15 @@ const appRoutes: Routes = [
         OwnerAccountInfoComponent,
         CustomerAccountInfoComponent,
         ConfirmModalComponent,
-        AdminNavBarComponent,
+        AdminNavbarComponent,
         OwnersListComponent,
-        AdminSideBarComponent
+        AdminSidebarComponent
     ],
     imports: [
         BrowserModule,
         FormsModule,
         HttpClientModule,
+        HttpClientXsrfModule,
         RouterModule.forRoot(appRoutes),
         NgxSpinnerModule,
         ReactiveFormsModule,

@@ -9,7 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.apigateway.model.view.Content;
 import ru.otus.apigateway.model.view.OwnerViewModel;
-import ru.otus.apigateway.service.api.OwnerDataService;
+import ru.otus.apigateway.service.api.OwnerService;
 import ru.otus.apigateway.service.api.UserDataService;
 import ru.otus.apigateway.transfer.Exist;
 import ru.otus.apigateway.transfer.New;
@@ -21,41 +21,40 @@ import java.util.Optional;
 @AllArgsConstructor
 public class OwnerController {
 
-    private final OwnerDataService ownerDataService;
+    private final OwnerService ownerService;
     private final UserDataService userDataService;
     private final PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @GetMapping(params = {"page", "size"})
-    public ResponseEntity<Content<OwnerViewModel>> getAllOwners(@RequestParam("page") int page, @RequestParam("size") int size) {
-        return ResponseEntity.ok(ownerDataService.getAll(page, size));
+    public Content<OwnerViewModel> getAllOwners(@RequestParam("page") int page, @RequestParam("size") int size) {
+        return ownerService.getAll(page, size);
     }
 
 
     @PostMapping
-    public ResponseEntity<OwnerViewModel> saveOwner(@Validated(New.class) @RequestBody OwnerViewModel owner) {
+    public OwnerViewModel saveOwner(@Validated(New.class) @RequestBody OwnerViewModel owner) {
         owner.getUser().setPassword(passwordEncoder.encode(owner.getUser().getPassword()));
-        return ResponseEntity.ok(ownerDataService.saveOwner(owner));
+        return ownerService.saveOwner(owner);
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @PutMapping
-    public ResponseEntity<OwnerViewModel> saveEditedOwner(@Validated(Exist.class) @RequestBody OwnerViewModel owner) {
-        ownerDataService.saveEditedOwner(owner);
-        return ResponseEntity.ok().build();
+    public void saveEditedOwner(@Validated(Exist.class) @RequestBody OwnerViewModel owner) {
+        ownerService.saveEditedOwner(owner);
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<OwnerViewModel> getOwnerById(@PathVariable(name = "id") Long id) {
-        Optional<OwnerViewModel> owner = ownerDataService.getOwnerById(id);
+        Optional<OwnerViewModel> owner = ownerService.getOwnerById(id);
         return owner.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PreAuthorize("hasAnyAuthority('admin', 'owner')")
-    @GetMapping(value = "/user/")
+    @GetMapping(value = "/users")
     public ResponseEntity<OwnerViewModel> getOwnerByUserId() {
-        OwnerViewModel owner = ownerDataService.getOwnerByUserId(Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()));
+        OwnerViewModel owner = ownerService.getOwnerByUserId(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
         if (owner != null) {
             return ResponseEntity.ok(owner);
         } else {
@@ -66,14 +65,13 @@ public class OwnerController {
     @PreAuthorize("hasAnyAuthority('admin')")
     @DeleteMapping(value = "/{id}")
     public void deleteOwner(@PathVariable String id) {
-        ownerDataService.deleteOwner(Long.valueOf(id));
+        ownerService.deleteOwner(Long.valueOf(id));
     }
 
-    @PreAuthorize("hasAnyAuthority('admin')")
     //    @Validated(Exist.class) on owner
+    @PreAuthorize("hasAnyAuthority('admin')")
     @PutMapping(value = "/details")
-    public ResponseEntity<OwnerViewModel> updateOwnerDetails(@RequestBody OwnerViewModel owner) {
-        ownerDataService.updateOwnerDetails(owner);
-        return ResponseEntity.ok().build();
+    public void updateOwnerDetails(@RequestBody OwnerViewModel owner) {
+        ownerService.updateOwnerDetails(owner);
     }
 }

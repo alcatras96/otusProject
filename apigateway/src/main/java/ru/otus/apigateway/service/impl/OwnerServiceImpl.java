@@ -5,61 +5,60 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import ru.otus.apigateway.model.view.Content;
 import ru.otus.apigateway.model.view.OwnerViewModel;
-import ru.otus.apigateway.service.api.OwnerDataService;
+import ru.otus.apigateway.service.api.OwnerService;
 
 import java.util.Optional;
 
 @Service
-public class OwnerServiceImpl implements OwnerDataService {
+public class OwnerServiceImpl implements OwnerService {
 
-    @Value("${backend.server.url}")
-    private String backendServerUrl;
+    private final static String BACKEND_CONTROLLER_URL_PREFIX = "/api/owners";
+
+    private final String backendServerUrl;
+
+    public OwnerServiceImpl(@Value("${backend.server.url}") String backendServerUrl) {
+        this.backendServerUrl = backendServerUrl;
+    }
 
     @Override
     public Content<OwnerViewModel> getAll(int page, int size) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + "/api/owners?page=" + page + "&size=" + size, Content.class);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "?page=" + page + "&size=" + size, Content.class);
     }
 
     @Override
     public Optional<OwnerViewModel> getOwnerById(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + "/api/owners/" + id, Optional.class);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/" + id, Optional.class);
     }
 
     @Override
     public OwnerViewModel getOwnerByUserId(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + "/api/owners/user/" + id, OwnerViewModel.class);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/users/" + id, OwnerViewModel.class);
     }
 
     @Override
     public OwnerViewModel saveOwner(OwnerViewModel owner) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForEntity(backendServerUrl + "/api/owners", owner, OwnerViewModel.class).getBody();
+        return restTemplate.postForEntity(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX, owner, OwnerViewModel.class).getBody();
     }
 
     @Override
     public void saveEditedOwner(OwnerViewModel owner) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.put(backendServerUrl + "/api/owners", owner);
+        restTemplate.put(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX, owner);
     }
 
     @Override
     public void deleteOwner(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(backendServerUrl + "/api/owners/" + id);
+        restTemplate.delete(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/" + id);
     }
 
     @Override
     public void updateOwnerDetails(OwnerViewModel owner) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.put(backendServerUrl + "/api/owners/details", owner);
-    }
-
-    @Override
-    public OwnerViewModel saveOwnerBa(OwnerViewModel owner) {
-        RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForEntity(backendServerUrl + "/api/owners/ba", owner, OwnerViewModel.class).getBody();
+        restTemplate.put(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/details", owner);
     }
 }

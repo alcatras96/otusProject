@@ -10,29 +10,21 @@ import ru.otus.apigateway.model.view.BillingAccountViewModel;
 import ru.otus.apigateway.model.view.CustomerViewModel;
 import ru.otus.apigateway.model.view.OwnerViewModel;
 import ru.otus.apigateway.service.api.BillingAccountService;
-import ru.otus.apigateway.service.api.CustomerDataService;
-import ru.otus.apigateway.service.api.OwnerDataService;
+import ru.otus.apigateway.service.api.CustomerService;
+import ru.otus.apigateway.service.api.OwnerService;
 import ru.otus.apigateway.service.api.UserDataService;
 import ru.otus.apigateway.transfer.Exist;
 import ru.otus.apigateway.transfer.New;
 
-import java.util.List;
-
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/billing_accounts")
+@RequestMapping("/api/billing-accounts")
 public class BillingAccountController {
 
     private final BillingAccountService billingAccountService;
-    private final CustomerDataService customerDataService;
-    private final OwnerDataService ownerDataService;
+    private final CustomerService customerService;
+    private final OwnerService ownerService;
     private final UserDataService userDataService;
-
-    @PreAuthorize("hasAnyAuthority('admin')")
-    @RequestMapping
-    public ResponseEntity<List<BillingAccountViewModel>> getAllBillingAccounts() {
-        return ResponseEntity.ok(billingAccountService.getAllBillingAccounts());
-    }
 
     @PreAuthorize("hasAnyAuthority('owner', 'customer')")
     @PutMapping
@@ -42,20 +34,20 @@ public class BillingAccountController {
     }
 
     @PreAuthorize("hasAnyAuthority('customer')")
-    @PostMapping(value = "/customer")
+    @PostMapping(value = "/customers")
     public ResponseEntity<BillingAccountViewModel> saveCustomerBillingAccount(@Validated(New.class) @RequestBody BillingAccountViewModel billingAccountViewModel) {
-        CustomerViewModel customer = customerDataService.getCustomerByUserId(
-                Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId())
+        CustomerViewModel customer = customerService.getCustomerByUserId(
+                userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()
         );
         customer.setBillingAccount(billingAccountViewModel);
         return ResponseEntity.ok(billingAccountService.saveCustomerBillingAccount(customer).getBillingAccount());
     }
 
     @PreAuthorize("hasAnyAuthority('owner')")
-    @PostMapping(value = "/owner")
+    @PostMapping(value = "/owners")
     public ResponseEntity<BillingAccountViewModel> saveOwnerBillingAccount(@Validated(New.class) @RequestBody BillingAccountViewModel billingAccountViewModel) {
-        OwnerViewModel owner = ownerDataService.getOwnerByUserId(
-                Long.valueOf(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId())
+        OwnerViewModel owner = ownerService.getOwnerByUserId(
+                userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId()
         );
         owner.setBillingAccount(billingAccountViewModel);
         return ResponseEntity.ok(billingAccountService.saveOwnerBillingAccount(owner).getBillingAccount());

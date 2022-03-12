@@ -1,46 +1,50 @@
 package ru.otus.apigateway.service.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import ru.otus.apigateway.converter.Converter;
-import ru.otus.apigateway.model.backend.ActiveSubscription;
-import ru.otus.apigateway.model.view.ActiveSubscriptionViewModel;
-import ru.otus.apigateway.service.api.ActiveSubscriptionDataService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import ru.otus.apigateway.converter.Converter;
+import ru.otus.apigateway.model.backend.ActiveSubscription;
+import ru.otus.apigateway.model.view.ActiveSubscriptionViewModel;
+import ru.otus.apigateway.service.api.ActiveSubscriptionService;
 
 import java.util.List;
 
 @Service
-public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionDataService {
+public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionService {
 
-    @Value("${backend.server.url}")
-    private String backendServerUrl;
+    private final static String BACKEND_CONTROLLER_URL_PREFIX = "/api/active-subscriptions";
 
-    @Autowired
-    private Converter<ActiveSubscriptionViewModel, ActiveSubscription> toActiveSubscriptionConverter;
+    private final String backendServerUrl;
+    private final Converter<ActiveSubscriptionViewModel, ActiveSubscription> toActiveSubscriptionConverter;
+
+    public ActiveSubscriptionServiceImpl(@Value("${backend.server.url}") String backendServerUrl,
+                                         Converter<ActiveSubscriptionViewModel, ActiveSubscription> toActiveSubscriptionConverter) {
+        this.backendServerUrl = backendServerUrl;
+        this.toActiveSubscriptionConverter = toActiveSubscriptionConverter;
+    }
 
     @Override
     public List<ActiveSubscriptionViewModel> saveActiveSubscriptions(List<ActiveSubscriptionViewModel> activeSubscriptionViewModel) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.postForObject(backendServerUrl + "/api/active_subscription", toActiveSubscriptionConverter.convert(activeSubscriptionViewModel), List.class);
+        return restTemplate.postForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX, toActiveSubscriptionConverter.convert(activeSubscriptionViewModel), List.class);
     }
 
     @Override
     public Iterable<ActiveSubscriptionViewModel> getASByCustomerId(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + "/api/active_subscription/customer/" + id, Iterable.class);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/customer/" + id, Iterable.class);
     }
 
     @Override
     public ActiveSubscriptionViewModel getActiveSubscriptionById(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + "/api/active_subscription/" + id, ActiveSubscriptionViewModel.class);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/" + id, ActiveSubscriptionViewModel.class);
     }
 
     @Override
     public void deleteActiveSubscriptionById(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(backendServerUrl + "/api/active_subscription/" + id);
+        restTemplate.delete(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/" + id);
     }
 }

@@ -8,13 +8,17 @@ public interface CustomerService {
 
     Optional<Customer> getCustomerById(Long id);
 
+    Iterable<Customer> getCustomersById(Iterable<Long> ids);
+
     Customer saveWithBillingAccount(Customer customer);
 
     Iterable<Customer> getAllCustomers(int page, int size);
 
-    Customer saveCustomer(Customer customer);
+    Customer createCustomer(Customer customer);
 
-    Customer updateCustomerStatus(Long id, Long statusId);
+    Customer updateCustomer(Customer customer);
+
+    Iterable<Customer> saveCustomers(Iterable<Customer> customers);
 
     void updateCustomerDetails(Customer customer);
 

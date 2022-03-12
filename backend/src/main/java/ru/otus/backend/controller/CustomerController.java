@@ -27,8 +27,8 @@ public class CustomerController {
     }
 
     @PostMapping
-    public Customer saveCustomer(@RequestBody Customer customer) {
-        return customerService.saveCustomer(customer);
+    public Customer createCustomer(@RequestBody Customer customer) {
+        return customerService.createCustomer(customer);
     }
 
     @PutMapping(value = "/details")
@@ -37,17 +37,16 @@ public class CustomerController {
     }
 
     @PutMapping
-    public Customer saveEditedCustomer(@RequestBody Customer customer) {
-        return customerService.saveCustomer(customer);
+    public Customer updateCustomer(@RequestBody Customer customer) {
+        return customerService.updateCustomer(customer);
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteCustomer(@PathVariable(name = "id") Long id) {
+    public void deleteCustomer(@PathVariable(name = "id") Long id) {
         customerService.deleteCustomer(id);
-        return ResponseEntity.noContent().build();
     }
 
-    @GetMapping(value = "user/{id}")
+    @GetMapping(value = "/users/{id}")
     public ResponseEntity<Customer> getCustomerByUserId(@PathVariable(name = "id") Long id) {
         Customer customer = customerService.findByUserId(id);
         if (customer != null) {

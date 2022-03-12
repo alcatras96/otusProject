@@ -13,11 +13,15 @@ public interface ActiveSubscriptionService {
 
     Iterable<ActiveSubscription> getAllActiveSubscriptions();
 
-    Iterable<ActiveSubscription> saveActiveSubscriptions(List<ActiveSubscription> activeSubscription);
+    Iterable<ActiveSubscription> addActiveSubscriptions(List<ActiveSubscription> activeSubscriptions);
+
+    Iterable<ActiveSubscription> saveActiveSubscriptions(Iterable<ActiveSubscription> activeSubscriptions);
 
     ActiveSubscription saveActiveSubscription(ActiveSubscription activeSubscription);
 
     void deleteActiveSubscriptionById(Long id);
 
     void deleteActiveSubscriptionsByCustomerId(Long customerId);
+
+    void deleteActiveSubscriptions(Iterable<ActiveSubscription> activeSubscriptions);
 }

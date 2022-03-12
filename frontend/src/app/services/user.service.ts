@@ -8,23 +8,20 @@ import {User} from "../main-module/models/user";
 })
 export class UserService {
 
+    private _controllerUrlPrefix: string = '/api/users';
+
     constructor(private http: HttpClient) {
     }
 
-    getUsers(): Observable<User[]> {
-        return this.http.get<User[]>('/api/users');
-    }
-
     saveUser(user: User): Observable<User> {
-        return this.http.post<User>('/api/users', user);
+        return this.http.post<User>(this._controllerUrlPrefix, user);
     }
 
     getUserById(id: string): Observable<User> {
-        return this.http.get<User>('/api/users/' + id);
+        return this.http.get<User>(this._controllerUrlPrefix + '/' + id);
     }
 
-    getUser(): Observable<User> {
-        return this.http.get<User>('/api/users/userLogin/');
+    getUserByLogin(): Observable<User> {
+        return this.http.get<User>(this._controllerUrlPrefix + '/login');
     }
-
 }

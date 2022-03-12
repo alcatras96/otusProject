@@ -14,11 +14,8 @@ public class Customer {
     private Long id;
     private String name;
     private String address;
-    @JsonIgnore
     private Long userId;
-    @JsonIgnore
     private Long billingAccountId;
-    @JsonIgnore
     private Long statusId;
 
     @Transient

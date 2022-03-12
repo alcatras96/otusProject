@@ -8,18 +8,20 @@ import {BillingAccount} from "../main-module/models/billing-account";
 })
 export class BillingAccountService {
 
+    private _controllerUrlPrefix: string = '/api/billing-accounts';
+
     constructor(private http: HttpClient) {
     }
 
-    saveBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
-        return this.http.put<BillingAccount>('/api/billing_accounts', billingAccount);
+    createCustomerBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
+        return this.http.post<BillingAccount>(this._controllerUrlPrefix + '/customer', billingAccount);
     }
 
-    saveCustomerBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
-        return this.http.post<BillingAccount>('/api/billing_accounts/customer', billingAccount);
+    createOwnerBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
+        return this.http.post<BillingAccount>(this._controllerUrlPrefix + '/owner', billingAccount);
     }
 
-    saveOwnerBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
-        return this.http.post<BillingAccount>('/api/billing_accounts/owner', billingAccount);
+    addMoneyOnBillingAccount(money: number): Observable<BillingAccount> {
+        return this.http.put<BillingAccount>(this._controllerUrlPrefix + '/money/add', money);
     }
 }

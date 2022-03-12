@@ -1,11 +1,11 @@
 <ngx-spinner type="ball-scale-multiple"></ngx-spinner>
 
 <div class="wrapper">
-    <app-adminSideBar [isCollapsed]="isCollapsed"></app-adminSideBar>
+    <app-admin-sidebar [isCollapsed]="isCollapsed"></app-admin-sidebar>
 
     <div id="content">
 
-        <app-adminNavBar (onCollapse)="collapse($event)"></app-adminNavBar>
+        <app-admin-navbar (onCollapse)="collapse($event)"></app-admin-navbar>
 
         <div class="container">
 
@@ -64,5 +64,5 @@
 </div>
 
 <ng-template #editOwner>
-    <modal-editOwnerMenu [editableOwner]="editableOwner" (onChanged)="closeEditOwnerModal()"></modal-editOwnerMenu>
+    <modal-edit-owner [editableOwner]="editableOwner" (onChanged)="closeEditOwnerModal()"></modal-edit-owner>
 </ng-template>

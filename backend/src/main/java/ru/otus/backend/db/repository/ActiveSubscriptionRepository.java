@@ -6,6 +6,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import ru.otus.backend.db.entity.ActiveSubscription;
 
+import java.util.List;
+
 @Repository
 public interface ActiveSubscriptionRepository extends CrudRepository<ActiveSubscription, Long> {
 
@@ -25,5 +27,5 @@ public interface ActiveSubscriptionRepository extends CrudRepository<ActiveSubsc
             where a.customer_id = :customer_id
                                                         """,
             resultSetExtractorRef = "activeSubscriptionsByCustomerIdExtractor")
-    Iterable<ActiveSubscription> findByCustomerId(@Param("customer_id") Long id);
+    List<ActiveSubscription> findByCustomerId(@Param("customer_id") Long id);
 }

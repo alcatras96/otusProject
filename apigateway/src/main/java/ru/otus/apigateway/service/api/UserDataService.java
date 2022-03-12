@@ -10,9 +10,5 @@ public interface UserDataService {
 
     Optional<UserViewModel> getUserById(Long id);
 
-    UserViewModel saveUser(UserViewModel user);
-
-    void deleteUser(Long id);
-
     UserViewModel findByLogin(String name);
 }

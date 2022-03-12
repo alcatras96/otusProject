@@ -23,8 +23,8 @@ public class UserController {
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @RequestMapping
-    public ResponseEntity<List<UserViewModel>> getAllUsers() {
-        return ResponseEntity.ok(userDataService.getAll());
+    public List<UserViewModel> getAllUsers() {
+        return userDataService.getAll();
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
@@ -35,14 +35,13 @@ public class UserController {
     }
 
     @PreAuthorize("hasAnyAuthority('admin', 'owner', 'customer')")
-    @GetMapping(value = "userLogin/")
-    public ResponseEntity<UserViewModel> getUser() {
+    @GetMapping(value = "login")
+    public ResponseEntity<UserViewModel> getUserByLogin() {
         UserViewModel currentUser = userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
         if (currentUser != null) {
             return ResponseEntity.ok(currentUser);
         } else {
             return ResponseEntity.notFound().build();
         }
-
     }
 }

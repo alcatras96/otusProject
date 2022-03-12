@@ -6,7 +6,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {PageChangedEvent} from "ngx-bootstrap/pagination";
 
 @Component({
-    selector: 'app-ownersList',
+    selector: 'app-owners-list',
     templateUrl: './owners-list.component.html',
     styleUrls: ['./owners-list.component.css']
 })
@@ -21,12 +21,11 @@ export class OwnersListComponent implements OnInit {
     totalElements: number = 0;
     page: number = 0;
 
-    // private subUsers: Subscription[] = [];
-
-    constructor(private loadingService: NgxSpinnerService , private ownersService: OwnerService, private modalService: BsModalService) {
+    constructor(private loadingService: NgxSpinnerService,
+                private ownersService: OwnerService,
+                private modalService: BsModalService) {
     }
 
-    // Calls on component init
     ngOnInit() {
         this.loadOwners(this.page, this.size);
     }
@@ -43,7 +42,6 @@ export class OwnersListComponent implements OnInit {
     public deleteOwner(id: string): void {
         this.ownersService.deleteOwner(id).subscribe(() => {
             this.loadOwners(this.page, this.size);
-            // this.loadUsers(0, this.size);
         });
     }
 

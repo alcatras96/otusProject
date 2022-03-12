@@ -11,14 +11,14 @@ import java.util.Optional;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api/basket_item")
+@RequestMapping("/api/basket-items")
 public class BasketItemController {
 
     private final BasketItemService basketItemService;
 
-    @GetMapping(value = "/count/{id}")
-    public ResponseEntity<Long> getCount(@PathVariable(name = "id") Long id) {
-        return ResponseEntity.ok(basketItemService.getCountByCustomerId(id));
+    @GetMapping(value = "/count/customers/{id}")
+    public Long getCount(@PathVariable(name = "id") Long id) {
+        return basketItemService.getCountByCustomerId(id);
     }
 
     @GetMapping(value = "/{id}")
@@ -28,12 +28,11 @@ public class BasketItemController {
     }
 
     @PostMapping
-    public ResponseEntity<?> saveSb(@RequestBody List<BasketItem> Sb) {
-        basketItemService.saveBasketItems(Sb);
-        return ResponseEntity.noContent().build();
+    public void saveBasketItems(@RequestBody List<BasketItem> basketItems) {
+        basketItemService.saveBasketItems(basketItems);
     }
 
-    @GetMapping(value = "/customer/{id}")
+    @GetMapping(value = "/customers/{id}")
     public ResponseEntity<Iterable<BasketItem>> getBasketItemsByCustomerId(@PathVariable(name = "id") Long id) {
         Iterable<BasketItem> basketItems = basketItemService.findByCustomerId(id);
         if (basketItems != null) {
@@ -44,14 +43,12 @@ public class BasketItemController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteBasketItemById(@PathVariable(name = "id") Long id) {
+    public void deleteBasketItemById(@PathVariable(name = "id") Long id) {
         basketItemService.deleteBasketItem(id);
-        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping(value = "/customer/{id}")
-    public ResponseEntity<?> deleteAllBasketItemsByCustomerId(@PathVariable(name = "id") Long id) {
+    @DeleteMapping(value = "/customerS/{id}")
+    public void deleteAllBasketItemsByCustomerId(@PathVariable(name = "id") Long id) {
         basketItemService.deleteAllBasketItemsByCustomerId(id);
-        return ResponseEntity.noContent().build();
     }
 }

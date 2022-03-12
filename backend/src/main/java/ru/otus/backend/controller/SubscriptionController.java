@@ -31,7 +31,7 @@ public class SubscriptionController {
         }
     }
 
-    @GetMapping(value = "/owner/{ownerId}")
+    @GetMapping(value = "/owners/{ownerId}")
     public Iterable<Subscription> findByOwnerId(@PathVariable(name = "ownerId") Long id) {
         return subscriptionService.getByOwnerId(id);
     }
@@ -52,13 +52,12 @@ public class SubscriptionController {
         return ResponseEntity.noContent().build();
     }
 
-
     @GetMapping(value = "/search", params = {"name", "page", "size"})
     public Iterable<Subscription> findByNameLike(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("size") int size) {
         return subscriptionService.findByNameContaining(name, page, size);
     }
 
-    @GetMapping(value = "/category/{id}", params = {"page", "size"})
+    @GetMapping(value = "/categories/{id}", params = {"page", "size"})
     public Iterable<Subscription> findByCategoryId(@PathVariable("id") Long id, @RequestParam("page") int page, @RequestParam("size") int size) {
         return subscriptionService.getByCategoryId(id, page, size);
     }

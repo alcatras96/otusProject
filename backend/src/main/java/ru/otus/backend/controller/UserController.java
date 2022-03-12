@@ -29,7 +29,7 @@ public class UserController {
         return userService.getAllUsers();
     }
 
-    @GetMapping(value = "userLogin/{login}")
+    @GetMapping(value = "/login/{login}")
     public ResponseEntity<User> getUserByLogin(@PathVariable(name = "login") String login) {
         Optional<User> user = userService.findByLogin(login);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
