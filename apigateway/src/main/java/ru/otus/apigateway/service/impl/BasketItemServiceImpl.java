@@ -56,10 +56,8 @@ public class BasketItemServiceImpl implements BasketItemService {
     }
 
     @Override
-    public void deleteBasketItemByCustomerId(Long id) {
+    public void deleteBasketItemsByCustomerId(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        restTemplate.delete(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/customer/" + id);
+        restTemplate.delete(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/customers/" + id);
     }
-
-
 }

@@ -23,19 +23,12 @@ export class WalletModalComponent implements OnInit {
     }
 
     register() {
-        if (localStorage.getItem('currentUserRole') == 'owner') {
-            this.newBa.validity = this.walletForm.controls['month'].value + ' ' + this.walletForm.controls['year'].value;
-            this.billingAccountService.createOwnerBillingAccount(this.newBa).subscribe(ba => {
-                localStorage.setItem('wallet', ba.id);
-            });
-        }
-        if (localStorage.getItem('currentUserRole') == 'customer') {
-            this.newBa.validity = this.walletForm.controls['month'].value + ' ' + this.walletForm.controls['year'].value;
-            this.billingAccountService.createCustomerBillingAccount(this.newBa).subscribe(ba => {
-                    localStorage.setItem('wallet', ba.id);
-                }
-            );
-        }
+        this.newBa.validity = this.walletForm.controls['month'].value + ' ' + this.walletForm.controls['year'].value;
+        this.billingAccountService.createBillingAccount(this.newBa).subscribe(billingAccount => {
+                localStorage.setItem('wallet', billingAccount.id);
+            }
+        );
+
         this.bsModalRef.hide();
         this.router.navigateByUrl('/');
     }

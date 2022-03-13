@@ -1,7 +1,6 @@
 package ru.otus.backend.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.backend.db.entity.ActiveSubscription;
 import ru.otus.backend.service.api.ActiveSubscriptionService;
@@ -16,13 +15,8 @@ public class ActiveSubscriptionController {
     private final ActiveSubscriptionService activeSubscriptionService;
 
     @GetMapping(value = "/customers/{id}")
-    public ResponseEntity<Iterable<ActiveSubscription>> getActiveSubscriptionsByCustomerId(@PathVariable(name = "id") Long id) {
-        Iterable<ActiveSubscription> activeSubscriptions = activeSubscriptionService.getActiveSubscriptionsByCustomerId(id);
-        if (activeSubscriptions != null) {
-            return ResponseEntity.ok(activeSubscriptions);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+    public Iterable<ActiveSubscription> getActiveSubscriptionsByCustomerId(@PathVariable(name = "id") Long id) {
+        return activeSubscriptionService.getActiveSubscriptionsByCustomerId(id);
     }
 
     @PostMapping

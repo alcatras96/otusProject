@@ -13,12 +13,8 @@ export class BillingAccountService {
     constructor(private http: HttpClient) {
     }
 
-    createCustomerBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
-        return this.http.post<BillingAccount>(this._controllerUrlPrefix + '/customer', billingAccount);
-    }
-
-    createOwnerBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
-        return this.http.post<BillingAccount>(this._controllerUrlPrefix + '/owner', billingAccount);
+    createBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
+        return this.http.post<BillingAccount>(this._controllerUrlPrefix, billingAccount);
     }
 
     addMoneyOnBillingAccount(money: number): Observable<BillingAccount> {

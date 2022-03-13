@@ -3,14 +3,13 @@ package ru.otus.apigateway.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.apigateway.model.view.Content;
 import ru.otus.apigateway.model.view.OwnerViewModel;
 import ru.otus.apigateway.model.view.SubscriptionViewModel;
 import ru.otus.apigateway.service.api.OwnerService;
 import ru.otus.apigateway.service.api.SubscriptionService;
-import ru.otus.apigateway.service.api.UserDataService;
+import ru.otus.apigateway.service.api.UserService;
 
 import java.util.List;
 
@@ -21,7 +20,7 @@ public class SubscriptionController {
 
     private final SubscriptionService subscriptionService;
     private final OwnerService ownerService;
-    private final UserDataService userDataService;
+    private final UserService userService;
 
     @GetMapping(params = {"page", "size"})
     public Content<SubscriptionViewModel> findAll(@RequestParam("page") int page, @RequestParam("size") int size) {
@@ -46,7 +45,7 @@ public class SubscriptionController {
     @PreAuthorize("hasAnyAuthority('owner')")
     @PostMapping
     public ResponseEntity<SubscriptionViewModel> saveSubscription(@RequestBody SubscriptionViewModel subscription) {
-        OwnerViewModel owner = ownerService.getOwnerByUserId(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
+        OwnerViewModel owner = ownerService.getOwnerByUserId(userService.getCurrentUserByLogin().getId());
         if (owner.getBillingAccount() == null) {
             return ResponseEntity.badRequest().build();
         }

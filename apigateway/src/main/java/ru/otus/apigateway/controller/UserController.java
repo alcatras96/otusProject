@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import ru.otus.apigateway.model.view.UserViewModel;
-import ru.otus.apigateway.service.api.UserDataService;
+import ru.otus.apigateway.service.api.UserService;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,29 +19,24 @@ import java.util.Optional;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserDataService userDataService;
+    private final UserService userService;
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @RequestMapping
     public List<UserViewModel> getAllUsers() {
-        return userDataService.getAll();
+        return userService.getAll();
     }
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @GetMapping(value = "/{id}")
     public ResponseEntity<UserViewModel> getUserById(@PathVariable(name = "id") Long id) {
-        Optional<UserViewModel> user = userDataService.getUserById(id);
+        Optional<UserViewModel> user = userService.getUserById(id);
         return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PreAuthorize("hasAnyAuthority('admin', 'owner', 'customer')")
     @GetMapping(value = "login")
-    public ResponseEntity<UserViewModel> getUserByLogin() {
-        UserViewModel currentUser = userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
-        if (currentUser != null) {
-            return ResponseEntity.ok(currentUser);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public UserViewModel getUserByLogin() {
+        return userService.getUserByLogin(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 }

@@ -11,23 +11,24 @@ import ru.otus.backend.db.resultsetextractor.base.OwnerExtractorBase;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Component
-public class OwnerByUserIdExtractor extends OwnerExtractorBase implements ResultSetExtractor<Owner> {
+public class OwnerExtractor extends OwnerExtractorBase implements ResultSetExtractor<Optional<Owner>> {
 
-    public OwnerByUserIdExtractor(RowMapper<Owner> ownerRowMapper,
-                                  RowMapper<BillingAccount> billingAccountRowMapper,
-                                  RowMapper<User> userRowMapper,
-                                  RowMapper<Role> roleRowMapper) {
+    public OwnerExtractor(RowMapper<Owner> ownerRowMapper,
+                          RowMapper<BillingAccount> billingAccountRowMapper,
+                          RowMapper<User> userRowMapper,
+                          RowMapper<Role> roleRowMapper) {
         super(ownerRowMapper, billingAccountRowMapper, userRowMapper, roleRowMapper);
     }
 
     @Override
-    public Owner extractData(ResultSet rs) throws SQLException {
+    public Optional<Owner> extractData(ResultSet rs) throws SQLException {
         Owner owner = null;
         if (rs.next()) {
             owner = extractOwner(rs);
         }
-        return owner;
+        return Optional.ofNullable(owner);
     }
 }

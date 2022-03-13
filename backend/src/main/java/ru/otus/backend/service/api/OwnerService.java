@@ -20,6 +20,6 @@ public interface OwnerService {
 
     void deleteOwner(Long id);
 
-    Owner findByUserId(Long id);
+    Optional<Owner> findByUserId(Long id);
 
 }

@@ -21,7 +21,7 @@ public class RoleController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Role> getRoleById(@PathVariable(name = "id") Long id) {
         Optional<Role> role = roleService.getRoleById(id);
-        return role.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return role.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping

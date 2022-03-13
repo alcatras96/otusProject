@@ -19,16 +19,20 @@ public class SubscriptionController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Subscription> getSubscriptionById(@PathVariable(name = "id") Long id) {
         Optional<Subscription> subscriptionById = subscriptionService.getSubscriptionById(id);
-        return subscriptionById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return subscriptionById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping(params = {"page", "size"})
-    public Iterable<Subscription> findSubscriptions(@RequestParam("page") int page, @RequestParam("size") int size, @RequestParam(value = "sort", required = false) String sort, @RequestParam(value = "direction", required = false) String direction) {
+    public Iterable<Subscription> findSubscriptions(@RequestParam("page") Integer page, @RequestParam("size") Integer size,
+                                                    @RequestParam(value = "sort", required = false) String sort,
+                                                    @RequestParam(value = "direction", required = false) String direction) {
+        Sort sortingOptions;
         if (sort != null && direction != null && (direction.equals("asc") || direction.equals("desc"))) {
-            return subscriptionService.findAllWithSorting(page, size, Sort.by(Sort.Direction.fromString(direction), sort));
+            sortingOptions = Sort.by(Sort.Direction.fromString(direction), sort);
         } else {
-            return subscriptionService.findAllWithSorting(page, size, Sort.unsorted());
+            sortingOptions = Sort.unsorted();
         }
+        return subscriptionService.findAllWithSorting(page, size, sortingOptions);
     }
 
     @GetMapping(value = "/owners/{ownerId}")
@@ -47,18 +51,19 @@ public class SubscriptionController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteSubscription(@PathVariable(name = "id") Long id) {
+    public void deleteSubscription(@PathVariable(name = "id") Long id) {
         subscriptionService.deleteSubscription(id);
-        return ResponseEntity.noContent().build();
     }
 
     @GetMapping(value = "/search", params = {"name", "page", "size"})
-    public Iterable<Subscription> findByNameLike(@RequestParam("name") String name, @RequestParam("page") int page, @RequestParam("size") int size) {
+    public Iterable<Subscription> findByNameLike(@RequestParam("name") String name, @RequestParam("page") Integer page,
+                                                 @RequestParam("size") Integer size) {
         return subscriptionService.findByNameContaining(name, page, size);
     }
 
     @GetMapping(value = "/categories/{id}", params = {"page", "size"})
-    public Iterable<Subscription> findByCategoryId(@PathVariable("id") Long id, @RequestParam("page") int page, @RequestParam("size") int size) {
+    public Iterable<Subscription> findByCategoryId(@PathVariable("id") Long id, @RequestParam("page") Integer page,
+                                                   @RequestParam("size") Integer size) {
         return subscriptionService.getByCategoryId(id, page, size);
     }
 }

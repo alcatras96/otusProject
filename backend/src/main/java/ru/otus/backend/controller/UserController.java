@@ -21,7 +21,7 @@ public class UserController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<User> getUserById(@PathVariable(name = "id") Long id) {
         Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping
@@ -32,6 +32,6 @@ public class UserController {
     @GetMapping(value = "/login/{login}")
     public ResponseEntity<User> getUserByLogin(@PathVariable(name = "login") String login) {
         Optional<User> user = userService.findByLogin(login);
-        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return user.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

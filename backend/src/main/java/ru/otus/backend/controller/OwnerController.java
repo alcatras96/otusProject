@@ -18,7 +18,7 @@ public class OwnerController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Owner> getOwnerById(@PathVariable(name = "id") Long id) {
         Optional<Owner> ownerById = ownerService.getOwnerById(id);
-        return ownerById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return ownerById.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping(params = {"page", "size"})
@@ -48,11 +48,7 @@ public class OwnerController {
 
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<Owner> getOwnerByUserId(@PathVariable(name = "id") Long id) {
-        Owner owner = ownerService.findByUserId(id);
-        if (owner != null) {
-            return ResponseEntity.ok(owner);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+        Optional<Owner> owner = ownerService.findByUserId(id);
+        return owner.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

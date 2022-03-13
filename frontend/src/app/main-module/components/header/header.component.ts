@@ -17,7 +17,8 @@ export class HeaderComponent {
     @Output() onSearch = new EventEmitter<string>();
     searchValue: string = '';
 
-    constructor(private modalService: BsModalService, private authService: AuthService, private router: Router, private sbService: BasketItemService) {
+    constructor(private modalService: BsModalService, private authService: AuthService,
+                private router: Router, private sbService: BasketItemService) {
     }
 
     openModalWithLogin(template: TemplateRef<any>) {
@@ -47,18 +48,16 @@ export class HeaderComponent {
     }
 
     walletIsPresent(): boolean {
-        if (localStorage.getItem('wallet') != 'unregistered') {
-            return true;
-        }
-        return false;
+        return localStorage.getItem('wallet') != 'unregistered';
+
     }
 
-    userRole(): string {
-        return (localStorage.getItem('currentUserRole'));
+    getUserRole(): string {
+        return localStorage.getItem('currentUserRole');
     }
 
     accountInfo(): string {
-        switch (this.userRole()) {
+        switch (this.getUserRole()) {
             case "customer": {
                 return "customerAccountInfo/" + localStorage.getItem('customerId');
             }

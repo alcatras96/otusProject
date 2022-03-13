@@ -24,6 +24,6 @@ public interface CustomerService {
 
     void deleteCustomer(Long id);
 
-    Customer findByUserId(Long id);
+    Optional<Customer> findByUserId(Long id);
 
 }

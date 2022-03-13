@@ -3,16 +3,15 @@ package ru.otus.apigateway.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.otus.apigateway.model.view.Content;
 import ru.otus.apigateway.model.view.OwnerViewModel;
 import ru.otus.apigateway.service.api.OwnerService;
-import ru.otus.apigateway.service.api.UserDataService;
-import ru.otus.apigateway.transfer.Exist;
-import ru.otus.apigateway.transfer.New;
+import ru.otus.apigateway.service.api.UserService;
+import ru.otus.apigateway.validationgroup.Exist;
+import ru.otus.apigateway.validationgroup.New;
 
 import java.util.Optional;
 
@@ -22,7 +21,7 @@ import java.util.Optional;
 public class OwnerController {
 
     private final OwnerService ownerService;
-    private final UserDataService userDataService;
+    private final UserService userService;
     private final PasswordEncoder passwordEncoder;
 
     @PreAuthorize("hasAnyAuthority('admin')")
@@ -30,7 +29,6 @@ public class OwnerController {
     public Content<OwnerViewModel> getAllOwners(@RequestParam("page") int page, @RequestParam("size") int size) {
         return ownerService.getAll(page, size);
     }
-
 
     @PostMapping
     public OwnerViewModel saveOwner(@Validated(New.class) @RequestBody OwnerViewModel owner) {
@@ -54,7 +52,7 @@ public class OwnerController {
     @PreAuthorize("hasAnyAuthority('admin', 'owner')")
     @GetMapping(value = "/users")
     public ResponseEntity<OwnerViewModel> getOwnerByUserId() {
-        OwnerViewModel owner = ownerService.getOwnerByUserId(userDataService.findByLogin(SecurityContextHolder.getContext().getAuthentication().getName()).getId());
+        OwnerViewModel owner = ownerService.getOwnerByUserId(userService.getCurrentUserByLogin().getId());
         if (owner != null) {
             return ResponseEntity.ok(owner);
         } else {

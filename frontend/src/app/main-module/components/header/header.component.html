@@ -10,22 +10,22 @@
             </li>
             <li class="nav-item">
                 <a class="nav-link" (click)="openModalWithWallet()"
-                   [hidden]="userRole() == 'admin' || !userIsPresent() || walletIsPresent()">Wallet</a>
+                   [hidden]="getUserRole() == 'admin' || !userIsPresent() || walletIsPresent()">Wallet</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" (click)="openModalWithLogin(modalLogin)" [hidden]="userIsPresent()">Login</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" [hidden]="!userIsPresent() || userRole() == 'admin'" routerLink="/{{accountInfo()}}">Account
+                <a class="nav-link" [hidden]="!userIsPresent() || getUserRole() == 'admin'" routerLink="/{{accountInfo()}}">Account
                     Info</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" routerLink="/adminPanel" [hidden]="userRole() != 'admin'">Administrator panel</a>
+                <a class="nav-link" routerLink="/adminPanel" [hidden]="getUserRole() != 'admin'">Administrator panel</a>
             </li>
         </ul>
 
         <a class="btn btn-light mx-2" routerLink="/shoppingList"
-           [hidden]="!(userRole() == 'customer')">
+           [hidden]="!(getUserRole() == 'customer')">
             <i class="fa fa-cart-arrow-down"></i>
             {{itemsCounter}}
         </a>

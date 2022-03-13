@@ -31,6 +31,6 @@ export class CustomerService {
     }
 
     getCustomerByUserId(): Observable<Customer> {
-        return this.http.get<Customer>(this._controllerUrlPrefix + '/user');
+        return this.http.get<Customer>(this._controllerUrlPrefix + '/users');
     }
 }

@@ -18,11 +18,11 @@ public class CustomerController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<Customer> getCustomerById(@PathVariable(name = "id") Long id) {
         Optional<Customer> customer = customerService.getCustomerById(id);
-        return customer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return customer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @GetMapping(params = {"page", "size"})
-    public Iterable<Customer> getAllCustomers(@RequestParam("page") int page, @RequestParam("size") int size) {
+    public Iterable<Customer> getAllCustomers(@RequestParam("page") Integer page, @RequestParam("size") Integer size) {
         return customerService.getAllCustomers(page, size);
     }
 
@@ -48,11 +48,7 @@ public class CustomerController {
 
     @GetMapping(value = "/users/{id}")
     public ResponseEntity<Customer> getCustomerByUserId(@PathVariable(name = "id") Long id) {
-        Customer customer = customerService.findByUserId(id);
-        if (customer != null) {
-            return ResponseEntity.ok(customer);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+        Optional<Customer> customer = customerService.findByUserId(id);
+        return customer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 }

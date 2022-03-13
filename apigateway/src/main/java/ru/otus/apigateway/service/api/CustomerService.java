@@ -1,5 +1,6 @@
 package ru.otus.apigateway.service.api;
 
+import ru.otus.apigateway.model.backend.Customer;
 import ru.otus.apigateway.model.view.Content;
 import ru.otus.apigateway.model.view.CustomerViewModel;
 
@@ -13,6 +14,8 @@ public interface CustomerService {
     CustomerViewModel saveCustomer(CustomerViewModel customer);
 
     void updateCustomerDetails(CustomerViewModel customer);
+
+    void updateCustomer(Customer customer);
 
     void deleteCustomer(Long id);
 }

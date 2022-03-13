@@ -23,8 +23,8 @@ public class BasketItemController {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<BasketItem> getBasketItemById(@PathVariable(name = "id") Long id) {
-        Optional<BasketItem> sb = basketItemService.getBasketItemById(id);
-        return sb.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        Optional<BasketItem> basketItem = basketItemService.getBasketItemById(id);
+        return basketItem.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
@@ -33,13 +33,8 @@ public class BasketItemController {
     }
 
     @GetMapping(value = "/customers/{id}")
-    public ResponseEntity<Iterable<BasketItem>> getBasketItemsByCustomerId(@PathVariable(name = "id") Long id) {
-        Iterable<BasketItem> basketItems = basketItemService.findByCustomerId(id);
-        if (basketItems != null) {
-            return ResponseEntity.ok(basketItems);
-        } else {
-            return ResponseEntity.noContent().build();
-        }
+    public Iterable<BasketItem> getBasketItemsByCustomerId(@PathVariable(name = "id") Long id) {
+        return basketItemService.findByCustomerId(id);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -47,7 +42,7 @@ public class BasketItemController {
         basketItemService.deleteBasketItem(id);
     }
 
-    @DeleteMapping(value = "/customerS/{id}")
+    @DeleteMapping(value = "/customers/{id}")
     public void deleteAllBasketItemsByCustomerId(@PathVariable(name = "id") Long id) {
         basketItemService.deleteAllBasketItemsByCustomerId(id);
     }

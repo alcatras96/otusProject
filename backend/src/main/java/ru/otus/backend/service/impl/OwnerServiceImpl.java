@@ -106,7 +106,7 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public Owner findByUserId(Long id) {
+    public Optional<Owner> findByUserId(Long id) {
         return ownerRepository.findByUserId(id);
     }
 }

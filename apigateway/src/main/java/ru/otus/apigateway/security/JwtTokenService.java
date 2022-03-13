@@ -1,4 +1,4 @@
-package ru.otus.apigateway.config;
+package ru.otus.apigateway.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -17,7 +17,7 @@ import static ru.otus.apigateway.constants.Constants.ACCESS_TOKEN_VALIDITY_SECON
 import static ru.otus.apigateway.constants.Constants.SIGNING_KEY;
 
 @Component
-public class JwtTokenUtil implements Serializable {
+public class JwtTokenService implements Serializable {
 
     public String getUsernameFromToken(String token) {
         return getClaimFromToken(token, Claims::getSubject);
@@ -53,7 +53,7 @@ public class JwtTokenUtil implements Serializable {
                 .claim("scopes", authorities)
                 .signWith(SignatureAlgorithm.HS256, SIGNING_KEY)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS*1000))
+                .setExpiration(new Date(System.currentTimeMillis() + ACCESS_TOKEN_VALIDITY_SECONDS * 1000))
                 .compact();
     }
 

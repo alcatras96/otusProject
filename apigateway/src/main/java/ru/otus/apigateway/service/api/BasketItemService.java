@@ -16,5 +16,5 @@ public interface BasketItemService {
 
     void deleteBasketItem(Long id);
 
-    void deleteBasketItemByCustomerId(Long id);
+    void deleteBasketItemsByCustomerId(Long id);
 }

@@ -38,8 +38,8 @@ create table statuses
 create table users
 (
     id       bigserial not null primary key,
-    email    varchar(255),
-    login    varchar(255),
+    email    varchar(255) unique,
+    login    varchar(255) unique,
     password varchar(255),
     role_id  bigint    not null references roles
 );

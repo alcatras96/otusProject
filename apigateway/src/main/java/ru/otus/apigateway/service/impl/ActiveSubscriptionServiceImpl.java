@@ -33,7 +33,7 @@ public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionService 
     @Override
     public Iterable<ActiveSubscriptionViewModel> getASByCustomerId(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/customer/" + id, Iterable.class);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/customers/" + id, Iterable.class);
     }
 
     @Override

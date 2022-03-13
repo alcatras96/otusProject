@@ -3,6 +3,8 @@ sourceCompatibility = JavaVersion.VERSION_17
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+    implementation 'net.sf.ehcache:ehcache'
     implementation 'io.jsonwebtoken:jjwt'
     implementation 'javax.validation:validation-api'
     implementation 'javax.xml.bind:jaxb-api'

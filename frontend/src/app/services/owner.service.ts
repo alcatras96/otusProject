@@ -32,6 +32,6 @@ export class OwnerService {
     }
 
     getOwnerByUserId(): Observable<Owner> {
-        return this.http.get<Owner>(this._controllerUrlPrefix + '/user');
+        return this.http.get<Owner>(this._controllerUrlPrefix + '/users');
     }
 }

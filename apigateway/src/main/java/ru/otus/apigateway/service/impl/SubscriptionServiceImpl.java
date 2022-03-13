@@ -42,13 +42,13 @@ public class SubscriptionServiceImpl implements SubscriptionService {
     @Override
     public Content<SubscriptionViewModel> findByCategoryId(Long id, int page, int size) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/category/" + id + "?page=" + page + "&size=" + size, Content.class);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/categories/" + id + "?page=" + page + "&size=" + size, Content.class);
     }
 
     @Override
     public List<SubscriptionViewModel> findByOwnerId(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        SubscriptionViewModel[] subscriptions = restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/owner/s" + id, SubscriptionViewModel[].class);
+        SubscriptionViewModel[] subscriptions = restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/owners/" + id, SubscriptionViewModel[].class);
         return subscriptions == null ? Collections.emptyList() : Arrays.asList(subscriptions);
     }
 

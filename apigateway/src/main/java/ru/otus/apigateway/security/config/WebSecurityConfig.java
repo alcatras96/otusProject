@@ -1,4 +1,4 @@
-package ru.otus.apigateway.config;
+package ru.otus.apigateway.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +17,8 @@ import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import ru.otus.apigateway.security.JwtAuthenticationEntryPoint;
+import ru.otus.apigateway.security.filter.JwtAuthenticationFilter;
 
 import javax.annotation.Resource;
 import java.util.Arrays;

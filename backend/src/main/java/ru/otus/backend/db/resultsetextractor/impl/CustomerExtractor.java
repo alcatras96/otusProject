@@ -8,10 +8,11 @@ import ru.otus.backend.db.mapper.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Optional;
 
 @Component
 @AllArgsConstructor
-public class CustomerByUserIdExtractor implements ResultSetExtractor<Customer> {
+public class CustomerExtractor implements ResultSetExtractor<Optional<Customer>> {
 
     private final RowMapper<Customer> customerRowMapper;
     private final RowMapper<BillingAccount> billingAccountRowMapper;
@@ -20,12 +21,12 @@ public class CustomerByUserIdExtractor implements ResultSetExtractor<Customer> {
     private final RowMapper<Role> roleRowMapper;
 
     @Override
-    public Customer extractData(ResultSet rs) throws SQLException {
+    public Optional<Customer> extractData(ResultSet rs) throws SQLException {
         Customer customer = null;
         if (rs.next()) {
             customer = extractCustomer(rs);
         }
-        return customer;
+        return Optional.ofNullable(customer);
     }
 
     private Customer extractCustomer(ResultSet rs) throws SQLException {

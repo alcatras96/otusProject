@@ -2,8 +2,8 @@ package ru.otus.apigateway.model.view;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
-import ru.otus.apigateway.transfer.Exist;
-import ru.otus.apigateway.transfer.New;
+import ru.otus.apigateway.validationgroup.Exist;
+import ru.otus.apigateway.validationgroup.New;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;

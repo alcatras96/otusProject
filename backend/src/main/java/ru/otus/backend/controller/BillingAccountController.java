@@ -24,7 +24,7 @@ public class BillingAccountController {
     @GetMapping(value = "/{id}")
     public ResponseEntity<BillingAccount> getBillingAccountById(@PathVariable(name = "id") Long id) {
         Optional<BillingAccount> billing_accountsOptional = billingAccountService.getBillingAccountById(id);
-        return billing_accountsOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.noContent().build());
+        return billing_accountsOptional.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping
