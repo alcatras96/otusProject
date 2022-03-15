@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Output} from '@angular/core';
-import {AuthInfo} from "../../../models/auth-info";
+import {AuthInfoModel} from "../../../models/auth-info.model";
 import {AuthService} from "../../../../services/auth.service";
 import {TokenStorage} from "../../../../services/token.storage";
 import {UserService} from "../../../../services/user.service";
@@ -16,14 +16,13 @@ export class LoginModalComponent {
     isNotHidden = false;
     @Output() onChange = new EventEmitter();
 
-    loginUser: AuthInfo = new AuthInfo();
+    loginUser: AuthInfoModel = new AuthInfoModel();
 
     constructor(private authService: AuthService, private token: TokenStorage, private userService: UserService,
                 private ownersService: OwnerService, private customersService: CustomerService) {
     }
 
     login(): void {
-
         this.authService.attemptAuth(this.loginUser).subscribe(
             data => {
                 this.token.saveToken(data.token);

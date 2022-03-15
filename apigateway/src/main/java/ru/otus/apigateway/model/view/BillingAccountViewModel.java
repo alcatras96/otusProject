@@ -25,5 +25,5 @@ public class BillingAccountViewModel {
     @Size(groups = {New.class, Exist.class}, min = 4, max = 20)
     private String validity;
     @Min(groups = {New.class, Exist.class}, value = 0)
-    private int balance;
+    private Long balance;
 }

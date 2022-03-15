@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {BasketItem} from "../main-module/models/basket-item";
+import {BasketItemModel} from "../main-module/models/basket-item.model";
 import {ListWrapper} from "../main-module/models/list-wrapper";
 
 @Injectable({
@@ -14,20 +14,20 @@ export class BasketItemService {
     constructor(private http: HttpClient) {
     }
 
-    saveBasketItem(basketItem: ListWrapper<BasketItem>): Observable<void> {
+    saveBasketItem(basketItem: ListWrapper<BasketItemModel>): Observable<void> {
         return this.http.post<void>(this._controllerUrlPrefix, basketItem);
     }
 
-    getBasketItemsByCustomerId(): Observable<BasketItem[]> {
-        return this.http.get<BasketItem[]>(this._controllerUrlPrefix + '/customers');
+    getBasketItemsByCustomerId(): Observable<BasketItemModel[]> {
+        return this.http.get<BasketItemModel[]>(this._controllerUrlPrefix + '/customers');
     }
 
     getCount(): Observable<number> {
         return this.http.get<number>(this._controllerUrlPrefix + '/count');
     }
 
-    deleteBasketItemById(id: string): Observable<BasketItem> {
-        return this.http.delete<BasketItem>(this._controllerUrlPrefix + '/' + id);
+    deleteBasketItemById(id: string): Observable<BasketItemModel> {
+        return this.http.delete<BasketItemModel>(this._controllerUrlPrefix + '/' + id);
     }
 
     deleteAllBasketItemsByCustomerId(): Observable<void> {

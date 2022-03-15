@@ -1,5 +1,6 @@
 package ru.otus.backend.db.repository;
 
+import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
@@ -65,4 +66,8 @@ public interface CustomerRepository extends PagingAndSortingRepository<Customer,
                                                         """,
             resultSetExtractorRef = "customerExtractor")
     Optional<Customer> findByUserId(@Param("user_id") Long id);
+
+    @Modifying
+    @Query("update customers set status_id = :status_id where id = :id")
+    void saveCustomerStatus(@Param("id") Long id, @Param("status_id") Long status_id);
 }

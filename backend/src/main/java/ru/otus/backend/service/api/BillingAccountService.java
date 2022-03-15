@@ -11,6 +11,8 @@ public interface BillingAccountService {
 
     Iterable<BillingAccount> saveBillingAccounts(Iterable<BillingAccount> billingAccounts);
 
+    void saveBillingAccountsBalance(Iterable<BillingAccount> billingAccounts);
+
     void deleteBillingAccountById(Long id);
 
     Optional<BillingAccount> getBillingAccountById(Long id);

@@ -1,20 +1,20 @@
 import {User} from "./user";
-import {BillingAccount} from "./billing-account";
+import {BillingAccountModel} from "./billing-account.model";
 
-export class Owner {
+export class OwnerModel {
     id: string;
     name: string;
     user: User = new User();
-    billingAccount: BillingAccount;
+    billingAccount: BillingAccountModel;
 
     constructor() {
         if (localStorage.getItem('wallet')) {
-            this.billingAccount = new BillingAccount();
+            this.billingAccount = new BillingAccountModel();
         }
     }
 
-    static cloneOwner(owner: Owner): Owner {
-        let cloneOwner: Owner = new Owner();
+    static cloneOwner(owner: OwnerModel): OwnerModel {
+        let cloneOwner: OwnerModel = new OwnerModel();
         cloneOwner.id = owner.id;
         cloneOwner.name = owner.name;
         cloneOwner.user = owner.user;

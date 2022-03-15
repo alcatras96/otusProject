@@ -10,18 +10,12 @@ import ru.otus.backend.service.api.ActiveSubscriptionService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
 @AllArgsConstructor
 @Component
 public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionService {
 
     private final ActiveSubscriptionRepository repository;
-
-    @Override
-    public Optional<ActiveSubscription> getActiveSubscriptionById(Long id) {
-        return repository.findById(id);
-    }
 
     @Override
     public Iterable<ActiveSubscription> getActiveSubscriptionsByCustomerId(Long id) {
@@ -61,8 +55,15 @@ public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionService 
     }
 
     @Override
-    public ActiveSubscription saveActiveSubscription(ActiveSubscription activeSubscription) {
-        return repository.save(activeSubscription);
+    public void saveSubscriptionQuantityAndLastEditDate(Iterable<ActiveSubscription> activeSubscriptions) {
+        activeSubscriptions.forEach(activeSubscription -> repository.saveSubscriptionQuantityAndLastEditDate(
+                activeSubscription.getId(), activeSubscription.getLastEditDate(), activeSubscription.getQuantity())
+        );
+    }
+
+    @Override
+    public List<ActiveSubscription> findAllForRecalculation() {
+        return repository.findAllForRecalculation();
     }
 
     @Override

@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {Subscription} from "../main-module/models/subscription";
+import {SubscriptionModel} from "../main-module/models/subscription.model";
 import {Content} from "../main-module/models/content";
 
 @Injectable({
@@ -14,24 +14,24 @@ export class SubscriptionService {
     constructor(private http: HttpClient) {
     }
 
-    getSubscriptionsPaged(page: number, size: number): Observable<Content<Subscription>> {
-        return this.http.get<Content<Subscription>>(this._controllerUrlPrefix + '?page=' + page + '&size=' + size);
+    getSubscriptionsPaged(page: number, size: number): Observable<Content<SubscriptionModel>> {
+        return this.http.get<Content<SubscriptionModel>>(this._controllerUrlPrefix + '?page=' + page + '&size=' + size);
     }
 
-    getSubscriptionsByOwnerId(id: string): Observable<Subscription[]> {
-        return this.http.get<Subscription[]>(this._controllerUrlPrefix + '/owners/' + id);
+    getSubscriptionsByOwnerId(id: string): Observable<SubscriptionModel[]> {
+        return this.http.get<SubscriptionModel[]>(this._controllerUrlPrefix + '/owners/' + id);
     }
 
-    getSubscriptionByCategoryId(id: string, page: number, size: number): Observable<Content<Subscription>> {
-        return this.http.get<Content<Subscription>>(this._controllerUrlPrefix + '/categories/' + id + '?page=' + page + '&size=' + size);
+    getSubscriptionByCategoryId(id: string, page: number, size: number): Observable<Content<SubscriptionModel>> {
+        return this.http.get<Content<SubscriptionModel>>(this._controllerUrlPrefix + '/categories/' + id + '?page=' + page + '&size=' + size);
     }
 
-    saveSubscription(subscription: Subscription): Observable<Subscription> {
-        return this.http.post<Subscription>(this._controllerUrlPrefix, subscription);
+    saveSubscription(subscription: SubscriptionModel): Observable<SubscriptionModel> {
+        return this.http.post<SubscriptionModel>(this._controllerUrlPrefix, subscription);
     }
 
-    getSubscriptionsByNameLike(name: string, page: number, size: number): Observable<Content<Subscription>> {
-        return this.http.get<Content<Subscription>>(this._controllerUrlPrefix + '/search?name=' + name + "&page=" + page + "&size=" + size);
+    getSubscriptionsByNameLike(name: string, page: number, size: number): Observable<Content<SubscriptionModel>> {
+        return this.http.get<Content<SubscriptionModel>>(this._controllerUrlPrefix + '/search?name=' + name + "&page=" + page + "&size=" + size);
     }
 
     deleteSubscription(id: string): Observable<void> {

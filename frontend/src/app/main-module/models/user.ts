@@ -1,11 +1,11 @@
-import {Role} from "./role";
+import {RoleModel} from "./role.model";
 
 export class User {
     id: string;
     login: string;
     email: string;
     password: string;
-    role: Role = new Role();
+    role: RoleModel = new RoleModel();
 
     static cloneUser(user: User): User {
         if (!user) {
@@ -17,7 +17,7 @@ export class User {
         clonedUser.login = user.login;
         clonedUser.email = user.email;
         clonedUser.password = user.password;
-        clonedUser.role = Role.cloneRole(user.role);
+        clonedUser.role = RoleModel.cloneRole(user.role);
         return clonedUser;
     }
 }

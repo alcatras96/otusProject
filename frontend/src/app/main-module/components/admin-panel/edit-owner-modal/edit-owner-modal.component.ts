@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Owner} from "../../../models/owner";
+import {OwnerModel} from "../../../models/owner.model";
 import {OwnerService} from "../../../../services/owner.service";
 
 @Component({
@@ -8,7 +8,7 @@ import {OwnerService} from "../../../../services/owner.service";
 })
 export class EditOwnerModalComponent {
 
-    @Input() editableOwner: Owner = new Owner();
+    @Input() editableOwner: OwnerModel = new OwnerModel();
     @Output() onChanged = new EventEmitter();
 
     constructor(private ownersService: OwnerService) {

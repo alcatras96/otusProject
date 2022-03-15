@@ -1,10 +1,10 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {ActivatedRoute} from "@angular/router";
-import {Owner} from "../../models/owner";
+import {OwnerModel} from "../../models/owner.model";
 import {OwnerService} from "../../../services/owner.service";
 import {User} from "../../models/user";
 import {SubscriptionService} from "../../../services/subscription.service";
-import {Subscription} from "../../models/subscription";
+import {SubscriptionModel} from "../../models/subscription.model";
 import {BillingAccountService} from "../../../services/billing-account.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -19,11 +19,11 @@ export class OwnerAccountInfoComponent implements OnInit {
     id: string;
     modalRef: BsModalRef;
     amount: number = 0;
-    owner: Owner = new Owner();
-    subscriptions: Subscription[] = [];
-    // private subOwner: Subscription[] = [];
-    // private subs: Subscription[] = [];
-    editableSubscription: Subscription;
+    owner: OwnerModel = new OwnerModel();
+    subscriptions: SubscriptionModel[] = [];
+    // private subOwner: SubscriptionModel[] = [];
+    // private subs: SubscriptionModel[] = [];
+    editableSubscription: SubscriptionModel;
 
     constructor(private modalService: BsModalService, private activateRoute: ActivatedRoute,
                 private loadingService: NgxSpinnerService, private ownersService: OwnerService,
@@ -66,12 +66,12 @@ export class OwnerAccountInfoComponent implements OnInit {
     }
 
     openAddSubscriptionModal(template: TemplateRef<any>): void {
-        this.editableSubscription = new Subscription();
+        this.editableSubscription = new SubscriptionModel();
         this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
     }
 
-    openEditSubscriptionModal(template: TemplateRef<any>, subscription: Subscription): void {
-        this.editableSubscription = Subscription.cloneSubscription(subscription);
+    openEditSubscriptionModal(template: TemplateRef<any>, subscription: SubscriptionModel): void {
+        this.editableSubscription = SubscriptionModel.cloneSubscription(subscription);
         this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
     }
 

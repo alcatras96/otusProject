@@ -1,8 +1,8 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {CustomerService} from "../../../services/customer.service";
-import {Customer} from "../../models/customer";
+import {CustomerModel} from "../../models/customer.model";
 import {BillingAccountService} from "../../../services/billing-account.service";
-import {ActiveSubscription} from "../../models/active-subscription";
+import {ActiveSubscriptionModel} from "../../models/active-subscription.model";
 import {ActiveSubscriptionService} from "../../../services/active-subscription.service";
 import {BasketItemService} from "../../../services/basket-item.service";
 import {BsModalRef, BsModalService} from 'ngx-bootstrap/modal';
@@ -18,8 +18,8 @@ export class CustomerAccountInfoComponent implements OnInit {
     amount: number = 0;
     modalRef: BsModalRef;
     itemsCounter: number;
-    customer: Customer = new Customer();
-    activeSubs: ActiveSubscription[] = [];
+    customer: CustomerModel = new CustomerModel();
+    activeSubs: ActiveSubscriptionModel[] = [];
 
     constructor(private modalService: BsModalService, private loadingService: NgxSpinnerService,
                 private sbService: BasketItemService, private customersService: CustomerService,
@@ -30,7 +30,6 @@ export class CustomerAccountInfoComponent implements OnInit {
         this.modalRef = this.modalService.show(template);
     }
 
-    // Calls on component init
     ngOnInit() {
         this.loadCustomer();
         this.loadActiveSubs();
@@ -40,7 +39,6 @@ export class CustomerAccountInfoComponent implements OnInit {
     private loadCustomer(): void {
         this.loadingService.show();
         this.customersService.getCustomerByUserId().subscribe(customer => {
-            // Parse json response into local array
             this.customer = customer;
             localStorage.setItem('status', customer.status.name);
             this.loadingService.hide();

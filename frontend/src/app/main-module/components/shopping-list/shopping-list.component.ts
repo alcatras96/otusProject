@@ -1,7 +1,7 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
-import {BasketItem} from "../../models/basket-item";
+import {BasketItemModel} from "../../models/basket-item.model";
 import {BasketItemService} from "../../../services/basket-item.service";
-import {ActiveSubscription} from "../../models/active-subscription";
+import {ActiveSubscriptionModel} from "../../models/active-subscription.model";
 import {ActiveSubscriptionService} from "../../../services/active-subscription.service";
 import {Router} from "@angular/router";
 import {ListWrapper} from "../../models/list-wrapper";
@@ -16,11 +16,11 @@ import {finalize} from "rxjs";
 })
 export class ShoppingListComponent implements OnInit {
 
-    shoppingBasket: BasketItem[] = [];
+    shoppingBasket: BasketItemModel[] = [];
     total: number = 0;
     itemsCounter: number;
     bsModalRef: BsModalRef;
-    private subscriptions: ActiveSubscription[] = [];
+    private subscriptions: ActiveSubscriptionModel[] = [];
 
     constructor(private loadingService: NgxSpinnerService, private sbService: BasketItemService,
                 private activeSubscriptionService: ActiveSubscriptionService, private router: Router,
@@ -67,9 +67,9 @@ export class ShoppingListComponent implements OnInit {
 
     checkout(): void {
         this.shoppingBasket.forEach(item => {
-            this.subscriptions.push(new ActiveSubscription(item.subscription, item.quantity));
+            this.subscriptions.push(new ActiveSubscriptionModel(item.subscription, item.quantity));
         });
-        this.activeSubscriptionService.saveActiveSubscriptions(new ListWrapper<ActiveSubscription>(this.subscriptions)).pipe(finalize(() => {
+        this.activeSubscriptionService.saveActiveSubscriptions(new ListWrapper<ActiveSubscriptionModel>(this.subscriptions)).pipe(finalize(() => {
             this.subscriptions = [];
         })).subscribe(() => {
             this.sbService.deleteAllBasketItemsByCustomerId().subscribe(() => {

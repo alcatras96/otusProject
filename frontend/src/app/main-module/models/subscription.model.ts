@@ -1,16 +1,16 @@
-import {SubscriptionCategory} from "./subscription-category";
+import {SubscriptionCategoryModel} from "./subscription-category.model";
 
-export class Subscription {
+export class SubscriptionModel {
     id: string;
     name: string;
     imageUrl: string;
     description: string;
     price: number;
     ownerId: string;
-    category: SubscriptionCategory;
+    category: SubscriptionCategoryModel;
 
-    static cloneSubscription(subscription: Subscription): Subscription {
-        let clonedSubscription: Subscription = new Subscription();
+    static cloneSubscription(subscription: SubscriptionModel): SubscriptionModel {
+        let clonedSubscription: SubscriptionModel = new SubscriptionModel();
         clonedSubscription.id = subscription.id;
         clonedSubscription.name = subscription.name;
         clonedSubscription.imageUrl = subscription.imageUrl;
@@ -18,7 +18,7 @@ export class Subscription {
         clonedSubscription.price = subscription.price;
         clonedSubscription.ownerId = subscription.ownerId;
         if (subscription.category) {
-            clonedSubscription.category = SubscriptionCategory.cloneCategory(subscription.category);
+            clonedSubscription.category = SubscriptionCategoryModel.cloneCategory(subscription.category);
         }
         return clonedSubscription;
     }

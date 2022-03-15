@@ -1,4 +1,4 @@
-package ru.otus.apigateway.security.config;
+package ru.otus.apigateway.config;
 
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;

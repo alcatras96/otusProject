@@ -1,30 +1,30 @@
 import {User} from "./user";
-import {BillingAccount} from "./billing-account";
-import {Status} from "./status";
+import {BillingAccountModel} from "./billing-account.model";
+import {StatusModel} from "./status.model";
 
-export class Customer {
+export class CustomerModel {
     id: string;
     name: string;
     address: string;
     user: User = new User();
-    billingAccount: BillingAccount;
-    status: Status = new Status();
+    billingAccount: BillingAccountModel;
+    status: StatusModel = new StatusModel();
 
     constructor() {
         if (localStorage.getItem('wallet')) {
-            this.billingAccount = new BillingAccount();
+            this.billingAccount = new BillingAccountModel();
         }
     }
 
-    static cloneCustomer(customer: Customer): Customer {
-        let cloneCustomer: Customer = new Customer();
+    static cloneCustomer(customer: CustomerModel): CustomerModel {
+        let cloneCustomer: CustomerModel = new CustomerModel();
         cloneCustomer.id = customer.id;
         cloneCustomer.name = customer.name;
         cloneCustomer.address = customer.address;
         cloneCustomer.user = customer.user;
         cloneCustomer.billingAccount = customer.billingAccount;
         cloneCustomer.user = User.cloneUser(customer.user);
-        cloneCustomer.status = Status.cloneStatus(customer.status);
+        cloneCustomer.status = StatusModel.cloneStatus(customer.status);
         return cloneCustomer;
     }
 }

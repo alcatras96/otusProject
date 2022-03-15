@@ -1,9 +1,9 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
 import {SubscriptionService} from "../../../services/subscription.service";
-import {Subscription} from "../../models/subscription";
+import {SubscriptionModel} from "../../models/subscription.model";
 import {BasketItemService} from "../../../services/basket-item.service";
-import {BasketItem} from "../../models/basket-item";
-import {SubscriptionCategory} from "../../models/subscription-category";
+import {BasketItemModel} from "../../models/basket-item.model";
+import {SubscriptionCategoryModel} from "../../models/subscription-category.model";
 import {CategoryService} from "../../../services/category.service";
 import {CustomerService} from "../../../services/customer.service";
 import {ListWrapper} from "../../models/list-wrapper";
@@ -19,14 +19,14 @@ import {finalize} from "rxjs";
 })
 export class ShopComponent implements OnInit {
 
-    shoppingList: BasketItem[] = [];
-    subs: Subscription[];
+    shoppingList: BasketItemModel[] = [];
+    subs: SubscriptionModel[];
     bsModalRef: BsModalRef;
     selectedMonthsCountPerSubscription: number[] = [];
     size: number = 12;
     totalElements: number;
     itemsCounter: number;
-    categories: SubscriptionCategory[] = [];
+    categories: SubscriptionCategoryModel[] = [];
     searchValue: string;
     currentCategoryId: string;
     loadOption: number = 1;
@@ -90,12 +90,12 @@ export class ShopComponent implements OnInit {
         let i: number = 0;
         for (let sub of this.subs) {
             if (this.selectedMonthsCountPerSubscription[i] > 0) {
-                this.shoppingList.push(new BasketItem(localStorage.getItem('customerId'), sub, this.selectedMonthsCountPerSubscription[i]));
+                this.shoppingList.push(new BasketItemModel(localStorage.getItem('customerId'), sub, this.selectedMonthsCountPerSubscription[i]));
             }
             i++;
         }
 
-        this.sbService.saveBasketItem(new ListWrapper<BasketItem>(this.shoppingList)).pipe(finalize(() => {
+        this.sbService.saveBasketItem(new ListWrapper<BasketItemModel>(this.shoppingList)).pipe(finalize(() => {
             this.updateItemsCounter();
             this.shoppingList = [];
             this.selectedMonthsCountPerSubscription = [];

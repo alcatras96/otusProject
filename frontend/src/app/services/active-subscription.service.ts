@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ActiveSubscription} from "../main-module/models/active-subscription";
+import {ActiveSubscriptionModel} from "../main-module/models/active-subscription.model";
 import {ListWrapper} from "../main-module/models/list-wrapper";
 
 @Injectable({
@@ -14,15 +14,15 @@ export class ActiveSubscriptionService {
     constructor(private http: HttpClient) {
     }
 
-    saveActiveSubscriptions(activeSubscriptions: ListWrapper<ActiveSubscription>): Observable<ActiveSubscription[]> {
-        return this.http.post<ActiveSubscription[]>(this._controllerUrlPrefix, activeSubscriptions);
+    saveActiveSubscriptions(activeSubscriptions: ListWrapper<ActiveSubscriptionModel>): Observable<ActiveSubscriptionModel[]> {
+        return this.http.post<ActiveSubscriptionModel[]>(this._controllerUrlPrefix, activeSubscriptions);
     }
 
-    getActiveSubscriptionsForCurrentCustomer(): Observable<ActiveSubscription[]> {
-        return this.http.get<ActiveSubscription[]>(this._controllerUrlPrefix + '/customers');
+    getActiveSubscriptionsForCurrentCustomer(): Observable<ActiveSubscriptionModel[]> {
+        return this.http.get<ActiveSubscriptionModel[]>(this._controllerUrlPrefix + '/customers');
     }
 
-    deleteActiveSubscriptionById(id: string): Observable<ActiveSubscription> {
-        return this.http.delete<ActiveSubscription>(this._controllerUrlPrefix + '/' + id);
+    deleteActiveSubscriptionById(id: string): Observable<ActiveSubscriptionModel> {
+        return this.http.delete<ActiveSubscriptionModel>(this._controllerUrlPrefix + '/' + id);
     }
 }

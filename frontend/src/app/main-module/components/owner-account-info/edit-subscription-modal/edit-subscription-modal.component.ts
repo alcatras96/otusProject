@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {Subscription} from "../../../models/subscription";
+import {SubscriptionModel} from "../../../models/subscription.model";
 import {SubscriptionService} from "../../../../services/subscription.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {SubscriptionCategory} from "../../../models/subscription-category";
+import {SubscriptionCategoryModel} from "../../../models/subscription-category.model";
 import {CategoryService} from "../../../../services/category.service";
 
 @Component({
@@ -14,9 +14,9 @@ export class EditSubscriptionModalComponent implements OnInit {
 
     subscriptionForm: FormGroup;
 
-    @Input() editableSubscription: Subscription = new Subscription();
+    @Input() editableSubscription: SubscriptionModel = new SubscriptionModel();
     @Output() onChanged = new EventEmitter();
-    categories: SubscriptionCategory[] = [];
+    categories: SubscriptionCategoryModel[] = [];
 
     constructor(private subscriptionsService: SubscriptionService, private formBuilder: FormBuilder, private categoryService: CategoryService) {
     }
@@ -27,7 +27,7 @@ export class EditSubscriptionModalComponent implements OnInit {
         }
 
         if(this.editableSubscription.category == null){
-            this.editableSubscription.category = new SubscriptionCategory();
+            this.editableSubscription.category = new SubscriptionCategoryModel();
         }
 
 
@@ -70,7 +70,7 @@ export class EditSubscriptionModalComponent implements OnInit {
         })
     }
 
-    equalSubscriptionCategory(category: SubscriptionCategory): boolean {
+    equalSubscriptionCategory(category: SubscriptionCategoryModel): boolean {
         if (this.editableSubscription.category == null && category.name == 'Other') {
             return true;
         } else if (this.editableSubscription.category != null && this.editableSubscription.category.id === category.id) {

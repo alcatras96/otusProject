@@ -1,5 +1,5 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
-import {Customer} from "../../models/customer";
+import {CustomerModel} from "../../models/customer.model";
 import {CustomerService} from "../../../services/customer.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -15,8 +15,8 @@ export class AdminPanelComponent implements OnInit {
     bsModalRef: BsModalRef;
     isCollapsed: boolean = false;
 
-    customers: Customer[] = [];
-    editableCustomer: Customer;
+    customers: CustomerModel[] = [];
+    editableCustomer: CustomerModel;
     size: number = 10;
     totalElements: number = 0;
     page: number = 0;
@@ -43,8 +43,8 @@ export class AdminPanelComponent implements OnInit {
         });
     }
 
-    openCustomerEditModal(template: TemplateRef<any>, customer: Customer) {
-        this.editableCustomer = Customer.cloneCustomer(customer);
+    openCustomerEditModal(template: TemplateRef<any>, customer: CustomerModel) {
+        this.editableCustomer = CustomerModel.cloneCustomer(customer);
         this.bsModalRef = this.modalService.show(template, {class: 'modal-lg'});
     }
 

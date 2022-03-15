@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
-import {Customer} from "../../models/customer";
-import {Owner} from "../../models/owner";
+import {CustomerModel} from "../../models/customer.model";
+import {OwnerModel} from "../../models/owner.model";
 import {User} from "../../models/user";
 import {CustomerService} from "../../../services/customer.service";
 import {OwnerService} from "../../../services/owner.service";
@@ -26,8 +26,8 @@ export class RegistrationComponent {
     ownersForm: FormGroup;
     customersForm: FormGroup;
     newUser: User = new User();
-    newCustomer: Customer = new Customer();
-    newOwner: Owner = new Owner();
+    newCustomer: CustomerModel = new CustomerModel();
+    newOwner: OwnerModel = new OwnerModel();
 
     constructor(private loadingService: NgxSpinnerService, private usersService: UserService,
                 private customersService: CustomerService, private ownersService: OwnerService,
@@ -95,12 +95,12 @@ export class RegistrationComponent {
 
     private refreshCustomer(): void {
         this.newUser = new User();
-        this.newCustomer = new Customer();
+        this.newCustomer = new CustomerModel();
     }
 
     private refreshOwner(): void {
         this.newUser = new User();
-        this.newOwner = new Owner();
+        this.newOwner = new OwnerModel();
     }
 
 

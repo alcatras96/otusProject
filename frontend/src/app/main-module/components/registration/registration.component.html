@@ -14,7 +14,7 @@
             <label>First name</label>
             <form [formGroup]="customersForm">
                 <input class="form-control" formControlName="firstName" placeholder="Alan" minlength="6" maxlength="20"
-                       [(ngModel)]="newCustomer.name" pattern="^[A-z]+$" [required]="currentRegisterOption == 'Customer'"></form>
+                       [(ngModel)]="newCustomer.name" pattern="^[A-z]+$" [required]="currentRegisterOption == 'CustomerModel'"></form>
             <div class="alert alert-danger"
                  *ngIf="customersForm.controls['firstName'].invalid && customersForm.controls['firstName'].touched && customersForm.controls['firstName'].dirty">
                 Incorrect name.
@@ -25,7 +25,7 @@
             <form [formGroup]="ownersForm">
                 <input class="form-control" formControlName="orgName" placeholder="Microsoft" minlength="6"
                        maxlength="20" pattern="^[A-z]+$"
-                       [(ngModel)]="newOwner.name" [required]="currentRegisterOption == 'Owner'">
+                       [(ngModel)]="newOwner.name" [required]="currentRegisterOption == 'OwnerModel'">
             </form>
             <div class="alert alert-danger"
                  *ngIf="ownersForm.controls['orgName'].invalid && ownersForm.controls['orgName'].touched && ownersForm.controls['orgName'].dirty">
@@ -106,7 +106,7 @@
             <label>Address</label>
             <form [formGroup]="customersForm">
                 <input class="form-control" formControlName="address" placeholder="1234 Main st." minlength="6" maxlength="25"
-                       [(ngModel)]="newCustomer.address" [required]="currentRegisterOption == 'Customer'"
+                       [(ngModel)]="newCustomer.address" [required]="currentRegisterOption == 'CustomerModel'"
                        pattern="^[a-zA-Z0-9_]+( [a-zA-Z0-9_]+)*$"></form>
             <div class="alert alert-danger"
                  *ngIf="customersForm.controls['address'].dirty && customersForm.controls['address'].invalid && customersForm.controls['address'].touched">
@@ -126,14 +126,14 @@
         <div class="col-md-2">
             <div class="btn-group">
                 <label class="btn btn-primary"
-                       (click)="collapseAddr.show(); collapseName.show(); collapseOrgName.hide(); currentRegisterOption = 'Customer'">Customer</label>
+                       (click)="collapseAddr.show(); collapseName.show(); collapseOrgName.hide(); currentRegisterOption = 'CustomerModel'">CustomerModel</label>
                 <label class="btn btn-primary"
-                       (click)="collapseAddr.hide(); collapseName.hide(); collapseOrgName.show(); currentRegisterOption = 'Owner'">Owner</label>
+                       (click)="collapseAddr.hide(); collapseName.hide(); collapseOrgName.show(); currentRegisterOption = 'OwnerModel'">OwnerModel</label>
             </div>
         </div>
         <div class="col-md-2">
             <button class="btn btn-primary" type="button" [disabled]="_isRegisterButtonDisabled(currentRegisterOption)"
-                    (click)="currentRegisterOption == 'Owner' ? _addOwner() : _addCustomer();">
+                    (click)="currentRegisterOption == 'OwnerModel' ? _addOwner() : _addCustomer();">
                 Register
             </button>
         </div>

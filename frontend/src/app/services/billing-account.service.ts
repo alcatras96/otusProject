@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {BillingAccount} from "../main-module/models/billing-account";
+import {BillingAccountModel} from "../main-module/models/billing-account.model";
 
 @Injectable({
     providedIn: 'root'
@@ -13,11 +13,11 @@ export class BillingAccountService {
     constructor(private http: HttpClient) {
     }
 
-    createBillingAccount(billingAccount: BillingAccount): Observable<BillingAccount> {
-        return this.http.post<BillingAccount>(this._controllerUrlPrefix, billingAccount);
+    createBillingAccount(billingAccount: BillingAccountModel): Observable<BillingAccountModel> {
+        return this.http.post<BillingAccountModel>(this._controllerUrlPrefix, billingAccount);
     }
 
-    addMoneyOnBillingAccount(money: number): Observable<BillingAccount> {
-        return this.http.put<BillingAccount>(this._controllerUrlPrefix + '/money/add', money);
+    addMoneyOnBillingAccount(money: number): Observable<BillingAccountModel> {
+        return this.http.put<BillingAccountModel>(this._controllerUrlPrefix + '/money/add', money);
     }
 }

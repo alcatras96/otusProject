@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, Output} from '@angular/core';
-import {Customer} from "../../../models/customer";
+import {CustomerModel} from "../../../models/customer.model";
 import {CustomerService} from "../../../../services/customer.service";
 
 @Component({
@@ -9,7 +9,7 @@ import {CustomerService} from "../../../../services/customer.service";
 export class EditCustomerModalComponent {
 
 
-    @Input() editableCustomer: Customer = new Customer();
+    @Input() editableCustomer: CustomerModel = new CustomerModel();
     @Output() onChanged = new EventEmitter();
 
     constructor(private customersService: CustomerService) {

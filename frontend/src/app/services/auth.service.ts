@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {AuthInfo} from "../main-module/models/auth-info";
+import {AuthInfoModel} from "../main-module/models/auth-info.model";
 import {TokenStorage} from "./token.storage";
 
 @Injectable({
@@ -12,8 +12,8 @@ export class AuthService {
     constructor(private http: HttpClient, private tokenStorage: TokenStorage) {
     }
 
-    attemptAuth(loginUser: AuthInfo): Observable<any> {
-        return this.http.post<any>('/api/token/generate', loginUser);
+    attemptAuth(authInfo: AuthInfoModel): Observable<any> {
+        return this.http.post<any>('/api/token/generate', authInfo);
     }
 
     logout() {

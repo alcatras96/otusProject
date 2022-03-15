@@ -1,4 +1,4 @@
-package ru.otus.apigateway.security.config;
+package ru.otus.apigateway.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

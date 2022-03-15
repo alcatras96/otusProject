@@ -1,5 +1,5 @@
 import {Component, OnInit, TemplateRef} from '@angular/core';
-import {Owner} from "../../../models/owner";
+import {OwnerModel} from "../../../models/owner.model";
 import {OwnerService} from "../../../../services/owner.service";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {NgxSpinnerService} from "ngx-spinner";
@@ -15,8 +15,8 @@ export class OwnersListComponent implements OnInit {
     bsModalRef: BsModalRef;
     isCollapsed: boolean = false;
 
-    owners: Owner[] = [];
-    editableOwner: Owner;
+    owners: OwnerModel[] = [];
+    editableOwner: OwnerModel;
     size: number = 10;
     totalElements: number = 0;
     page: number = 0;
@@ -45,8 +45,8 @@ export class OwnersListComponent implements OnInit {
         });
     }
 
-    openOwnerEditModal(template: TemplateRef<any>, owner: Owner) {
-        this.editableOwner = Owner.cloneOwner(owner);
+    openOwnerEditModal(template: TemplateRef<any>, owner: OwnerModel) {
+        this.editableOwner = OwnerModel.cloneOwner(owner);
         this.bsModalRef = this.modalService.show(template, {class: 'modal-lg'});
     }
 

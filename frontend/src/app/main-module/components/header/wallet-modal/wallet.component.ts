@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {BillingAccount} from "../../../models/billing-account";
+import {BillingAccountModel} from "../../../models/billing-account.model";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
 import {BsModalRef} from "ngx-bootstrap/modal";
@@ -16,7 +16,7 @@ export class WalletModalComponent implements OnInit {
     month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     walletForm: FormGroup;
-    newBa: BillingAccount = new BillingAccount();
+    newBa: BillingAccountModel = new BillingAccountModel();
 
     constructor(private billingAccountService: BillingAccountService,
                 public bsModalRef: BsModalRef, private formBuilder: FormBuilder, private router: Router) {

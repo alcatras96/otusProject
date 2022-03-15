@@ -1,4 +1,4 @@
-export class BillingAccount {
+export class BillingAccountModel {
 
     id: string;
     number: string;

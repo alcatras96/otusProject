@@ -24,6 +24,8 @@ public class ActiveSubscription {
 
     @Transient
     private Subscription subscription;
+    @Transient
+    private Customer customer;
 
     public Long getSubscriptionId() {
         return subscription != null ? subscription.getId() : subscriptionId;

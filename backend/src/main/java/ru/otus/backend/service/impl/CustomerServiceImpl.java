@@ -33,11 +33,6 @@ public class CustomerServiceImpl implements CustomerService {
         return customerRepository.findById(id);
     }
 
-    @Override
-    public Iterable<Customer> getCustomersById(Iterable<Long> ids) {
-        return customerRepository.findAllById(ids);
-    }
-
     @Transactional
     @Override
     public Customer saveWithBillingAccount(Customer customer) {
@@ -85,6 +80,11 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Iterable<Customer> saveCustomers(Iterable<Customer> customers) {
         return customerRepository.saveAll(customers);
+    }
+
+    @Override
+    public void saveCustomersStatus(Iterable<Customer> customers) {
+        customers.forEach(customer -> customerRepository.saveCustomerStatus(customer.getId(), customer.getStatusId()));
     }
 
     @Override

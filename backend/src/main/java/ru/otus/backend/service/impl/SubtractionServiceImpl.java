@@ -1,18 +1,21 @@
 package ru.otus.backend.service.impl;
 
-import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.otus.backend.constants.Constants;
-import ru.otus.backend.db.entity.*;
-import ru.otus.backend.service.api.*;
+import ru.otus.backend.db.entity.ActiveSubscription;
+import ru.otus.backend.db.entity.BillingAccount;
+import ru.otus.backend.db.entity.Customer;
+import ru.otus.backend.db.entity.Subscription;
+import ru.otus.backend.service.api.ActiveSubscriptionService;
+import ru.otus.backend.service.api.BillingAccountService;
+import ru.otus.backend.service.api.CustomerService;
+import ru.otus.backend.service.api.SubtractionService;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -23,126 +26,105 @@ public class SubtractionServiceImpl implements SubtractionService {
     private static final int CYCLE_TIME = 10000;
 
     private final ActiveSubscriptionService activeSubscriptionService;
-    private final SubscriptionService subscriptionService;
     private final CustomerService customerService;
     private final BillingAccountService billingAccountService;
-    private final OwnerService ownerService;
+
+    @Getter
+    private static final class EntitiesToEdit {
+        private final Set<BillingAccount> billingAccountsToUpdate = new HashSet<>();
+        private final Set<ActiveSubscription> activeSubscriptionsToUpdate = new HashSet<>();
+        private final Set<ActiveSubscription> activeSubscriptionsToDelete = new HashSet<>();
+        private final Set<Customer> customersToUpdate = new HashSet<>();
+
+        public void addBillingAccountToUpdate(BillingAccount billingAccount) {
+            billingAccountsToUpdate.add(billingAccount);
+        }
+
+        public void addActiveSubscriptionToUpdate(ActiveSubscription activeSubscription) {
+            activeSubscriptionsToUpdate.add(activeSubscription);
+        }
+
+        public void addActiveSubscriptionToDelete(ActiveSubscription activeSubscription) {
+            activeSubscriptionsToDelete.add(activeSubscription);
+        }
+
+        public void addCustomerToUpdate(Customer customer) {
+            customersToUpdate.add(customer);
+        }
+    }
 
     @Override
     @Scheduled(fixedDelay = CYCLE_TIME)
     public void subtract() {
-        List<ActiveSubscription> activeSubscriptions = Lists.newArrayList(activeSubscriptionService.getAllActiveSubscriptions());
+        List<ActiveSubscription> activeSubscriptions = activeSubscriptionService.findAllForRecalculation();
         if (!activeSubscriptions.isEmpty()) {
-            List<Subscription> subscriptions = Lists.newArrayList(subscriptionService.getSubscriptionsById(activeSubscriptions.stream()
-                    .map(ActiveSubscription::getSubscriptionId).collect(Collectors.toList())));
-            activeSubscriptions.forEach(activeSubscription -> activeSubscription.setSubscription(
-                            subscriptions.stream()
-                                    .filter(subscription -> subscription.getId().equals(activeSubscription.getSubscriptionId()))
-                                    .findAny().orElseThrow()
-                    )
+            Map<Customer, List<ActiveSubscription>> activeSubscriptionsByCustomerId = activeSubscriptions.stream().collect(
+                    Collectors.groupingBy(ActiveSubscription::getCustomer, HashMap::new, Collectors.toCollection(ArrayList::new))
             );
 
-            List<Customer> customers = Lists.newArrayList(customerService.getCustomersById(activeSubscriptions.stream()
-                    .map(ActiveSubscription::getCustomerId).collect(Collectors.toList())));
-            List<Owner> owners = Lists.newArrayList(ownerService.getOwnersById(
-                    subscriptions.stream()
-                            .map(Subscription::getOwnerId)
-                            .collect(Collectors.toSet()))
-            );
+            var entitiesToEdit = new EntitiesToEdit();
 
-            List<Long> billingAccountIds = customers.stream().map(Customer::getBillingAccountId).collect(Collectors.toList());
-            billingAccountIds.addAll(owners.stream().map(Owner::getBillingAccountId).collect(Collectors.toList()));
-
-            List<BillingAccount> billingAccounts = Lists.newArrayList(billingAccountService.getBillingAccountsById(billingAccountIds));
-            customers.forEach(customer -> customer.setBillingAccount(
-                            billingAccounts.stream()
-                                    .filter(billingAccount -> billingAccount.getId().equals(customer.getBillingAccountId()))
-                                    .findAny().orElseThrow()
-                    )
-            );
-            owners.forEach(owner -> owner.setBillingAccount(
-                            billingAccounts.stream()
-                                    .filter(billingAccount -> billingAccount.getId().equals(owner.getBillingAccountId()))
-                                    .findAny().orElseThrow()
-                    )
-            );
-            subscriptions.forEach(subscription -> subscription.setOwner(owners.stream().filter(owner -> owner.getId().equals(subscription.getOwnerId())).findAny().orElseThrow()));
-
-            HashMap<Long, ArrayList<ActiveSubscription>> activeSubscriptionsByCustomerId = activeSubscriptions.stream().collect(
-                    Collectors.groupingBy(ActiveSubscription::getCustomerId, HashMap::new, Collectors.toCollection(ArrayList::new))
-            );
-
-            ArrayList<BillingAccount> billingAccountsToUpdate = new ArrayList<>();
-            ArrayList<ActiveSubscription> activeSubscriptionsToUpdate = new ArrayList<>();
-            ArrayList<ActiveSubscription> activeSubscriptionsToDelete = new ArrayList<>();
-            ArrayList<Customer> customersToUpdate = new ArrayList<>();
-            Set<Long> customerIds = activeSubscriptionsByCustomerId.keySet();
-            customerIds.forEach(customerId -> {
-                ArrayList<ActiveSubscription> activeSubscriptionsForCurrentCustomer = activeSubscriptionsByCustomerId.get(customerId);
-                Customer customer = customers.stream()
-                        .filter(cust -> customerId.equals(cust.getId()))
-                        .findAny()
-                        .orElseThrow();
+            activeSubscriptionsByCustomerId.keySet().forEach(customer -> {
+                List<ActiveSubscription> activeSubscriptionsForCurrentCustomer = activeSubscriptionsByCustomerId.get(customer);
                 for (ActiveSubscription activeSubscription : activeSubscriptionsForCurrentCustomer) {
-                    long newEditedDate = System.currentTimeMillis();
-                    long deltaTime = newEditedDate - activeSubscription.getLastEditDate();
-                    int amount = (int) deltaTime / CYCLE_TIME;
-                    log.info("Difference in time: " + ((Long) deltaTime));
-                    if (amount > 0) {
-
+                    long newEditDate = System.currentTimeMillis();
+                    int quantityForSubtract = (int) (newEditDate - activeSubscription.getLastEditDate()) / CYCLE_TIME;
+                    if (quantityForSubtract > 0) {
                         if (customer.getStatusId().equals(1L)) {
-                            int subtractMoney = amount * activeSubscription.getSubscription().getPrice();
-                            BillingAccount customerBillingAccount = customer.getBillingAccount();
-                            Integer balance = customerBillingAccount.getBalance() - subtractMoney;
+                            activeSubscription.setLastEditDate(newEditDate);
 
-                            int quantity = activeSubscription.getQuantity() - amount;
-                            Owner owner = activeSubscription.getSubscription().getOwner();
-                            BillingAccount ownerBillingAccount = owner.getBillingAccount();
-                            Integer ownerBalance = ownerBillingAccount.getBalance();
-
-                            if (quantity < 0) {
-                                activeSubscription.setLastEditDate(newEditedDate);
-                                activeSubscriptionsToUpdate.add(activeSubscription);
+                            int quantityAfterSubtract = activeSubscription.getQuantity() - quantityForSubtract;
+                            if (quantityAfterSubtract < 0) {
+                                entitiesToEdit.addActiveSubscriptionToUpdate(activeSubscription);
                             } else {
-                                if (quantity > 0) {
-                                    activeSubscription.setQuantity(quantity);
-                                    activeSubscription.setLastEditDate(newEditedDate);
-                                    activeSubscriptionsToUpdate.add(activeSubscription);
-                                } else {
-                                    activeSubscriptionsToDelete.add(activeSubscription);
-                                }
-
-                                customerBillingAccount.setBalance(balance);
-                                log.info("Amount: " + customerBillingAccount.getBalance().toString());
-                                ownerBalance += subtractMoney;
-                                log.info("Owner amount: " + ownerBalance);
-
-                                ownerBillingAccount.setBalance(ownerBalance);
-                                billingAccountsToUpdate.add(ownerBillingAccount);
-                                billingAccountsToUpdate.add(customerBillingAccount);
+                                recalculateActiveSubscriptionQuantity(entitiesToEdit, activeSubscription, quantityAfterSubtract);
+                                recalculateCustomerAndOwnerBillingAccountBalance(entitiesToEdit, activeSubscription, quantityForSubtract);
                             }
 
-                            if (customerBillingAccount.getBalance() < Constants.THRESHOLD) {
+                            if (customer.getBillingAccount().getBalance() < Constants.THRESHOLD) {
                                 customer.setStatusId(2L);
-                                customersToUpdate.add(customer);
+                                entitiesToEdit.addCustomerToUpdate(customer);
                             }
                         } else {
-                            activeSubscription.setLastEditDate(newEditedDate);
-                            activeSubscriptionsToUpdate.add(activeSubscription);
+                            entitiesToEdit.addActiveSubscriptionToUpdate(activeSubscription);
                         }
-
                     }
-                    log.info("------------------------------------");
                 }
             });
-            activeSubscriptionService.deleteActiveSubscriptions(activeSubscriptionsToDelete);
-            activeSubscriptionService.saveActiveSubscriptions(activeSubscriptionsToUpdate);
-            billingAccountService.saveBillingAccounts(billingAccountsToUpdate);
-            customerService.saveCustomers(customersToUpdate);
 
+            processEntitiesToEdit(entitiesToEdit);
+
+            log.info("------------------------------------");
             log.info("Cycle is done.");
             log.info("------------------------------------");
         }
     }
 
+    private void processEntitiesToEdit(EntitiesToEdit entitiesToEdit) {
+        activeSubscriptionService.deleteActiveSubscriptions(entitiesToEdit.getActiveSubscriptionsToDelete());
+        activeSubscriptionService.saveSubscriptionQuantityAndLastEditDate(entitiesToEdit.getActiveSubscriptionsToUpdate());
+        billingAccountService.saveBillingAccountsBalance(entitiesToEdit.getBillingAccountsToUpdate());
+        customerService.saveCustomersStatus(entitiesToEdit.getCustomersToUpdate());
+    }
+
+    private void recalculateActiveSubscriptionQuantity(EntitiesToEdit entitiesToEdit, ActiveSubscription activeSubscription, int quantityAfterSubtract) {
+        if (quantityAfterSubtract > 0) {
+            activeSubscription.setQuantity(quantityAfterSubtract);
+            entitiesToEdit.addActiveSubscriptionToUpdate(activeSubscription);
+        } else {
+            entitiesToEdit.addActiveSubscriptionToDelete(activeSubscription);
+        }
+    }
+
+    private void recalculateCustomerAndOwnerBillingAccountBalance(EntitiesToEdit entitiesToEdit, ActiveSubscription activeSubscription,
+                                                                  int quantityForSubtract) {
+        Subscription subscription = activeSubscription.getSubscription();
+        BillingAccount customerBillingAccount = activeSubscription.getCustomer().getBillingAccount();
+        BillingAccount ownerBillingAccount = subscription.getOwner().getBillingAccount();
+        int customerPaymentAmount = quantityForSubtract * subscription.getPrice();
+        customerBillingAccount.setBalance(customerBillingAccount.getBalance() - customerPaymentAmount);
+        ownerBillingAccount.setBalance(ownerBillingAccount.getBalance() + customerPaymentAmount);
+        entitiesToEdit.addBillingAccountToUpdate(ownerBillingAccount);
+        entitiesToEdit.addBillingAccountToUpdate(customerBillingAccount);
+    }
 }

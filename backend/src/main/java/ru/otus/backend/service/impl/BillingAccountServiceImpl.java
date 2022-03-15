@@ -26,6 +26,13 @@ public class BillingAccountServiceImpl implements BillingAccountService {
     }
 
     @Override
+    public void saveBillingAccountsBalance(Iterable<BillingAccount> billingAccounts) {
+        billingAccounts.forEach(billingAccount ->
+                repository.saveBillingAccountBalance(billingAccount.getId(), billingAccount.getBalance())
+        );
+    }
+
+    @Override
     public void deleteBillingAccountById(Long id) {
         repository.deleteById(id);
     }
