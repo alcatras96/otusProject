@@ -1,6 +1,6 @@
 import {User} from "./user";
 import {BillingAccountModel} from "./billing-account.model";
-import {StatusModel} from "./status.model";
+import {Status} from "./status";
 
 export class CustomerModel {
     id: string;
@@ -8,7 +8,7 @@ export class CustomerModel {
     address: string;
     user: User = new User();
     billingAccount: BillingAccountModel;
-    status: StatusModel = new StatusModel();
+    status: Status;
 
     constructor() {
         if (localStorage.getItem('wallet')) {
@@ -24,7 +24,7 @@ export class CustomerModel {
         cloneCustomer.user = customer.user;
         cloneCustomer.billingAccount = customer.billingAccount;
         cloneCustomer.user = User.cloneUser(customer.user);
-        cloneCustomer.status = StatusModel.cloneStatus(customer.status);
+        cloneCustomer.status = customer.status;
         return cloneCustomer;
     }
 }

@@ -8,7 +8,7 @@
             <div class="row">
                 <div class="col-md-8 text-left">
                     <label>Card number</label>
-                    <input type="text" class="form-control" formControlName="number" [(ngModel)]="newBa.number" minlength="16"
+                    <input type="text" class="form-control" formControlName="number" [(ngModel)]="newBillingAccount.number" minlength="16"
                            maxlength="16" pattern="^[0-9]+$" placeholder="1111222233334444">
                     <div class="alert alert-danger"
                          *ngIf="walletForm.controls['number'].dirty && walletForm.controls['number'].invalid && walletForm.controls['number'].touched">
@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-md-4 text-left">
                     <label>CVV</label>
-                    <input type="text" class="form-control" formControlName="cvv" [(ngModel)]="newBa.cvv" placeholder="660" minlength="3"
+                    <input type="text" class="form-control" formControlName="cvv" [(ngModel)]="newBillingAccount.cvv" placeholder="660" minlength="3"
                            maxlength="3">
                     <div class="alert alert-danger"
                          *ngIf="walletForm.controls['cvv'].dirty && walletForm.controls['cvv'].invalid && walletForm.controls['cvv'].touched">

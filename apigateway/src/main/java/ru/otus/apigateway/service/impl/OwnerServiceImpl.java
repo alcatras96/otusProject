@@ -9,8 +9,6 @@ import ru.otus.apigateway.model.view.Content;
 import ru.otus.apigateway.model.view.OwnerViewModel;
 import ru.otus.apigateway.service.api.OwnerService;
 
-import java.util.Optional;
-
 @Service
 public class OwnerServiceImpl implements OwnerService {
 
@@ -31,9 +29,9 @@ public class OwnerServiceImpl implements OwnerService {
     }
 
     @Override
-    public Optional<OwnerViewModel> getOwnerById(Long id) {
+    public OwnerViewModel getOwnerById(Long id) {
         RestTemplate restTemplate = new RestTemplate();
-        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/" + id, Optional.class);
+        return restTemplate.getForObject(backendServerUrl + BACKEND_CONTROLLER_URL_PREFIX + "/" + id, OwnerViewModel.class);
     }
 
     @Override
@@ -56,10 +54,10 @@ public class OwnerServiceImpl implements OwnerService {
 
     @Override
     public void deleteOwner(Long id) {
-        Optional<OwnerViewModel> owner = getOwnerById(id);
+        OwnerViewModel owner = getOwnerById(id);
         Cache usersCache = cacheManager.getCache("usersCache");
-        if (usersCache != null && owner.isPresent()) {
-            usersCache.evict(owner.get().getUser().getLogin());
+        if (usersCache != null) {
+            usersCache.evict(owner.getUser().getLogin());
         }
 
         RestTemplate restTemplate = new RestTemplate();

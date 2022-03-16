@@ -9,14 +9,9 @@
                required autofocus maxlength="25">
         <input type="password" class="form-control my-3" placeholder="Password" [(ngModel)]="loginUser.password"
                required maxlength="25">
-        <div class="alert alert-danger" *ngIf="isNotHidden">
+        <div class="alert alert-danger" *ngIf="alertVisible">
             Wrong login or password.
         </div>
-        <!--<div class="checkbox mb-3">-->
-        <!--<label>-->
-        <!--<input type="checkbox" value="remember-me"> Remember me-->
-        <!--</label>-->
-        <!--</div>-->
         <button class="btn btn-lg btn-primary btn-block" type="submit" (click)="login()">Login</button>
         <a id="regButton" routerLink="registration" (click)="close()">Registration</a>
     </div>

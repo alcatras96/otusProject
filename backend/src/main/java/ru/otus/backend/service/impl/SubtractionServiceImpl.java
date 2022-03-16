@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import ru.otus.backend.constants.Constants;
-import ru.otus.backend.db.entity.ActiveSubscription;
-import ru.otus.backend.db.entity.BillingAccount;
-import ru.otus.backend.db.entity.Customer;
-import ru.otus.backend.db.entity.Subscription;
+import ru.otus.backend.db.entity.*;
 import ru.otus.backend.service.api.ActiveSubscriptionService;
 import ru.otus.backend.service.api.BillingAccountService;
 import ru.otus.backend.service.api.CustomerService;
@@ -70,7 +67,7 @@ public class SubtractionServiceImpl implements SubtractionService {
                     long newEditDate = System.currentTimeMillis();
                     int quantityForSubtract = (int) (newEditDate - activeSubscription.getLastEditDate()) / CYCLE_TIME;
                     if (quantityForSubtract > 0) {
-                        if (customer.getStatusId().equals(1L)) {
+                        if (customer.getStatus() == Status.VALID) {
                             activeSubscription.setLastEditDate(newEditDate);
 
                             int quantityAfterSubtract = activeSubscription.getQuantity() - quantityForSubtract;
@@ -82,7 +79,7 @@ public class SubtractionServiceImpl implements SubtractionService {
                             }
 
                             if (customer.getBillingAccount().getBalance() < Constants.THRESHOLD) {
-                                customer.setStatusId(2L);
+                                customer.setStatus(Status.BLOCKED);
                                 entitiesToEdit.addCustomerToUpdate(customer);
                             }
                         } else {

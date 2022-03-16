@@ -6,7 +6,7 @@
     <div class="row justify-content-end" style="position: absolute; margin-left: 90%">
         <div class="col-md-auto">
             <button id="submitSubs" class="btn btn-primary" (click)="openConfirmModal(confirmDialog)"
-                    [hidden]="adminOrOwner()" [disabled]="cantAdd()">Add to Cart
+                    [hidden]="adminOrOwner()" [disabled]="isAddToCardButtonDisabled()">Add to Cart
             </button>
         </div>
     </div>
@@ -21,7 +21,7 @@
             </div>
         </div>
     </div>
-    <div class="row justify-content-center my-0" [hidden]="customerIsNotBlocked()">
+    <div class="row justify-content-center my-0" [hidden]="adminOrOwner() || customerIsNotBlocked()">
         <div class="col-4 text-center">
             <alert type="danger">
                 <strong>Warning!</strong> You where blocked. You have a <strong>negative wallet balance</strong> and your status is blocked.
@@ -29,7 +29,7 @@
             </alert>
         </div>
     </div>
-    <div class="row justify-content-center my-0" [hidden]="customerWalletIsPresent()">
+    <div class="row justify-content-center my-0" [hidden]="walletIsPresent()">
         <div class="col-4 text-center">
             <alert type="warning">
                 <strong>Warning!</strong> You need to register a <strong>wallet</strong> first if you want to subscribe.
@@ -63,30 +63,8 @@
                         </button>
                     </div>
                 </div>
-                <h4>{{sub.price}}$/Day</h4>
+                <h4>{{sub.price}}$/Month</h4>
             </div>
-
-            <!--            <div class="col-md-1 align-self-center px-1 ml-3 mr-5 text-center">-->
-            <!--                <div class="row">-->
-            <!--                    <div class="col-3 px-0">-->
-            <!--                        <button type="button" class="btn btn-danger btn-number" (click)="value[i]=value[i]-1"-->
-            <!--                                [disabled]="value[i] < 1">-->
-            <!--                            <span class="fa fa-minus"></span>-->
-            <!--                        </button>-->
-            <!--                    </div>-->
-            <!--                    <div class="col-md-6 px-0">-->
-            <!--                        <input class="form-control" type="number" min="0"-->
-            <!--                               [(ngModel)]="value[i] == undefined ? value[i] = 0 : value[i]">-->
-            <!--                    </div>-->
-            <!--                    <div class="col-3 px-0">-->
-            <!--                        <button type="button" class="btn btn-primary btn-number" (click)="value[i]=value[i]+1">-->
-            <!--                            <span class="fa fa-plus"></span>-->
-            <!--                        </button>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--                <h4>{{sub.price}}$/Day</h4>-->
-
-            <!--            </div>-->
 
             <div class="w-100" *ngIf="(i+1)%4==0"></div>
         </ng-container>

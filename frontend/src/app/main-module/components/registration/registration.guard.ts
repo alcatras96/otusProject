@@ -9,7 +9,7 @@ export class RegistrationGuard implements CanActivate {
     }
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-        if ((localStorage.getItem('currentUserRole') == null)) {
+        if (localStorage.getItem('currentUserRole') == null) {
             return true;
         } else {
             this.router.navigateByUrl('/404');

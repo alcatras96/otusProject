@@ -5,6 +5,7 @@ import {TokenStorage} from "../../../../services/token.storage";
 import {UserService} from "../../../../services/user.service";
 import {OwnerService} from "../../../../services/owner.service";
 import {CustomerService} from "../../../../services/customer.service";
+import {BillingAccountModel} from "../../../models/billing-account.model";
 
 @Component({
     selector: 'modal-login',
@@ -13,7 +14,7 @@ import {CustomerService} from "../../../../services/customer.service";
 })
 export class LoginModalComponent {
 
-    isNotHidden = false;
+    alertVisible = false;
     @Output() onChange = new EventEmitter();
 
     loginUser: AuthInfoModel = new AuthInfoModel();
@@ -22,38 +23,33 @@ export class LoginModalComponent {
                 private ownersService: OwnerService, private customersService: CustomerService) {
     }
 
+    //todo: refactor
     login(): void {
-        this.authService.attemptAuth(this.loginUser).subscribe(
-            data => {
+        this.authService.attemptAuth(this.loginUser).subscribe(data => {
                 this.token.saveToken(data.token);
                 localStorage.setItem('currentUser', this.loginUser.login);
 
                 this.userService.getUserByLogin().subscribe(user => {
-                    localStorage.setItem('currentUserRole', user.role.name);
+                    const role = user.role.name;
+                    localStorage.setItem('currentUserRole', role);
                     this.onChange.emit();
 
-                    if (user.role.name == 'owner') {
+                    if (role == 'owner') {
                         this.ownersService.getOwnerByUserId().subscribe(owner => {
                             localStorage.setItem('ownerId', owner.id);
-                            if (owner.billingAccount) {
-                                localStorage.setItem('wallet', owner.billingAccount.id);
-                            } else localStorage.setItem('wallet', 'unregistered');
+                            this._setBillingAccountIdToLocalStorage(owner.billingAccount);
                         });
-                    }
-
-                    if (user.role.name == 'customer') {
+                    } else if (role == 'customer') {
                         this.customersService.getCustomerByUserId().subscribe(customer => {
                             localStorage.setItem('customerId', customer.id);
-                            localStorage.setItem('status', customer.status.name);
-                            if (customer.billingAccount) {
-                                localStorage.setItem('wallet', customer.billingAccount.id);
-                            } else localStorage.setItem('wallet', 'unregistered');
+                            localStorage.setItem('status', customer.status);
+                            this._setBillingAccountIdToLocalStorage(customer.billingAccount);
                         });
                     }
                 });
             },
             () => {
-                this.isNotHidden = true;
+                this.alertVisible = true;
             }
         );
 
@@ -63,4 +59,7 @@ export class LoginModalComponent {
         this.onChange.emit();
     }
 
+    private _setBillingAccountIdToLocalStorage(billingAccount: BillingAccountModel) {
+        localStorage.setItem('wallet', billingAccount ? billingAccount.id : 'unregistered');
+    }
 }

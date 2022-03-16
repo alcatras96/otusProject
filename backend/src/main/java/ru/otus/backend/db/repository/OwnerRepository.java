@@ -31,7 +31,7 @@ public interface OwnerRepository extends PagingAndSortingRepository<Owner, Long>
                      left join billing_accounts b
                                 on o.billing_account_id = b.id
                      inner join roles r on r.id = u.role_id
-            where o.user_id = :id
+            where o.id = :id
                                                             """,
             resultSetExtractorRef = "ownerExtractor")
     Optional<Owner> findById(@Param("id") Long id);

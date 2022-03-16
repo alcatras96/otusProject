@@ -8,7 +8,7 @@ import java.util.Optional;
 public interface OwnerService {
     Content<OwnerViewModel> getAll(int page, int size);
 
-    Optional<OwnerViewModel> getOwnerById(Long id);
+    OwnerViewModel getOwnerById(Long id);
 
     OwnerViewModel getOwnerByUserId(Long id);
 

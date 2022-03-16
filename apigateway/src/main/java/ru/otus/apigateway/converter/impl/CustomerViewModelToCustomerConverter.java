@@ -15,7 +15,7 @@ public class CustomerViewModelToCustomerConverter implements Converter<CustomerV
                 .address(customerViewModel.getAddress())
                 .billingAccountId(customerViewModel.getBillingAccount().getId())
                 .name(customerViewModel.getName())
-                .statusId(customerViewModel.getStatus().getId())
+                .status(customerViewModel.getStatus())
                 .userId(customerViewModel.getUser().getId())
                 .build();
     }

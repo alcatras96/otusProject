@@ -46,7 +46,7 @@ public interface ActiveSubscriptionRepository extends CrudRepository<ActiveSubsc
                    b2.id              as customer_billing_account_id,
                    b2.balance         as customer_billing_account_balance,
                    c.id               as customer_id,
-                   c.status_id        as customer_status_id
+                   c.status           as customer_status_name
             from active_subscriptions a_s
                      inner join subscriptions s on s.id = a_s.subscription_id
                      inner join owners o on o.id = s.owner_id

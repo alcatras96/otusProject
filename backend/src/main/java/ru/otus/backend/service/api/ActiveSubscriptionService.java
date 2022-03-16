@@ -3,10 +3,13 @@ package ru.otus.backend.service.api;
 import ru.otus.backend.db.entity.ActiveSubscription;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ActiveSubscriptionService {
 
     Iterable<ActiveSubscription> getActiveSubscriptionsByCustomerId(Long id);
+
+    Optional<ActiveSubscription> getActiveSubscriptionById(Long id);
 
     Iterable<ActiveSubscription> getAllActiveSubscriptions();
 

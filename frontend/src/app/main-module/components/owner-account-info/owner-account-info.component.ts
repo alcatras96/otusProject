@@ -21,8 +21,6 @@ export class OwnerAccountInfoComponent implements OnInit {
     amount: number = 0;
     owner: OwnerModel = new OwnerModel();
     subscriptions: SubscriptionModel[] = [];
-    // private subOwner: SubscriptionModel[] = [];
-    // private subs: SubscriptionModel[] = [];
     editableSubscription: SubscriptionModel;
 
     constructor(private modalService: BsModalService, private activateRoute: ActivatedRoute,
@@ -35,7 +33,6 @@ export class OwnerAccountInfoComponent implements OnInit {
         this.modalRef = this.modalService.show(template);
     }
 
-    // Calls on component init
     ngOnInit() {
         this.loadOwner();
     }
@@ -44,7 +41,6 @@ export class OwnerAccountInfoComponent implements OnInit {
         this.loadingService.show();
         this.owner.user = new User();
         this.ownersService.getOwnerByUserId().subscribe(owner => {
-            // Parse json response into local array
             this.owner = owner;
             this.loadSubscriptions();
         });
@@ -59,19 +55,20 @@ export class OwnerAccountInfoComponent implements OnInit {
     }
 
     walletIsPresent(): boolean {
-        if (localStorage.getItem('wallet') != 'unregistered') {
-            return true;
-        }
-        return false;
+        return localStorage.getItem('wallet') != 'unregistered';
     }
 
     openAddSubscriptionModal(template: TemplateRef<any>): void {
         this.editableSubscription = new SubscriptionModel();
-        this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
+        this.showModal(template);
     }
 
     openEditSubscriptionModal(template: TemplateRef<any>, subscription: SubscriptionModel): void {
         this.editableSubscription = SubscriptionModel.cloneSubscription(subscription);
+        this.showModal(template);
+    }
+
+    showModal(template: TemplateRef<any>) {
         this.modalRef = this.modalService.show(template, {class: 'modal-lg'});
     }
 
@@ -87,9 +84,7 @@ export class OwnerAccountInfoComponent implements OnInit {
     }
 
     fillUp(): void {
-        const billingAccount = this.owner.billingAccount;
-        billingAccount.balance += this.amount;
-        this.baService.addMoneyOnBillingAccount(billingAccount.balance).subscribe(() => {
+        this.baService.addMoneyOnBillingAccount(this.amount).subscribe(() => {
             this.loadOwner();
             this.amount = 0;
             this.modalRef.hide();

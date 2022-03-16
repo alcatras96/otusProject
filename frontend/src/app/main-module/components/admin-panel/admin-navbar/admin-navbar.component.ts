@@ -48,5 +48,4 @@ export class AdminNavbarComponent implements OnInit {
     ngOnInit(): void {
         this.loadThreshold()
     }
-
 }

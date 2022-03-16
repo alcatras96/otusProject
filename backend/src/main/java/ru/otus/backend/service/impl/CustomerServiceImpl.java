@@ -64,7 +64,6 @@ public class CustomerServiceImpl implements CustomerService {
     @Transactional
     @Override
     public Customer createCustomer(Customer customer) {
-        customer.setStatusId(1L);
         User user = customer.getUser();
         user.setRoleId(user.getRole().getId());
         user = userService.saveUser(user);
@@ -84,7 +83,7 @@ public class CustomerServiceImpl implements CustomerService {
 
     @Override
     public void saveCustomersStatus(Iterable<Customer> customers) {
-        customers.forEach(customer -> customerRepository.saveCustomerStatus(customer.getId(), customer.getStatusId()));
+        customers.forEach(customer -> customerRepository.saveCustomerStatus(customer.getId(), customer.getStatus()));
     }
 
     @Override

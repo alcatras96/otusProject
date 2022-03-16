@@ -21,7 +21,8 @@ export class AdminPanelComponent implements OnInit {
     totalElements: number = 0;
     page: number = 0;
 
-    constructor(private loadingService: NgxSpinnerService , private customersService: CustomerService, private modalService: BsModalService) {
+    constructor(private loadingService: NgxSpinnerService, private customersService: CustomerService,
+                private modalService: BsModalService) {
     }
 
     ngOnInit() {

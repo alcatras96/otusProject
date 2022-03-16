@@ -13,8 +13,6 @@ import ru.otus.apigateway.service.api.UserService;
 import ru.otus.apigateway.validationgroup.Exist;
 import ru.otus.apigateway.validationgroup.New;
 
-import java.util.Optional;
-
 @RestController
 @RequestMapping("/api/owners")
 @AllArgsConstructor
@@ -44,9 +42,8 @@ public class OwnerController {
 
     @PreAuthorize("hasAnyAuthority('admin')")
     @GetMapping(value = "/{id}")
-    public ResponseEntity<OwnerViewModel> getOwnerById(@PathVariable(name = "id") Long id) {
-        Optional<OwnerViewModel> owner = ownerService.getOwnerById(id);
-        return owner.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
+    public OwnerViewModel getOwnerById(@PathVariable(name = "id") Long id) {
+        return ownerService.getOwnerById(id);
     }
 
     @PreAuthorize("hasAnyAuthority('admin', 'owner')")

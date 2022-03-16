@@ -11,6 +11,7 @@ import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {NgxSpinnerService} from "ngx-spinner";
 import {PageChangedEvent} from "ngx-bootstrap/pagination";
 import {finalize} from "rxjs";
+import {Status} from "../../models/status";
 
 @Component({
     selector: 'app-shop',
@@ -48,7 +49,7 @@ export class ShopComponent implements OnInit {
 
     private updateCustomerStatus(): void {
         this.customerService.getCustomerByUserId().subscribe(customer => {
-            localStorage.setItem('status', customer.status.name);
+            localStorage.setItem('status', customer.status);
         })
     }
 
@@ -85,7 +86,7 @@ export class ShopComponent implements OnInit {
         this.selectedMonthsCountPerSubscription = [];
     }
 
-    addToSb(): void {
+    addToBasket(): void {
         this.loadingService.show();
         let i: number = 0;
         for (let sub of this.subs) {
@@ -99,9 +100,7 @@ export class ShopComponent implements OnInit {
             this.updateItemsCounter();
             this.shoppingList = [];
             this.selectedMonthsCountPerSubscription = [];
-
             this.loadingService.hide();
-
         })).subscribe(() => {
         });
     }
@@ -110,16 +109,20 @@ export class ShopComponent implements OnInit {
         return !(localStorage.getItem('currentUserRole') == 'customer');
     }
 
-    cantAdd(): boolean {
-        if (localStorage.getItem('wallet') == null || localStorage.getItem('status') == 'blocked') return true;
+    isAddToCardButtonDisabled(): boolean {
+        if (localStorage.getItem('wallet') == null || localStorage.getItem('status') == Status.BLOCKED) {
+            return true;
+        }
         for (let value of this.selectedMonthsCountPerSubscription) {
-            if (value > 0 && value < 1000) return false;
+            if (value > 0 && value < 1000) {
+                return false;
+            }
         }
         return true;
     }
 
     confirm() {
-        this.addToSb();
+        this.addToBasket();
         this.bsModalRef.hide();
     }
 
@@ -174,17 +177,15 @@ export class ShopComponent implements OnInit {
         this.loadSubscriptions(0);
     }
 
-    customerWalletIsPresent(): boolean {
-        if (this.adminOrOwner() || localStorage.getItem('wallet') == null) {
+    walletIsPresent(): boolean {
+        const wallet = localStorage.getItem('wallet');
+        if (this.adminOrOwner() || wallet == null) {
             return true;
         }
-        return localStorage.getItem('wallet') != 'unregistered';
+        return wallet != 'unregistered';
     }
 
     customerIsNotBlocked(): boolean {
-        if (this.adminOrOwner()) return true;
-        if (localStorage.getItem('status') == null) return true;
-        return localStorage.getItem('status') == 'valid';
+        return localStorage.getItem('status') != Status.BLOCKED;
     }
-
 }

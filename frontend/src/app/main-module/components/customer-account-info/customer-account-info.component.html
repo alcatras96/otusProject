@@ -10,10 +10,10 @@
                     <div class="card-title mb-4">
                         <div class="d-flex justify-content-start">
                             <div class="userData ml-3">
-                                <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold">CustomerModel login:
+                                <h2 class="d-block" style="font-size: 1.5rem; font-weight: bold">Customer login:
                                     {{customer.user.login}}</h2>
                                 <p class="font-weight-light">Account status: <span
-                                        style="color: crimson">{{customer.status.name}}</span></p>
+                                        style="color: crimson">{{customer?.status?.toLowerCase()}}</span></p>
                             </div>
                         </div>
                     </div>
@@ -116,9 +116,6 @@
 
             <input type="number" class="form-control" placeholder="Refill amount" min="0" #amountInput="ngModel"
                    required autofocus [(ngModel)]="amount">
-            <!--<div [hidden]="name.valid || name.untouched" class="alert alert-danger">-->
-            <!--Не указано имя-->
-            <!--</div>-->
         </div>
     </div>
     <div class="modal-footer">

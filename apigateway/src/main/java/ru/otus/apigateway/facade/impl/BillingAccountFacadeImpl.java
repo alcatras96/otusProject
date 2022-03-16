@@ -30,13 +30,13 @@ public class BillingAccountFacadeImpl implements BillingAccountFacade {
     public BillingAccountViewModel saveBillingAccount(BillingAccountViewModel billingAccountViewModel) {
         Long currentUserId = userService.getCurrentUserByLogin().getId();
         if (isCurrentUserIsOwner()) {
-            CustomerViewModel customer = customerService.getCustomerByUserId(currentUserId);
-            customer.setBillingAccount(billingAccountViewModel);
-            return billingAccountService.saveCustomerBillingAccount(customer).getBillingAccount();
-        } else {
             OwnerViewModel owner = ownerService.getOwnerByUserId(currentUserId);
             owner.setBillingAccount(billingAccountViewModel);
             return billingAccountService.saveOwnerBillingAccount(owner).getBillingAccount();
+        } else {
+            CustomerViewModel customer = customerService.getCustomerByUserId(currentUserId);
+            customer.setBillingAccount(billingAccountViewModel);
+            return billingAccountService.saveCustomerBillingAccount(customer).getBillingAccount();
         }
     }
 
@@ -45,7 +45,7 @@ public class BillingAccountFacadeImpl implements BillingAccountFacade {
         UserViewModel currentUser = userService.getCurrentUserByLogin();
         BillingAccountViewModel billingAccount;
         if (isCurrentUserIsOwner()) {
-            OwnerViewModel owner = ownerService.getOwnerById(currentUser.getId()).orElseThrow();
+            OwnerViewModel owner = ownerService.getOwnerById(currentUser.getId());
             billingAccount = owner.getBillingAccount();
         } else {
             CustomerViewModel customerViewModel = customerService.getCustomerByUserId(currentUser.getId());
@@ -57,9 +57,8 @@ public class BillingAccountFacadeImpl implements BillingAccountFacade {
     }
 
     private void validateCustomerStatus(CustomerViewModel customerViewModel) {
-        StatusViewModel status = customerViewModel.getStatus();
-        if (status.getName().equals("blocked") && customerViewModel.getBillingAccount().getBalance() > Constants.THRESHOLD) {
-            status.setId(1L);
+        if (customerViewModel.getStatus() == Status.BLOCKED && customerViewModel.getBillingAccount().getBalance() > Constants.THRESHOLD) {
+            customerViewModel.setStatus(Status.VALID);
             Customer customer = toCustomerConverter.convert(customerViewModel);
             customerService.updateCustomer(customer);
         }

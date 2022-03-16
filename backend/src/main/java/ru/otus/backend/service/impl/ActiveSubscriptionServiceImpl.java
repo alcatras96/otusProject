@@ -10,6 +10,7 @@ import ru.otus.backend.service.api.ActiveSubscriptionService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 @AllArgsConstructor
 @Component
@@ -20,6 +21,11 @@ public class ActiveSubscriptionServiceImpl implements ActiveSubscriptionService 
     @Override
     public Iterable<ActiveSubscription> getActiveSubscriptionsByCustomerId(Long id) {
         return repository.findByCustomerId(id);
+    }
+
+    @Override
+    public Optional<ActiveSubscription> getActiveSubscriptionById(Long id) {
+        return repository.findById(id);
     }
 
     @Override

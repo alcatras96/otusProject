@@ -29,12 +29,6 @@ create table roles
     name varchar(255)
 );
 
-create table statuses
-(
-    id   bigserial not null primary key,
-    name varchar(255)
-);
-
 create table users
 (
     id       bigserial not null primary key,
@@ -50,7 +44,7 @@ create table customers
     address            varchar(255),
     name               varchar(255),
     billing_account_id bigint references billing_accounts,
-    status_id          bigint references statuses,
+    status             varchar(255) default 'VALID',
     user_id            bigint    not null references users
 );
 
@@ -89,10 +83,6 @@ create table basket_items
     quantity        integer   not null,
     subscription_id bigint references subscriptions
 );
-
-insert into statuses(name)
-values ('valid'),
-       ('blocked');
 
 insert into roles(name)
 values ('admin'),
@@ -183,21 +173,21 @@ values ('Steve Jobs', (select id from billing_accounts where number like '123456
        ('Owner14', null, (select id from users where login like 'owner14')),
        ('Owner15', null, (select id from users where login like 'owner15'));
 
-insert into customers(address, name, billing_account_id, status_id, user_id)
-values ('Belarus, Minsk', 'Petya', (select id from billing_accounts where number like '654321'), 1,
+insert into customers(address, name, billing_account_id, user_id)
+values ('Belarus, Minsk', 'Petya', (select id from billing_accounts where number like '654321'),
         (select id from users where login like 'customer1')),
-       ('Belarus, Minsk', 'Customer01', null, 1, (select id from users where login like 'customer01')),
-       ('Belarus, Minsk', 'Customer02', null, 1, (select id from users where login like 'customer02')),
-       ('Belarus, Minsk', 'Customer03', null, 1, (select id from users where login like 'customer03')),
-       ('Belarus, Minsk', 'Customer04', null, 1, (select id from users where login like 'customer04')),
-       ('Belarus, Minsk', 'Customer05', null, 1, (select id from users where login like 'customer05')),
-       ('Belarus, Minsk', 'Customer06', null, 1, (select id from users where login like 'customer06')),
-       ('Belarus, Minsk', 'Customer07', null, 1, (select id from users where login like 'customer07')),
-       ('Belarus, Minsk', 'Customer08', null, 1, (select id from users where login like 'customer08')),
-       ('Belarus, Minsk', 'Customer09', null, 1, (select id from users where login like 'customer09')),
-       ('Belarus, Minsk', 'Customer10', null, 1, (select id from users where login like 'customer10')),
-       ('Belarus, Minsk', 'Customer11', null, 1, (select id from users where login like 'customer11')),
-       ('Belarus, Minsk', 'Customer12', null, 1, (select id from users where login like 'customer12'));
+       ('Belarus, Minsk', 'Customer01', null, (select id from users where login like 'customer01')),
+       ('Belarus, Minsk', 'Customer02', null, (select id from users where login like 'customer02')),
+       ('Belarus, Minsk', 'Customer03', null, (select id from users where login like 'customer03')),
+       ('Belarus, Minsk', 'Customer04', null, (select id from users where login like 'customer04')),
+       ('Belarus, Minsk', 'Customer05', null, (select id from users where login like 'customer05')),
+       ('Belarus, Minsk', 'Customer06', null, (select id from users where login like 'customer06')),
+       ('Belarus, Minsk', 'Customer07', null, (select id from users where login like 'customer07')),
+       ('Belarus, Minsk', 'Customer08', null, (select id from users where login like 'customer08')),
+       ('Belarus, Minsk', 'Customer09', null, (select id from users where login like 'customer09')),
+       ('Belarus, Minsk', 'Customer10', null, (select id from users where login like 'customer10')),
+       ('Belarus, Minsk', 'Customer11', null, (select id from users where login like 'customer11')),
+       ('Belarus, Minsk', 'Customer12', null, (select id from users where login like 'customer12'));
 
 insert into categories(name)
 values ('music'),

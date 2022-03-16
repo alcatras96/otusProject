@@ -33,5 +33,5 @@ public class CustomerViewModel {
     @Valid
     private BillingAccountViewModel billingAccount;
     @NotNull(groups = {Exist.class})
-    private StatusViewModel status;
+    private Status status;
 }

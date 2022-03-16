@@ -96,7 +96,13 @@ const appRoutes: Routes = [
         RegistrationGuard
     ],
     bootstrap: [AppComponent],
-    entryComponents: [LoginModalComponent, WalletModalComponent, EditOwnerModalComponent, EditCustomerModalComponent, EditSubscriptionModalComponent]
+    entryComponents: [
+        LoginModalComponent,
+        WalletModalComponent,
+        EditOwnerModalComponent,
+        EditCustomerModalComponent,
+        EditSubscriptionModalComponent
+    ]
 })
 export class AppModule {
 }

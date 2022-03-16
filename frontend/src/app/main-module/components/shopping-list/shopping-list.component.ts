@@ -8,6 +8,7 @@ import {ListWrapper} from "../../models/list-wrapper";
 import {BsModalRef, BsModalService} from "ngx-bootstrap/modal";
 import {NgxSpinnerService} from "ngx-spinner";
 import {finalize} from "rxjs";
+import {Status} from "../../models/status";
 
 @Component({
     selector: 'app-shopping-list',
@@ -32,7 +33,7 @@ export class ShoppingListComponent implements OnInit {
     }
 
     userIsNotBlockedAndHasWallet(): boolean {
-        return localStorage.getItem('status') == 'valid' && localStorage.getItem('wallet') != 'unregistered';
+        return localStorage.getItem('status') == Status.VALID && localStorage.getItem('wallet') != 'unregistered';
     }
 
     private updateItemsCounter(): void {

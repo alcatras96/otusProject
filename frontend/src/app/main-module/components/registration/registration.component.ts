@@ -72,7 +72,6 @@ export class RegistrationComponent {
 
     public _addOwner(): void {
         this.loadingService.show();
-
         this.newUser.role.id = '3';
         this.newOwner.user = this.newUser;
 
@@ -102,7 +101,6 @@ export class RegistrationComponent {
         this.newUser = new User();
         this.newOwner = new OwnerModel();
     }
-
 
     checkPasswords(group: FormGroup) {
         let pass = group.controls['password'].value;

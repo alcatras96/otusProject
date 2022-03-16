@@ -6,6 +6,6 @@ import {Injectable} from "@angular/core";
 export class AdminPanelGuard implements CanActivate {
 
     canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | boolean {
-        return (localStorage.getItem('currentUserRole') == 'admin');
+        return localStorage.getItem('currentUserRole') == 'admin';
     }
 }

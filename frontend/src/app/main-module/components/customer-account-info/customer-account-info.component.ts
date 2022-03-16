@@ -40,7 +40,7 @@ export class CustomerAccountInfoComponent implements OnInit {
         this.loadingService.show();
         this.customersService.getCustomerByUserId().subscribe(customer => {
             this.customer = customer;
-            localStorage.setItem('status', customer.status.name);
+            localStorage.setItem('status', customer.status);
             this.loadingService.hide();
         });
     }
@@ -51,7 +51,6 @@ export class CustomerAccountInfoComponent implements OnInit {
             this.activeSubs = activeSubscriptions;
             this.loadingService.hide();
         });
-
     }
 
     walletIsPresent(): boolean {

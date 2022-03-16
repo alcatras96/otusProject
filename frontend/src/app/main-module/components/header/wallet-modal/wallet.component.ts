@@ -16,15 +16,15 @@ export class WalletModalComponent implements OnInit {
     month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 
     walletForm: FormGroup;
-    newBa: BillingAccountModel = new BillingAccountModel();
+    newBillingAccount: BillingAccountModel = new BillingAccountModel();
 
     constructor(private billingAccountService: BillingAccountService,
                 public bsModalRef: BsModalRef, private formBuilder: FormBuilder, private router: Router) {
     }
 
     register() {
-        this.newBa.validity = this.walletForm.controls['month'].value + ' ' + this.walletForm.controls['year'].value;
-        this.billingAccountService.createBillingAccount(this.newBa).subscribe(billingAccount => {
+        this.newBillingAccount.validity = this.walletForm.controls['month'].value + ' ' + this.walletForm.controls['year'].value;
+        this.billingAccountService.createBillingAccount(this.newBillingAccount).subscribe(billingAccount => {
                 localStorage.setItem('wallet', billingAccount.id);
             }
         );
@@ -38,7 +38,7 @@ export class WalletModalComponent implements OnInit {
             number: ['', Validators.required],
             cvv: ['', Validators.required],
             month: ['January', Validators.required],
-            year: ['2018', Validators.required]
+            year: ['2022', Validators.required]
         });
     }
 }

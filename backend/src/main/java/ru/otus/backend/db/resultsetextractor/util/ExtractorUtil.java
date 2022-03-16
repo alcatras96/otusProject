@@ -16,7 +16,6 @@ public class ExtractorUtil {
     private final RowMapper<Customer> customerRowMapper;
     private final RowMapper<BillingAccount> billingAccountRowMapper;
     private final RowMapper<User> userRowMapper;
-    private final RowMapper<Status> statusRowMapper;
     private final RowMapper<Role> roleRowMapper;
 
     public Owner extractOwner(ResultSet rs) throws SQLException {
@@ -30,7 +29,7 @@ public class ExtractorUtil {
         Customer customer = customerRowMapper.mapRow(rs);
         customer.setBillingAccount(billingAccountRowMapper.mapRow(rs));
         customer.setUser(extractUser(rs));
-        customer.setStatus(statusRowMapper.mapRow(rs));
+        customer.setStatus(Status.valueOf(rs.getString("status_name")));
         return customer;
     }
 

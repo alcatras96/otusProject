@@ -51,7 +51,7 @@ public class AllActiveSubscriptionsForRecalculationExtractor implements ResultSe
     private Customer getCustomer(ResultSet rs) throws SQLException {
         return Customer.builder()
                 .id(rs.getLong("customer_id"))
-                .statusId(rs.getLong("customer_status_id"))
+                .status(Status.valueOf(rs.getString("customer_status_name")))
                 .billingAccount(getCustomerBillingAccount(rs))
                 .build();
     }
