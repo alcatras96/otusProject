@@ -28,13 +28,13 @@ public class SubtractionServiceImpl implements SubtractionService {
 
     @Getter
     private static final class EntitiesToEdit {
-        private final Set<BillingAccount> billingAccountsToUpdate = new HashSet<>();
+        private final Map<Long, Integer> billingAccountsMoneyToAdd = new HashMap<>();
         private final Set<ActiveSubscription> activeSubscriptionsToUpdate = new HashSet<>();
         private final Set<ActiveSubscription> activeSubscriptionsToDelete = new HashSet<>();
         private final Set<Customer> customersToUpdate = new HashSet<>();
 
-        public void addBillingAccountToUpdate(BillingAccount billingAccount) {
-            billingAccountsToUpdate.add(billingAccount);
+        public void addMoneyToBillingAccount(Long billingAccountId, Integer amountToAdd) {
+            billingAccountsMoneyToAdd.merge(billingAccountId, amountToAdd, Integer::sum);
         }
 
         public void addActiveSubscriptionToUpdate(ActiveSubscription activeSubscription) {
@@ -60,11 +60,11 @@ public class SubtractionServiceImpl implements SubtractionService {
             );
 
             var entitiesToEdit = new EntitiesToEdit();
+            long newEditDate = System.currentTimeMillis();
 
             activeSubscriptionsByCustomerId.keySet().forEach(customer -> {
                 List<ActiveSubscription> activeSubscriptionsForCurrentCustomer = activeSubscriptionsByCustomerId.get(customer);
                 for (ActiveSubscription activeSubscription : activeSubscriptionsForCurrentCustomer) {
-                    long newEditDate = System.currentTimeMillis();
                     int quantityForSubtract = (int) (newEditDate - activeSubscription.getLastEditDate()) / CYCLE_TIME;
                     if (quantityForSubtract > 0) {
                         if (customer.getStatus() == Status.VALID) {
@@ -100,7 +100,7 @@ public class SubtractionServiceImpl implements SubtractionService {
     private void processEntitiesToEdit(EntitiesToEdit entitiesToEdit) {
         activeSubscriptionService.deleteActiveSubscriptions(entitiesToEdit.getActiveSubscriptionsToDelete());
         activeSubscriptionService.saveSubscriptionQuantityAndLastEditDate(entitiesToEdit.getActiveSubscriptionsToUpdate());
-        billingAccountService.saveBillingAccountsBalance(entitiesToEdit.getBillingAccountsToUpdate());
+        billingAccountService.addMoneyToBillingAccounts(entitiesToEdit.getBillingAccountsMoneyToAdd());
         customerService.saveCustomersStatus(entitiesToEdit.getCustomersToUpdate());
     }
 
@@ -118,10 +118,8 @@ public class SubtractionServiceImpl implements SubtractionService {
         Subscription subscription = activeSubscription.getSubscription();
         BillingAccount customerBillingAccount = activeSubscription.getCustomer().getBillingAccount();
         BillingAccount ownerBillingAccount = subscription.getOwner().getBillingAccount();
-        int customerPaymentAmount = quantityForSubtract * subscription.getPrice();
-        customerBillingAccount.setBalance(customerBillingAccount.getBalance() - customerPaymentAmount);
-        ownerBillingAccount.setBalance(ownerBillingAccount.getBalance() + customerPaymentAmount);
-        entitiesToEdit.addBillingAccountToUpdate(ownerBillingAccount);
-        entitiesToEdit.addBillingAccountToUpdate(customerBillingAccount);
+        Integer customerPaymentAmount = quantityForSubtract * subscription.getPrice();
+        entitiesToEdit.addMoneyToBillingAccount(customerBillingAccount.getId(), -customerPaymentAmount);
+        entitiesToEdit.addMoneyToBillingAccount(ownerBillingAccount.getId(), customerPaymentAmount);
     }
 }

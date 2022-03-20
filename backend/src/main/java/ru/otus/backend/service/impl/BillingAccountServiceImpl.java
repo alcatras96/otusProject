@@ -7,6 +7,7 @@ import ru.otus.backend.db.repository.BillingAccountRepository;
 import ru.otus.backend.service.api.BillingAccountService;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -26,10 +27,8 @@ public class BillingAccountServiceImpl implements BillingAccountService {
     }
 
     @Override
-    public void saveBillingAccountsBalance(Iterable<BillingAccount> billingAccounts) {
-        billingAccounts.forEach(billingAccount ->
-                repository.saveBillingAccountBalance(billingAccount.getId(), billingAccount.getBalance())
-        );
+    public void addMoneyToBillingAccounts(Map<Long, Integer> moneyToAddPerBillingAccount) {
+        moneyToAddPerBillingAccount.forEach((billingAccountId, moneyToAdd) -> repository.addMonetToBillingAccount(billingAccountId, moneyToAdd));
     }
 
     @Override

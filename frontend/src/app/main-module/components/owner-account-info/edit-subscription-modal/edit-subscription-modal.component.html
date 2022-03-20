@@ -3,7 +3,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-3">
-                    <input class="form-control" placeholder="SubscriptionModel name" [(ngModel)]="editableSubscription.name"
+                    <input class="form-control" placeholder="Subscription name" [(ngModel)]="editableSubscription.name"
                            formControlName="name">
                     <div class="alert alert-danger"
                          *ngIf="subscriptionForm.controls['name'].dirty && subscriptionForm.controls['name'].invalid && subscriptionForm.controls['name'].touched">

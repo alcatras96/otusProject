@@ -42,6 +42,7 @@ public class OwnerServiceImpl implements OwnerService {
     @Override
     public Owner saveWithBillingAccount(Owner owner) {
         BillingAccount billingAccount = owner.getBillingAccount();
+        billingAccount.setBalance(0);
         billingAccountService.saveBillingAccount(billingAccount);
         owner.setBillingAccountId(billingAccount.getId());
         return saveOwner(owner);

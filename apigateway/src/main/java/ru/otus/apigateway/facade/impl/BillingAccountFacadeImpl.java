@@ -45,7 +45,7 @@ public class BillingAccountFacadeImpl implements BillingAccountFacade {
         UserViewModel currentUser = userService.getCurrentUserByLogin();
         BillingAccountViewModel billingAccount;
         if (isCurrentUserIsOwner()) {
-            OwnerViewModel owner = ownerService.getOwnerById(currentUser.getId());
+            OwnerViewModel owner = ownerService.getOwnerByUserId(currentUser.getId());
             billingAccount = owner.getBillingAccount();
         } else {
             CustomerViewModel customerViewModel = customerService.getCustomerByUserId(currentUser.getId());

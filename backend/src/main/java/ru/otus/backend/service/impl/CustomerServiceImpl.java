@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import ru.otus.backend.db.entity.BillingAccount;
 import ru.otus.backend.db.entity.Customer;
+import ru.otus.backend.db.entity.Status;
 import ru.otus.backend.db.entity.User;
 import ru.otus.backend.db.repository.CustomerRepository;
 import ru.otus.backend.service.api.ActiveSubscriptionService;
@@ -37,6 +38,7 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public Customer saveWithBillingAccount(Customer customer) {
         BillingAccount billingAccount = customer.getBillingAccount();
+        billingAccount.setBalance(0);
         billingAccountService.saveBillingAccount(billingAccount);
         customer.setBillingAccountId(billingAccount.getId());
         return createCustomer(customer);
@@ -67,6 +69,7 @@ public class CustomerServiceImpl implements CustomerService {
         User user = customer.getUser();
         user.setRoleId(user.getRole().getId());
         user = userService.saveUser(user);
+        customer.setStatus(Status.VALID);
         customer.setUserId(user.getId());
         return customerRepository.save(customer);
     }

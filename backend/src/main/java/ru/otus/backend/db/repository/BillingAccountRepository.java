@@ -11,6 +11,6 @@ import ru.otus.backend.db.entity.BillingAccount;
 public interface BillingAccountRepository extends CrudRepository<BillingAccount, Long> {
 
     @Modifying
-    @Query("update billing_accounts set balance = :balance where id = :id")
-    void saveBillingAccountBalance(@Param("id") Long id, @Param("balance") Integer balance);
+    @Query("update billing_accounts set balance = balance + :moneyToAdd where id = :id")
+    void addMonetToBillingAccount(@Param("id") Long id, @Param("moneyToAdd") Integer moneyToAdd);
 }

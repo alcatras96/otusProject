@@ -23,13 +23,13 @@ public class ActiveSubscriptionController {
     private final UserService userService;
 
     @PostMapping
-    public List<ActiveSubscriptionViewModel> saveActiveSubscription(@Valid @RequestBody ListWrapper<ActiveSubscriptionViewModel> activeSubscriptionModels) {
+    public List<ActiveSubscriptionViewModel> saveActiveSubscription(@Valid @RequestBody ListWrapper<ActiveSubscriptionViewModel> activeSubscriptions) {
         CustomerViewModel customer = customerService.getCustomerByUserId(userService.getCurrentUserByLogin().getId());
-        for (ActiveSubscriptionViewModel subscription : activeSubscriptionModels.getListWrapper()) {
+        for (ActiveSubscriptionViewModel subscription : activeSubscriptions.getListWrapper()) {
             subscription.setLastEditDate(System.currentTimeMillis());
             subscription.setCustomerId(customer.getId());
         }
-        return activeSubscriptionService.saveActiveSubscriptions(activeSubscriptionModels.getListWrapper());
+        return activeSubscriptionService.saveActiveSubscriptions(activeSubscriptions.getListWrapper());
     }
 
     @GetMapping(value = "/customers")
